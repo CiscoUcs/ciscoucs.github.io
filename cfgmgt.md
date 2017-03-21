@@ -1,6 +1,6 @@
 ---
 title: Configuration Management
-permalink: cfgmgt.html
+permalink: cfgmgt/
 ---
 
 # THis is some stuff.

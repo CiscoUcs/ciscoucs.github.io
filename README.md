@@ -1,3 +1,3 @@
 # Cisco UCS Programmability
 
-[Configuration Management](cfgmgt.md)
+[Configuration Management](cfgmgt/)
