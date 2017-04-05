@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <title>Cisco UCS Developer Resources</title>
+    <title>Programming Languages</title>
     
     <meta name="author" content="Cisco UCS">
 
@@ -46,31 +46,22 @@
 
   <body>
     <div id="wrap">
-     <div class="jumbotron">
-      <div class="container">
-        <h1>Cisco UCS Developer Resources</h1>
-        <p>UCS is the ultimate platform for DevOps, Containers, and Programmability. <br>Here we give you the resources to know how to make it happen with the tools you already love.</p>
-      </div>
-     </div>  
-      <div class="container">
-        <div class="col-sm-9 col-lg-10 col-sm-offset-2 col-lg-offset-1">
-        
-<p>This site is dedicated to helping you find the resources you need to achieve whatever mission you have with your UCS platform in terms of
-pragammability, DevOps, or Containers.  Here you’ll find how UCS integrates in with OpenSource tools to create the best DevOps experience
-you can get.</p>
-
-<p>You can reach us on slack in different support rooms:</p>
-
-<ul>
-  <li>UCS Python Slack Room</li>
-  <li>UCS Ansible Slack Room</li>
-</ul>
-
-<p><a class="btn" href="https://developer.cisco.com/site/ucs-dev-center/index.gsp">DEVNET UCS resources</a></p>
-
+      <nav class="navbar navbar-default" role="navigation">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#jb-navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">Cisco UCS Developer Resources</a>
         </div>
-      </div>
-    <div class="col-sm-3 col-md-2 sidebar-home">
+        <!-- Collect the nav links, forms, and other content for toggling -->
+      </nav>
+
+      <div class="container">
+        <div class="col-sm-3 col-md-2 sidebar">
   <ul class="nav nav-sidebar">
     
     
@@ -89,7 +80,7 @@ you can get.</p>
     
       
       	
-      	<li><a href="/02-programming">Programming Languages</a></li>
+      	<li class="active"><a href="/02-programming" class="active">Programming Languages</a></li>
       	
       
     
@@ -141,12 +132,53 @@ you can get.</p>
   </ul>
 </div>
 
-    </div>
+        <div class="col-sm-9 col-md-10 col-sm-offset-3 col-md-offset-2">
+        
+
+<div class="page-header">
+  <h1>Programming Languages </h1>
+</div>
+
+<div class="row">
+  <div class="col-xs-12">
+    
+<p>There are many libraries people have created to help you connect with UCS using the language of your choice. 
+Below is a list of a few of them.  If you have others to add, please submit a pull request or 
+<a href="https://github.com/CiscoUcs/ciscoucs.github.io/issues">open an issue</a></p>
+
+<h3 id="apple-swift">Apple Swift</h3>
+<ul>
+  <li><a href="https://github.com/vallard/iOSUCS">Sample Swift Repo</a></li>
+</ul>
+
+<h3 id="powershell">PowerShell</h3>
+
+<h3 id="go">Go</h3>
+<ul>
+  <li><a href="https://github.com/CiscoUcs/UCS-Terraform/blob/master/ucsclient/ucsclient.go">Code from the Terraform Plugin</a> is written in Golang.</li>
+</ul>
+
+<h3 id="python">Python</h3>
+<ul>
+  <li><a href="https://github.com/CiscoUcs/ucsmsdk">Python UCS SDK</a></li>
+  <li><a href="https://github.com/CiscoUcs/ucsmsdk_samples">Python UCS SDK Samples</a></li>
+  <li>Slack <code class="highlighter-rouge">ucspython</code> chat is open to anyone to register <a href="https://ucspython.herokuapp.com/">here</a></li>
+</ul>
+
+  </div>
+</div>
+
+
+        </div>
+      </div>
+
     </div>
 
     <div id="footer">
       <div class="container">
-        <p>&copy; 2017 Cisco Systems
+        <p>&copy; 2017 Cisco UCS
+          with help from <a href="http://jekyllbootstrap.com" target="_blank" title="The Definitive Jekyll Blogging Framework">Jekyll Bootstrap</a>
+          and <a href="http://getbootstrap.com" target="_blank">Bootstrap</a>
         </p>
       </div>
     </div>

@@ -87,7 +87,7 @@ body {
  * https://work.smarchal.com/twbscolor/css/ffffff2b57c00bb2dbd4bbff0
  * */
 .navbar-default {
-  background-color: #ffffff;
+  background-color: #8e9299;
   border-color: #fff;
 }
 .navbar-default .navbar-brand {
@@ -116,7 +116,7 @@ body {
 .navbar-default .navbar-nav > .open > a,
 .navbar-default .navbar-nav > .open > a:hover,
 .navbar-default .navbar-nav > .open > a:focus {
-  color: #d4bbff;
+  color: #222;
   background-color: #2b57c0;
 }
 .navbar-default .navbar-toggle {
@@ -125,9 +125,11 @@ body {
 .navbar-default .navbar-toggle:hover,
 .navbar-default .navbar-toggle:focus {
   background-color: #2b57c0;
+  background-color: #8e9299;
 }
 .navbar-default .navbar-toggle .icon-bar {
   background-color: #0bb2db;
+  background-color: #8e9299;
 }
 .navbar-default .navbar-collapse,
 .navbar-default .navbar-form {
@@ -153,6 +155,7 @@ body {
   .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
     color: #d4bbff;
     background-color: #2b57c0;
+  background-color: #8e9299;
   }
 }
 
@@ -184,6 +187,19 @@ body {
   .sidebar-home {
     position: fixed;
     top: 330px;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+    display: block;
+    padding: 20px;
+    overflow-x: hidden;
+    overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+    background-color: #fbfbfc;
+    border-right: 1px solid rgba(204,204,204,0.29);
+  }
+  .sidebar {
+    position: fixed;
+    top: 54px;
     bottom: 0;
     left: 0;
     z-index: 1000;
