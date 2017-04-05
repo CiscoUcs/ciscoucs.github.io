@@ -15,9 +15,10 @@
 
 /* Jekyll Bootstrap Colors */
 #footer {
-  background-color: #000;
-  color: #fff;
+  background-color: #fbfbfc;
+  color: #0a0a0a;
   text-align: center;
+  z-index: 2000;
 }
 
 body {
@@ -166,4 +167,48 @@ body {
     padding-top: 84px;
     padding-bottom: 84px;
   }
+}
+
+/*
+ *  
+ *  Sidebar
+ * 
+ */
+
+/* Hide for mobile, show later */
+.sidebar-home,
+.sidebar {
+  display: none;
+}
+@media (min-width: 768px) {
+  .sidebar-home {
+    position: fixed;
+    top: 330px;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+    display: block;
+    padding: 20px;
+    overflow-x: hidden;
+    overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+    background-color: #fbfbfc;
+    border-right: 1px solid rgba(204,204,204,0.29);
+  }
+}
+
+/* Sidebar navigation */
+.nav-sidebar {
+  margin-right: -21px; /* 20px padding + 1px border */
+  margin-bottom: 20px;
+  margin-left: -20px;
+}
+.nav-sidebar > li > a {
+  padding-right: 20px;
+  padding-left: 20px;
+}
+.nav-sidebar > .active > a,
+.nav-sidebar > .active > a:hover,
+.nav-sidebar > .active > a:focus {
+  color: #fff;
+  background-color: #428bca;
 }
