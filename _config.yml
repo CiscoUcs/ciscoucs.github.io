@@ -10,9 +10,9 @@ highlighter: pygments
 #
 title : Cisco UCS Developer Resources
 tagline: UCS is the number one hardware platform for Programmability. <br>Here we give you the resource to make that happen with the tools you already love.
-author : Cisco Systems
+author : 
   name : Cisco UCS
-  email : blah@email.test
+  email : vbeninco@cisco.com
   github : Cisco UCS
   twitter : ciscoucs
 
