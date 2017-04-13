@@ -11,7 +11,7 @@ you can get.
 
 You can reach us on slack in different support rooms:
 
-* UCS Python Slack Room
-* UCS Ansible Slack Room
+* [UCS Python Slack Room](https://ucspython.herokuapp.com/)
+* [UCS Ansible Slack Room](http://tiny.cc/ucsm-slack)
 
 <a class="btn" href="https://developer.cisco.com/site/ucs-dev-center/index.gsp">DEVNET UCS resources</a>
