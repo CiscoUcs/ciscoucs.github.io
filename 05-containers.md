@@ -14,4 +14,5 @@ we may be biased, but we find that half the people Cisco talks to run container 
 * [Validated design for UCS and Docker DataCenter](http://www.cisco.com/c/en/us/td/docs/unified_computing/ucs/UCS_CVDs/ucs_docker.html)
 * [Validated design for FlexPod and Docker DataCenter](http://www.cisco.com/c/en/us/td/docs/unified_computing/ucs/UCS_CVDs/flexpod_docker_deploy_design.html)
 
-
+## Kubernetes
+* [UCS Kubernetes The Hard Way](https://github.com/vallard/UCS-Kubernetes-The-Hard-Way)
