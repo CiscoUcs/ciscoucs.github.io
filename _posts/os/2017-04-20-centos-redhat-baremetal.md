@@ -1,4 +1,13 @@
-# RedHat/CentOS Automated UCS Installation without PXE
+---
+layout: post
+category : os
+title: RedHat / CentOS Automated UCS Installation without PXE
+tagline: "Kickstarting using vMedia Profiles"
+author: vallard
+tags : [os, centos, redhat, linux]
+---
+{% include JB/setup %}
+
 
 This past week I learned about the vmedia policy that has been in UCS since the 2.2(2c).  What is great about this is it gives us a way to automate server installations without using IPXE.  
 
