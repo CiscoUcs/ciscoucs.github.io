@@ -1,0 +1,402 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>CoreOS</title>
+    
+    <meta name="author" content="Cisco UCS">
+
+    <!-- Enable responsive viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap styles -->
+    <link href="/assets/themes/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Optional theme -->
+    <link href="/assets/themes/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
+    <!-- Sticky Footer -->
+    <link href="/assets/themes/bootstrap/css/bs-sticky-footer.css" rel="stylesheet">
+    
+    <!-- Custom styles -->
+    <link href="/assets/themes/css/style.css?body=1" rel="stylesheet" type="text/css" media="all">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <!-- Update these with your own images
+      <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+      <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+      <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+    -->
+      <link rel="shortcut icon" href="images/favicon.ico">
+
+    <!-- atom & rss feed -->
+    <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
+    <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
+
+  </head>
+
+  <body>
+    <div id="wrap">
+      <nav class="navbar navbar-default" role="navigation">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#jb-navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">Cisco UCS Developer Resources</a>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+      </nav>
+
+      <div class="container">
+        <div class="col-sm-3 col-md-2 sidebar">
+  <ul class="nav nav-sidebar">
+    
+    
+    
+
+
+  
+    
+      
+      	
+      	<li><a href="/01-api">UCS API</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/02-programming">Programming Languages</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/03-os">Operating Systems</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/04-cfgmgmt">Configuration Management</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/05-containers">Containers</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+  
+    
+  
+
+
+
+
+  </ul>
+</div>
+
+        <div class="col-sm-9 col-md-10 col-sm-offset-3 col-md-offset-2">
+        
+
+<div class="page-header">
+  <h1>CoreOS <small>Installing Container Linux on UCS</small></h1>
+</div>
+
+<div class="row post-full">
+  <div class="col-xs-12">
+    <div class="date">
+      <span>06 April 2017</span>
+    </div>
+    <div class="content">
+      
+<p>CoreOS is a Linux distribution that is trimmed down and purpose built to run containers.  It doesn’t even have its own package management system! (e.g.: no <code class="highlighter-rouge">apt-get</code> nor <code class="highlighter-rouge">yum</code>) As more organizations look to build systems with Kubernetes or other Containerized solutions, using a stripped down OS can be appealing.</p>
+
+<p>In this article we will discuss how to install CoreOS on bare metal UCS.  The advantages of such an installation are the following:</p>
+
+<ul>
+  <li>Better Performance</li>
+  <li>Less cost.  There is no requirement to use a proprietary vendors virtualization platform.</li>
+  <li>Less management overhead:  No need to manage a VM farm as well as a container environment.</li>
+</ul>
+
+<p>As with all articles in this platform it will be updated over time with new information.</p>
+
+<h2 id="ucs-configuration">UCS Configuration</h2>
+<p>The service profiles for a UCS blade (M3 or M4) will have the following characteristics:</p>
+
+<ul>
+  <li>Boot from Network first, then from hard drive</li>
+  <li>2 x Hard Drives mirrored</li>
+  <li>2 x vNICs (one up A side, one up B side) These NICs do not require Fabric Failover</li>
+</ul>
+
+<p>You’ll be happy to know that CoreOS installs out of the box with no requirement for additional NIC drivers and comes right up.  While the initial deployment of a PXE server may involve some headache, once up it works great.</p>
+
+<p>If you just want to skip all this madness and use the simple latest <a href="https://stable.release.core-os.net/amd64-usr/current/coreos_production_iso_image.iso">stable ISO image</a> then that is an option for you as well.</p>
+
+<h2 id="ipxe-configuration">IPXE configuration</h2>
+
+<p>To make things dynamic and fast we will boot the servers from the network.  This means you will need some type of installation server that runs DHCP, TFTP, HTTP, etc.  With UCS you can put these on a seperate network and then update the vNIC after installation has completed.</p>
+
+<h3 id="dhcp-config">DHCP Config</h3>
+<p>You will need to point to the files you want to install.  In our DHCP config we have the following:</p>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="c">#!ipxe</span>
+kernel http://<span class="k">${</span><span class="nv">next</span><span class="p">-server</span><span class="k">}</span>/install/coreos/coreos_production_pxe.vmlinuz coreos.config.url<span class="o">=</span>http://<span class="k">${</span><span class="nv">next</span><span class="p">-server</span><span class="k">}</span>/install/coreos/pxe-config.ign coreos.first_boot<span class="o">=</span>1
+initrd http://<span class="k">${</span><span class="nv">next</span><span class="p">-server</span><span class="k">}</span>/install/coreos/coreos_production_pxe_image.cpio.gz
+boot
+</code></pre>
+</div>
+
+<p>This directs the server when it PXEboots to grab three files:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">http://${next-server}/install/coreos/coreos_production_pxe.vmlinuz</code> - This is the kernel that runs the operating system.</li>
+  <li><code class="highlighter-rouge">http://${next-server}/install/coreos/pxe-config.ign</code> - This is the configuration file that tells Container Linux how to install itself.  Think of this like the Kickstart file if you are familiar with RedHat system.</li>
+  <li><code class="highlighter-rouge">http://${next-server}/install/coreos/coreos_production_pxe_image.cpio.gz</code> - This is the RAM Disk image used to run the operating system.</li>
+</ul>
+
+<p>All of these files use the <code class="highlighter-rouge">${next-server}</code> macro which tells the server that is booting with this file to use the IP address of the tftpserver as the address to query HTTP.</p>
+
+<h3 id="coreos-binaries">CoreOS binaries</h3>
+
+<p>Of the files that are requested, two of them are binary files that need to be downloaded from the CoreOS website.  There is also a third file that is required for the second stage of installation.  You can get these from the following commands run on your installation server in the <code class="highlighter-rouge">/install/coreos</code> directory:</p>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code>wget http://stable.release.core-os.net/amd64-usr/current/coreos_production_openstack_image.img.bz2
+wget http://stable.release.core-os.net/amd64-usr/current/coreos_production_pxe.vmlinuz
+wget http://stable.release.core-os.net/amd64-usr/current/coreos_production_pxe_image.cpio.gz
+</code></pre>
+</div>
+
+<h3 id="coreos-basic-configuration">CoreOS basic configuration</h3>
+
+<p>Container Linux introduced a new configuration tool to configure its systems in April 2016.  This system is called <a href="https://coreos.com/ignition/docs/0.14.0/what-is-ignition.html">ignition</a>.  You still have the option of using cloud-config which is a simple yaml file.  In this setup we are using ignition files.  A simple ignition file to get you going would look something like the following:</p>
+
+<div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"ignition"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2.0.0"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="nt">"passwd"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"users"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+                </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"vallard"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"create"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                        </span><span class="nt">"uid"</span><span class="p">:</span><span class="w"> </span><span class="mi">1000</span><span class="w">
+                    </span><span class="p">},</span><span class="w">
+                </span><span class="nt">"passwordHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"$1$AQGDGZZC$yGF9FviVbDZHqZiUfaZe9."</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"sshAuthorizedKeys"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                    </span><span class="s2">"ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA5xwR+1+0sBwa0wME6maFjXjIdxUS9taPOgpf1c1EJUgZENDUUOdOabDbEZ6w/xLvx7vHtYDMMTzbyKif9O5hfgQ4RXNjMIMhu+PgShfCsUCFyhMF+cKZNeg2fUZn83r9oWWcFfL31Qh8PMe3yHV30fmBUwpqdCiUCrLznefVwsIlBcnr0DaScU2TdfY73sFR69K6bBJ80GYryaQi2v2s7cjZl2sDMuv5tDNmiOZCxtDJpRS4oaILnRh0gPQaYem0Hl2AGsETsYzqbXsvKkKd96hUtKmoDQ/voHaqFvB6/don12BFQDkTtCGqOCkga7JIGWhAdZbD3+owvOPaPAvK7Q=="</span><span class="w">
+                </span><span class="p">]</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+                </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"core"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"sshAuthorizedKeys"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                    </span><span class="s2">"ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA5xwR+1+0sBwa0wME6maFjXjIdxUS9taPOgpf1c1EJUgZENDUUOdOabDbEZ6w/xLvx7vHtYDMMTzbyKif9O5hfgQ4RXNjMIMhu+PgShfCsUCFyhMF+cKZNeg2fUZn83r9oWWcFfL31Qh8PMe3yHV30fmBUwpqdCiUCrLznefVwsIlBcnr0DaScU2TdfY73sFR69K6bBJ80GYryaQi2v2s7cjZl2sDMuv5tDNmiOZCxtDJpRS4oaILnRh0gPQaYem0Hl2AGsETsYzqbXsvKkKd96hUtKmoDQ/voHaqFvB6/don12BFQDkTtCGqOCkga7JIGWhAdZbD3+owvOPaPAvK7Q=="</span><span class="w">
+                </span><span class="p">]</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+        </span><span class="p">]</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+</div>
+<p>The above file can be saved as <code class="highlighter-rouge">/install/coreos/pxe-config.ign</code>.  This file will create a new user <code class="highlighter-rouge">vallard</code> with the password <code class="highlighter-rouge">Cisco.123</code>.  It will also add the authorized SSH key to both the <code class="highlighter-rouge">vallard</code> user and the <code class="highlighter-rouge">core</code> user.  You should substitute your key and your own user for this if you wanted to add them.</p>
+
+<p>With all these files in place when the UCS blade boots you should be able to log into it.</p>
+
+<h2 id="installing-to-disk">Installing to Disk</h2>
+
+<p>Up until now, the configuration we have created will simply boot a server with a ramdisk and kernel.  That means that nothing will persist on the server.  In fact, if you already had an Operating System installed on the disk (like Ubuntu) you could reboot and turn off the pxe server and it will simply boot back into Ubuntu.  The above is also a good starting point for installing stateless systems.</p>
+
+<p>But let’s suppose that you want to have this operating system persist with reboots.  To do that there is another step and we call this <strong>stage 1</strong> with <strong>stage 0</strong> being the initial boot.</p>
+
+<p>Container Linux comes with a program called <a href="https://coreos.com/os/docs/latest/installing-to-disk.html"><code class="highlighter-rouge">coreos-install</code></a>  This progam will copy the bits of the operating system image onto disk.  In order to use it, we need to modify the <code class="highlighter-rouge">/install/coreos/pxe-config.ign</code> we created above with some intelligence to run this script.</p>
+
+<h3 id="config-transpiler">Config Transpiler</h3>
+
+<p>When CoreOS introduced ignition there was some <a href="https://news.ycombinator.com/item?id=11484196">grumbling on the InterWebs</a>.  The primary complaint is that while JSON is great for machines, its not so great for humans to use.  CoreOS has a nice <a href="https://coreos.com/validate">tool to validate</a> ignition files, but still maintaining them is not so great.</p>
+
+<p>One way we can get around this is by writing the files in YAML and then use the <a href="https://github.com/coreos/container-linux-config-transpiler/blob/master/doc/getting-started.md">Config Transpiler</a> tool to translate from YAML to JSON.</p>
+
+<p>For an installation script we can create the following YAML file:</p>
+
+<div class="language-yaml highlighter-rouge"><pre class="highlight"><code><span class="nn">---</span>
+<span class="s">systemd</span><span class="pi">:</span>
+  <span class="s">units</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">name</span><span class="pi">:</span> <span class="s">installer.service</span>
+      <span class="s">enable</span><span class="pi">:</span> <span class="s">true</span>
+      <span class="s">contents</span><span class="pi">:</span> <span class="pi">|</span>
+        <span class="no">[Unit]</span>
+        <span class="no">Requires=network-online.target</span>
+        <span class="no">After=network-online.target</span>
+        <span class="no">[Service]</span>
+        <span class="no">Type=simple</span>
+        <span class="no">ExecStart=/opt/installer</span>
+        <span class="no">[Install]</span>
+        <span class="no">WantedBy=multi-user.target</span>
+<span class="s">storage</span><span class="pi">:</span>
+  <span class="s">files</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">path</span><span class="pi">:</span> <span class="s">/opt/installer</span>
+      <span class="s">filesystem</span><span class="pi">:</span> <span class="s">root</span>
+      <span class="s">mode</span><span class="pi">:</span> <span class="s">0500</span>
+      <span class="s">contents</span><span class="pi">:</span>
+        <span class="s">inline</span><span class="pi">:</span> <span class="pi">|</span>
+          <span class="no">#!/bin/bash -ex</span>
+          <span class="no">curl http://172.20.1.1/install/coreos/stage1.ign -o ignition.json</span>
+          <span class="no">coreos-install -d /dev/sda -C stable -n -b http://172.20.1.1/install/coreos -i ignition.json</span>
+          <span class="no">udevadm settle</span>
+          <span class="no">systemctl reboot</span>
+<span class="s">passwd</span><span class="pi">:</span>
+  <span class="s">users</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">name</span><span class="pi">:</span> <span class="s">core</span>
+      <span class="s">ssh_authorized_keys</span><span class="pi">:</span>
+        <span class="pi">-</span> <span class="s2">"</span><span class="s">ssh-rsa</span><span class="nv"> </span><span class="s">AAAAB3NzaC1yc2EAAAABIwAAAQEA5xwR+1+0sBwa0wME6maFjXjIdxUS9taPOgpf1c1EJUgZENDUUOdOabDbEZ6w/xLvx7vHtYDMMTzbyKif9O5hfgQ4RXNjMIMhu+PgShfCsUCFyhMF+cKZNeg2fUZn83r9oWWcFfL31Qh8PMe3yHV30fmBUwpqdCiUCrLznefVwsIlBcnr0DaScU2TdfY73sFR69K6bBJ80GYryaQi2v2s7cjZl2sDMuv5tDNmiOZCxtDJpRS4oaILnRh0gPQaYem0Hl2AGsETsYzqbXsvKkKd96hUtKmoDQ/voHaqFvB6/don12BFQDkTtCGqOCkga7JIGWhAdZbD3+owvOPaPAvK7Q=="</span>
+</code></pre>
+</div>
+<p>This is based off the example found in the <a href="https://github.com/coreos/matchbox/blob/master/examples/ignition/install-reboot.yaml">CoreOS Matchbox Project</a></p>
+
+<p>To use this file there are further files we need to modify:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">stage1.ign</code> - This file is same as the previous <code class="highlighter-rouge">/install/coreos/pxe-config.ign</code> we showed above.  We have just renamed it to stage1.ign.  This file is what will be executed during the installation of Container Linux onto Disk.  It is a seperate configuration file than what we use to bootstrap the cluster.</li>
+  <li><code class="highlighter-rouge">coreos_production_image.bin.bz2</code> and <code class="highlighter-rouge">coreos_production_image.bin.bz2.sig</code>.  These two files are what the <code class="highlighter-rouge">coreos-install</code> script will try to get from the internet unless you download them and point it to a different installer.  These files can be downloaded from something like:
+    <ul>
+      <li><code class="highlighter-rouge">wget https://stable.release.core-os.net/amd64-usr/1298.7.0/coreos_production_image.bin.bz2</code></li>
+      <li><code class="highlighter-rouge">wget https://stable.release.core-os.net/amd64-usr/1298.7.0/coreos_production_image.bin.bz2.sig</code>
+It’s important to note that Container Linux images change all the time.  So even though at the time of this writing we are using 1298.7.0 you will need to make sure that whichever stable release you use matches the files you download, or you’ll need to use the <code class="highlighter-rouge">-V</code> flag on the <code class="highlighter-rouge">coreos-install</code> command.  These files will then live in <code class="highlighter-rouge">/install/coreos/1298.7.0</code></li>
+    </ul>
+  </li>
+  <li>The HTTP server in the example above is <code class="highlighter-rouge">172.20.1.1</code> and the base URL (which the <code class="highlighter-rouge">-b</code> flag signifies) will then search for the images at <code class="highlighter-rouge">http://172.20.1.1/install/coreos/&lt;version&gt;/</code>.  You may have a different HTTP server setup so be sure the base part matches what you are serving.</li>
+</ul>
+
+<p>Once you are happy with this file you can transcode it with the following command:</p>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code>cat install.yaml | ./ct | python -m json.tool | tee pxe-config.ign
+</code></pre>
+</div>
+<p>where the <code class="highlighter-rouge">ct</code> command is the config transpiler binary we downloaded from <a href="https://github.com/coreos/container-linux-config-transpiler/releases">the github repo</a></p>
+
+<p>Now that you have this working you can sit back and watch the fun.  The system will reboot and you’ll be able to login.</p>
+
+<p>In this article for the sake of simplicity we have used a rather trivial ignition file.  We can get more advanced and will need to if we want to install <code class="highlighter-rouge">kubernetes</code> and other systems on this server.  Expect to see more of these articles here on that subject.</p>
+
+<p>If you have any questions, please let me know on <a href="https://twitter.com/vallard">Twitter</a></p>
+
+    </div>
+<!--
+  
+    <ul class="tag_box inline">
+      <li><i class="glyphicon glyphicon-open"></i></li>
+      
+      
+
+
+  
+     
+    	<li><a href="/categories.html#os-ref">
+    		os <span>1</span>
+    	</a></li>
+    
+  
+
+
+    </ul>
+    
+
+  
+    <ul class="tag_box inline">
+      <li><i class="glyphicon glyphicon-tags"></i></li>
+      
+      
+
+
+  
+     
+    	<li><a href="/tags.html#os-ref">os <span>1</span></a></li>
+     
+    	<li><a href="/tags.html#coreos-ref">coreos <span>1</span></a></li>
+    
+  
+
+
+
+    </ul>
+    
+ --> 
+    <hr>
+    <ul class="pagination">
+    
+      <li class="prev disabled"><a>&larr; Previous</a></li>
+    
+      <li><a href="/archive.html">Archive</a></li>
+    
+      <li class="next disabled"><a>Next &rarr;</a>
+    
+    </ul>
+    <hr>
+    
+  </div>
+</div>
+
+
+        </div>
+      </div>
+
+    </div>
+
+    <div id="footer">
+      <div class="container">
+        <p>&copy; 2017 Cisco UCS
+          with help from <a href="http://jekyllbootstrap.com" target="_blank" title="The Definitive Jekyll Blogging Framework">Jekyll Bootstrap</a>
+          and <a href="http://getbootstrap.com" target="_blank">Bootstrap</a>
+        </p>
+      </div>
+    </div>
+
+    
+
+
+
+
+
+    <!-- Latest compiled and minified JavaScript, requires jQuery 1.x (2.x not supported in IE8) -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="/assets/themes/bootstrap/js/bootstrap.min.js"></script>
+  </body>
+</html>
+

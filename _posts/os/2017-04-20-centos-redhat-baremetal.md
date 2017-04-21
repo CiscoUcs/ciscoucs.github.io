@@ -26,6 +26,9 @@ We are going to create two images.
 
 
 ### 2.1 Create the Boot ISO Image
+
+__Credit:__ Some of this information was gleaned from the [help of the wonderful Internet](http://www.smorgasbork.com/2012/01/04/building-a-custom-centos-7-kickstart-disc-part-3/)
+
 ```
 mkdir /tmp/kubm
 mkdir -p /install/kubm
@@ -33,6 +36,9 @@ mount -o loop centos7.2.iso /tmp/kubm
 cd /install/kubm
 cp -a /tmp/kubm/isolinux .
 cp /tmp/kubm/.discinfo isolinux/
+cp /tmp/kubm/.treeinfo isolinux/
+cp -a /tmp/kubm/LiveCD isolinux/
+cp -a /tmp/kubm/images isolinux/
 chmod 664 isolinux/isolinux.bin
 ```
 
@@ -43,30 +49,32 @@ label linux
   menu label ^Install CentOS Linux 7
   menu default
   kernel vmlinuz
-  append initrd=initrd.img inst.stage2=hd:LABEL=CentOS\x207\x20x86_64 inst.ks=hd:LABEL=KUBM:/ks.cfg quiet
+  append initrd=initrd.img inst.stage2=hd:LABEL=CentOS\x207\x20x86_64 inst.ks=hd:LABEL=KUBM:ks.cfg quiet
 ```
 Really you should only need to change the append line and add the ```inst.ks``` line.  This will make it automatic.  You should also add the ```menu default``` line and delete it from the stanza that is below it so this comes up first. 
 
+You could also change the time out and all kinds of other things to make it go faster and install.  
 
 #### 2.1.1 Build the ISO Image
 
-The build commands for the RHEL or CentOS images differ slightly in syntax.  Below are examples.  Be sure the ```-V``` flag matches what is in the isolinux.cfg file you updated
+The build commands for the RHEL or CentOS images differ slightly in syntax.  Below are examples.  Be sure the ```-V``` flag matches what is in the isolinux.cfg file.  Note:  The isolinux.cfg file uses \x20 for spaces.  You can just use spaces below. 
 
 ##### 2.1.1.1 RedHat 7.3
+
 ```
-mkisofs -r -T -J -V "RHEL-7.3\x20Server.x86_64" \
- -b isolinux/isolinux.bin -c isolinux/boot.cat \
-  -no-emul-boot -boot-load-size 4 -boot-info-table \
-  -o /install/redhat7.3-boot.iso .
+mkisofs -o /install/redhat7.3-boot.iso -b isolinux.bin \
+	-c boot.cat -no-emul-boot -V 'RHEL-7.3 Server.x86_64' \
+	-boot-load-size 4 -boot-info-table -r -J -v -T isolinux/
 ```
 
 ##### 2.1.1.2 CentOS 7.2
+
+
 ```
-mkisofs -r -T -J -V "CentOS\x207\x20x86_64" \
- -b isolinux/isolinux.bin -c isolinux/boot.cat \
-  -no-emul-boot -boot-load-size 4 -boot-info-table \
-  -o /install/centos7.2-boot.iso .
-``` 
+mkisofs -o /install/centos7.2-boot.iso -b isolinux.bin \
+	-c boot.cat -no-emul-boot -V 'CentOS 7 x86_64' \
+	-boot-load-size 4 -boot-info-table -r -J -v -T isolinux/
+```
 
 ### 2.2 Create the Kickstart Images
 
@@ -83,6 +91,58 @@ The kickstart file will be unique for each node as we configure basic networking
 ##### 2.2.1.1 Basic Kickstart File
 The below kickstart file will get you started.  Substitute the IP addresses for your own. 
 
+```bash
+#version=DEVEL
+# System authorization information
+auth --useshadow --enablemd5
+# Install OS instead of upgrade
+install
+# Use network installation
+url --url="http://192.168.2.2/install/centos7.2"
+# Use graphical install
+graphical
+# Firewall configuration
+firewall --disabled
+firstboot --disable
+ignoredisk --only-use=sdb,sda
+# Keyboard layouts
+keyboard --vckeymap=us --xlayouts='us'
+# System language
+lang en_US.UTF-8
+
+# Network information
+#network  --bootproto=dhcp --device=enp6s0 --ipv6=auto --activate
+network --activate --bootproto=static --ip=192.168.2.213 --netmask=255.255.255.0 --gateway=192.168.2.2 --nameserver=192.168.2.2
+network  --bootproto=dhcp --device=enp7s0 --onboot=off --ipv6=auto
+network  --hostname=kube01
+# Reboot after installation if you want.  We leave this to not reboot so we can 
+# reboot
+# Root password
+rootpw --iscrypted $6$KVZvCsW9P.08qpM7$Yx1KnYmjxhiFcr99ocdpZYDb4MpJb6VEeZO7wrb/XRlaKfJsLkrYpy1oJLJqxbqWJQPqTAb.y.WOWV/dXjDAf0
+# SELinux configuration
+selinux --disabled
+# System services
+services --enabled="chronyd"
+# System timezone
+timezone US/Pacific
+# System bootloader configuration
+bootloader --append=" crashkernel=auto" --location=mbr --boot-drive=sda
+autopart --type=lvm
+# Partition clearing information
+clearpart --all --initlabel
+
+%packages
+@^minimal
+kexec-tools
+
+%end
+
+
+```
+
+
+* __Password__ use the following to encrypt a password:  ```python -c 'import crypt,getpass;pw=getpass.getpass();print(crypt.crypt(pw) if (pw==getpass.getpass("Confirm: ")) else exit())'```
+
 #### 2.2.2 Creating the Kickstart Image
 To mount this kickstart file as a CIMC HD image we need to embed our ```ks.cfg``` file into each image.  
 
@@ -98,7 +158,7 @@ mkdir mnt
 mount -o loop kube01.img mnt
 cp <kickstartfile location>/ks.cfg mnt/
 umount mnt
-e2label kube01.img LABEL=KUBM # note: This must match what was placed in the isolinux.cfg file. 
+e2label kube01.img KUBM # note: This must match what was placed in the isolinux.cfg file. 
 blkid kube01.img # test to see the label is there. 
 ```
 Now copy this file to the webserver directory and test. 
@@ -111,10 +171,20 @@ You should now have a webserver that contains at the very least 3 images:
 * Boot media.  One file this should be something like ```centos7.3-boot.iso``` and should be a small file. 
 * Installation Media.  This is just the CentOS iso image unextracted sitting here to be installed and is referenced from your kickstart file.  
 
-Be sure that you can ```curl``` or ```wget``` these files from the location you expect.  
+Be sure that you can ```curl``` or ```wget``` these files from the location you expect. 
 
+# Troubleshooting
+
+There are a ton of moving parts with this setup so it is very easy to make mistakes!  Don't worry, you are still a good person and you are still very smart.  
+
+If boot fails it may drop you emergency shell.  From here you can see what happened. 
+
+If you got the kickstart file successfully then you should see it in ```/etc/cmdline.d/80-kickstart.conf``` 
+
+You should also be able to tell in the ```/run/initramfs/rdsosreport.txt```.  This can tell you information like if the kickstart file wasn't found. 
 
 # Additional Information
+This section is left as reference only but not required for making the above sections all work.  It is only here if further customizations are required, which I have found are not necessary at this point but may be in the future. 
 
 ## Modify the initrd
 You probably don't need to do this but reference is here if you need to add something to the initrd.
