@@ -4,7 +4,7 @@
  <title>Cisco UCS Developer Resources</title>
  <link href="http://ciscoucs.github.io/atom.xml" rel="self"/>
  <link href="http://ciscoucs.github.io"/>
- <updated>2017-04-21T12:53:56-07:00</updated>
+ <updated>2017-04-21T13:04:52-07:00</updated>
  <id>http://ciscoucs.github.io</id>
  <author>
    <name>Cisco UCS</name>
@@ -13,7 +13,7 @@
 
  
  <entry>
-   <title>RedHat / CentOS Automated UCS Installation without PXE</title>
+   <title>PXE-less Automated UCS Installation of RedHat/CentOS</title>
    <link href="http://ciscoucs.github.io/os/2017/04/20/centos-redhat-baremetal"/>
    <updated>2017-04-20T00:00:00-07:00</updated>
    <id>http://ciscoucs.github.io/os/2017/04/20/centos-redhat-baremetal</id>

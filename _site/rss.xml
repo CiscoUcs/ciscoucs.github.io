@@ -5,13 +5,13 @@
         <description>Cisco UCS Developer Resources - Cisco UCS</description>
         <link>http://ciscoucs.github.io</link>
         <atom:link href="http://ciscoucs.github.io/rss.xml" rel="self" type="application/rss+xml" />
-        <lastBuildDate>Fri, 21 Apr 2017 12:53:56 -0700</lastBuildDate>
-        <pubDate>Fri, 21 Apr 2017 12:53:56 -0700</pubDate>
+        <lastBuildDate>Fri, 21 Apr 2017 13:04:52 -0700</lastBuildDate>
+        <pubDate>Fri, 21 Apr 2017 13:04:52 -0700</pubDate>
         <ttl>60</ttl>
 
 
         <item>
-                <title>RedHat / CentOS Automated UCS Installation without PXE</title>
+                <title>PXE-less Automated UCS Installation of RedHat/CentOS</title>
                 <description>
 &lt;p&gt;&lt;strong&gt;Author:&lt;/strong&gt; &lt;a href=&quot;https://twitter.com/vallard&quot;&gt;@vallard&lt;/a&gt;&lt;/p&gt;
 

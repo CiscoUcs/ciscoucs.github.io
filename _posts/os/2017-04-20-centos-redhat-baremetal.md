@@ -1,7 +1,7 @@
 ---
 layout: post
 category : os
-title: RedHat / CentOS Automated UCS Installation without PXE
+title: PXE-less Automated UCS Installation of RedHat/CentOS 
 tagline: "Kickstarting using vMedia Profiles"
 author: vallard
 tags : [os, centos, redhat, linux]
