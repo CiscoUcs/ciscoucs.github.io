@@ -6,13 +6,11 @@ group: navigation
 ---
 {% include JB/setup %}
 
-Here we will post information on how to best run container systems on UCS.  Many people run this on the cloud, however, there is also
-a number of Enterprise users who run container solutions like Mesos, Kubernetes, and Docker Swarm in their own Data Centers. While
-we may be biased, but we find that half the people Cisco talks to run container solutions in their own Data Centers. 
+Here we will post information on how to best run container systems on UCS.  While we may be biased, we find half of the people who run container systems run them in their own Data Centers with the other half running them on public cloud offerings.  
 
 ## Docker Data Center
 * [Validated design for UCS and Docker DataCenter](http://www.cisco.com/c/en/us/td/docs/unified_computing/ucs/UCS_CVDs/ucs_docker.html)
 * [Validated design for FlexPod and Docker DataCenter](http://www.cisco.com/c/en/us/td/docs/unified_computing/ucs/UCS_CVDs/flexpod_docker_deploy_design.html)
 
 ## Kubernetes
-* [UCS Kubernetes The Hard Way](https://github.com/vallard/UCS-Kubernetes-The-Hard-Way)
+* [KUBaM!](/kubam/) (Kubernetes on UCS Bare Metal) This guide walks through automatically installing Kubernetes on Bare Metal as fast as possible.  

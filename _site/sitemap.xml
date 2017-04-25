@@ -24,7 +24,13 @@
 <loc>http://localhost:4000/05-containers</loc>
 </url>
 <url>
+<loc>http://localhost:4000/kubam/</loc>
+</url>
+<url>
 <loc>http://localhost:4000/</loc>
+</url>
+<url>
+<loc>http://localhost:4000/kubam/stage1/manual</loc>
 </url>
 <url>
 <loc>http://localhost:4000/404.html</loc>
