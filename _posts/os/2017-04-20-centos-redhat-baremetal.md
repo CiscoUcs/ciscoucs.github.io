@@ -20,7 +20,7 @@ vMedia policies give us a way to create an autmated installation of our servers 
 
 ## 1. Prereqs
 
-* You will need a web server on the same network or some place where the nodes that are booting can get to.  	
+* You will need a build server that runs nginx or some type of web server.  This biuld server should be on the same network or some place where the nodes that are booting can get to.  	
 	* The easiest way to do this:  Suppose each node has an IP address of 192.168.2.x/24.  Then you can have a webserver on 192.168.2.2 that can have all your files. If possible make this OS the same OS that you are installing on the nodes. 
 	* Alternatively you could just create an ISO image with all the packages you need and avoid using the network all together.  This may not scale as well but may be just fine for you. 
 
@@ -28,7 +28,7 @@ vMedia policies give us a way to create an autmated installation of our servers 
 
 * Installation Media should be placed on the webserver in a place where it can be accessed.  You should download this on your build server first.  For CentOS you can grab it from places like [here](https://www.centos.org/download/) or [here](http://isoredirect.centos.org/centos/7/isos/x86_64/CentOS-7-x86_64-DVD-1611.iso).
 
-* vMedia policies require M3 blades at minimum.  I had some old M1 and M2 UCS blades sitting around and unfortunately vMedia policies aren't supported on these blades.  Don't fret:  You can still use them and PXE works fine, but you can't use the vMedia policy to get around PXE. 
+* vMedia policies require M3 B-Series or C-Series at minimum.  I had some old M1 and M2 UCS blades sitting around and unfortunately vMedia policies aren't supported on these blades.  Don't fret:  You can still use them and PXE works fine, but you can't use the vMedia policy to get around PXE. 
 
 * A build server.  We are using RedHat 7.3 but any RedHat derivative in the 7 range should work fine. 
 
@@ -40,7 +40,7 @@ We are going to create two images for bootstrapping the operating system:
 
 * Kickstart Disk Image.  We are also creating a unique disk image for each node so that it can have its own kickstart file and thus bring uniqueness to all our nodes.  
 
-We will also use the entire ISO image and place it in a directory on our webserver.  So there are three parts here that need to be in place for this to all work.  Please download an appropriate ISO file 
+We will also use the entire CentOS ISO image and place it in a directory on our webserver.  So there are three parts here that need to be in place for this to all work.  Please download an appropriate ISO file 
 
 ![Boot Media](/images/boot-media.png)
 
@@ -49,7 +49,7 @@ We will also use the entire ISO image and place it in a directory on our webserv
 
 __Credit:__ Some of this information was gleaned from the [help of the wonderful Internet](http://www.smorgasbork.com/2012/01/04/building-a-custom-centos-7-kickstart-disc-part-3/)
 
-The Boot ISO image involves extracting the essential parts out of the installation media.  We make a root directory to build from (kubm) and then put everything there. 
+The Boot ISO image involves extracting the essential parts out of the installation media.  We make a root directory on the build server to build from (kubm) and then put everything there. 
 
 ```
 mkdir -p /tmp/kubm  # our working directory
@@ -257,6 +257,15 @@ def createKubeVirtualMedia(handle):
 ```
 
 Notice in my example above, the http server will serve files from  [http://192.168.2.2/install/centos7.2.iso]("") and [http://192.168.2.2/_service_profile_name_]("")
+
+
+## 4. Boot Policy
+
+Now that you have a vMedia Policy you need to create a boot policy and attach it to a service profile that has the order: 
+
+* Boot from Local Disk
+* Boot from Remote CIMC CDD
+
 
 Installing that and all _should_ work.  Please note that whenever you change the ISO image, the vmedia policy may still be using the old mounted ISO.  You might want to change names to ensure the ISO you think is loading is actually loading.  
 

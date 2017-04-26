@@ -4,7 +4,7 @@
  <title>Cisco UCS Developer Resources</title>
  <link href="http://ciscoucs.github.io/atom.xml" rel="self"/>
  <link href="http://ciscoucs.github.io"/>
- <updated>2017-04-25T17:19:30-07:00</updated>
+ <updated>2017-04-26T09:21:36-07:00</updated>
  <id>http://ciscoucs.github.io</id>
  <author>
    <name>Cisco UCS</name>
@@ -31,7 +31,7 @@
 &lt;h2 id=&quot;1-prereqs&quot;&gt;1. Prereqs&lt;/h2&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;You will need a web server on the same network or some place where the nodes that are booting can get to.
+  &lt;li&gt;You will need a build server that runs nginx or some type of web server.  This biuld server should be on the same network or some place where the nodes that are booting can get to.
     &lt;ul&gt;
       &lt;li&gt;The easiest way to do this:  Suppose each node has an IP address of 192.168.2.x/24.  Then you can have a webserver on 192.168.2.2 that can have all your files. If possible make this OS the same OS that you are installing on the nodes.&lt;/li&gt;
       &lt;li&gt;Alternatively you could just create an ISO image with all the packages you need and avoid using the network all together.  This may not scale as well but may be just fine for you.&lt;/li&gt;
@@ -44,7 +44,7 @@
     &lt;p&gt;Installation Media should be placed on the webserver in a place where it can be accessed.  You should download this on your build server first.  For CentOS you can grab it from places like &lt;a href=&quot;https://www.centos.org/download/&quot;&gt;here&lt;/a&gt; or &lt;a href=&quot;http://isoredirect.centos.org/centos/7/isos/x86_64/CentOS-7-x86_64-DVD-1611.iso&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
   &lt;/li&gt;
   &lt;li&gt;
-    &lt;p&gt;vMedia policies require M3 blades at minimum.  I had some old M1 and M2 UCS blades sitting around and unfortunately vMedia policies aren’t supported on these blades.  Don’t fret:  You can still use them and PXE works fine, but you can’t use the vMedia policy to get around PXE.&lt;/p&gt;
+    &lt;p&gt;vMedia policies require M3 B-Series or C-Series at minimum.  I had some old M1 and M2 UCS blades sitting around and unfortunately vMedia policies aren’t supported on these blades.  Don’t fret:  You can still use them and PXE works fine, but you can’t use the vMedia policy to get around PXE.&lt;/p&gt;
   &lt;/li&gt;
   &lt;li&gt;A build server.  We are using RedHat 7.3 but any RedHat derivative in the 7 range should work fine.&lt;/li&gt;
 &lt;/ul&gt;
@@ -62,7 +62,7 @@
   &lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;We will also use the entire ISO image and place it in a directory on our webserver.  So there are three parts here that need to be in place for this to all work.  Please download an appropriate ISO file&lt;/p&gt;
+&lt;p&gt;We will also use the entire CentOS ISO image and place it in a directory on our webserver.  So there are three parts here that need to be in place for this to all work.  Please download an appropriate ISO file&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;/images/boot-media.png&quot; alt=&quot;Boot Media&quot; /&gt;&lt;/p&gt;
 
@@ -70,7 +70,7 @@
 
 &lt;p&gt;&lt;strong&gt;Credit:&lt;/strong&gt; Some of this information was gleaned from the &lt;a href=&quot;http://www.smorgasbork.com/2012/01/04/building-a-custom-centos-7-kickstart-disc-part-3/&quot;&gt;help of the wonderful Internet&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;The Boot ISO image involves extracting the essential parts out of the installation media.  We make a root directory to build from (kubm) and then put everything there.&lt;/p&gt;
+&lt;p&gt;The Boot ISO image involves extracting the essential parts out of the installation media.  We make a root directory on the build server to build from (kubm) and then put everything there.&lt;/p&gt;
 
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;mkdir -p /tmp/kubm  # our working directory
 mkdir -p /mnt
@@ -282,6 +282,15 @@ blkid kube01.img # test to see the label is there.
 &lt;/div&gt;
 
 &lt;p&gt;Notice in my example above, the http server will serve files from  &lt;a href=&quot;&amp;quot;&amp;quot;&quot;&gt;http://192.168.2.2/install/centos7.2.iso&lt;/a&gt; and &lt;a href=&quot;&amp;quot;&amp;quot;&quot;&gt;http://192.168.2.2/&lt;em&gt;service_profile_name&lt;/em&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;4-boot-policy&quot;&gt;4. Boot Policy&lt;/h2&gt;
+
+&lt;p&gt;Now that you have a vMedia Policy you need to create a boot policy and attach it to a service profile that has the order:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Boot from Local Disk&lt;/li&gt;
+  &lt;li&gt;Boot from Remote CIMC CDD&lt;/li&gt;
+&lt;/ul&gt;
 
 &lt;p&gt;Installing that and all &lt;em&gt;should&lt;/em&gt; work.  Please note that whenever you change the ISO image, the vmedia policy may still be using the old mounted ISO.  You might want to change names to ensure the ISO you think is loading is actually loading.&lt;/p&gt;
 
