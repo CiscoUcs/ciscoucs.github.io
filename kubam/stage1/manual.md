@@ -12,6 +12,8 @@ For the UCS Bare Metal setup KUBaM uses vMedia Policies to do the automated inst
 
 # 1. Setup Web Server
 
+The only service we need running for automated installation is a web server that we can put remote media.  We don't require TFTP, DHCP, or other PXE services to be in place.  See this [post](https://communities.cisco.com/people/vbeninco/blog/2017/04/25/pxe-less-automated-installation-of-centosredhat-on-ucs) for more explanation.
+
 ## 1.1 nginx on CentOS/RedHat 7
 
 ```bash
