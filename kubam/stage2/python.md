@@ -54,7 +54,7 @@ https_proxy=proxy.esl.cisco.com:80 git clone https://github.com/vallard/KUBaM.gi
 
 ```
 cd ~/Code/KUBaM/stage2
-./kubeucs.py admin nbv12345 172.28.225.163
+./kubeucs.py admin cisco.123 172.28.225.102
 [1] VLAN default
 [2] VLAN hx-inband-mgmt
 [3] VLAN hx-vmotion
