@@ -85,9 +85,12 @@ Listing available UCS Servers
 [5]: Blade 1/slot-8 type UCSB-B200-M3
 Please select servers you want to install Kubernetes on separated by commas
 (E.g: 2,4,8) :
+...
 ```
 
 At the end of this script, the servers should boot back up and be provisioned with the OS you created and be ready to go. 
+
+You are now ready to move to [stage 3](https://ciscoucs.github.io/kubam/)
 
 
 
