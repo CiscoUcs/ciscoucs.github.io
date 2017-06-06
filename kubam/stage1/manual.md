@@ -166,6 +166,9 @@ Then validate your kickstart file with:
 ```
 ksvalidator my-ks.cfg
 ```
+
+Once you like your ```ks.cfg``` copy it into the ```kube0x``` directories. 
+
 ### 4.1.1
 
 Please note that we recommend putting the public key of the install server in the authorized keys of the nodes you install.  This simplifies the ansible installation as you don't have to specify passwords. 
@@ -190,7 +193,7 @@ chmod 0600 /root/.ssh/authorized_keys
 ### fix up selinux context if you are using it.
 #restorecon -R /root/.ssh/
 %end
-
+```
 
 ## 4.2 Unmount Kickstart images
 Once images are ready, you can unmount them. 
@@ -211,5 +214,5 @@ Check that we now have all the right files:
 
 Make sure you can access all of those with your webserver. We will use these for the next step.  
 
-[Go to the Next Stage](http://localhost:4000/kubam/)
+[Go to the Next Stage](/kubam/)
 
