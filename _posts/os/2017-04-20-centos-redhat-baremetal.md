@@ -194,7 +194,7 @@ Using some [helpful hints from the Internet](https://thelinuxexperiment.com/crea
 mkdir -p /tmp/kubm/kube01
 cd /tmp/kubm/kube01
 fallocate -l 1M kube01.img
-dd if=/dev/zero of=kube01.img bs=1 count=1
+dd if=/dev/zero of=kube01.img bs=1M count=1
 mkfs -t ext4 kube01.img  # select y to proceed anyway
 mkdir mnt
 mount -o loop kube01.img mnt

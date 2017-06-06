@@ -54,7 +54,7 @@ Then run:
 
 ```
 mkdir /usr/share/nginx/html/kubam
-systemctl nginx restart
+systemctl restart nginx
 ```
 
 We can now put all of our files in the ```/usr/share/nginx/html/kubam``` directory and see a listing of all of them when we navigate to ```http://example.com/kubam/```. 
@@ -127,10 +127,11 @@ umount mnt
 Kickstart Images are used for individual nodes.  Each image should be named after the service profile (SP) name of the server.  If there are spaces in the SP name then they should be given dashes instead of spaces for the name. 
 
 ```bash
+export WORKDIR=/usr/share/nginx/html/kubam
 for i in $(seq -w 1 3) 
 do 
 	fallocate -l 1M kube0$i.img
-	dd if=/dev/zero of=kube01.img bs=1 count=1
+	dd if=/dev/zero of=kube0${i}.img bs=1M count=1
 	mkfs -t ext2 kube0$i.img
 	e2label kube0$i.img KUBAM
 	mkdir $WORKDIR/kube0$i/
@@ -145,12 +146,51 @@ This will create 3 directories for a KUBaM setup of 3 nodes.  We now need to cre
 
 ## 4.1 Kickstart Images
 
-The example in [Section 2.2.1.1 of this Post](http://localhost:4000/os/2017/04/20/centos-redhat-baremetal) will work for our purposes.  We will update this section with more information. 
+The example in [Section 2.2.1.1 of this Post](http://localhost:4000/os/2017/04/20/centos-redhat-baremetal) will work for our purposes.   
 
 * Be sure to put a unique IP address for each node
 * Substitute your correct encrypted password
 * Substitute in your public SSH key as shown in the example. 
 * Substitute the mount directory of the tree you created in step 3. This may be something like ```url --url="http://example.com/kubam/rh7.3"``` as we have done in the above example. 
+
+We have a sample set of UCS Kickstart images that have been known to work in [the KUBaM github repo](https://github.com/CiscoUcs/KUBaM/tree/master/stage1/kickstart-samples)
+
+To validate your kickstart file install the ```pykickstart``` package
+
+```
+yum -y install pykickstart
+```
+
+Then validate your kickstart file with: 
+
+```
+ksvalidator my-ks.cfg
+```
+### 4.1.1
+
+Please note that we recommend putting the public key of the install server in the authorized keys of the nodes you install.  This simplifies the ansible installation as you don't have to specify passwords. 
+
+On the install server run: 
+
+```
+ssh-keygen -t rsa
+```
+Accept all the defaults.  Then you can append the public key in the ```%post``` section of the ```ks.cfg``` file: 
+
+```
+%post
+#---- Install our SSH key ----
+mkdir -m0700 /root/.ssh/
+cat <<EOF >/root/.ssh/authorized_keys
+ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA5xwR+1+0sBwa0wME6maFjXjIdxUS9taPOgpf1c1EJUgZENDUUOdOabDbEZ6w/xLvx7vHtYDMMTzbyKif9O5hfgQ4RXNjMIMhu+PgShfCsUCFyhMF+cKZNeg2fUZn83r9oWWcFfL31Qh8PMe3yHV30fmBUwpqdCiUCrLznefVwsIlBcnr0DaScU2TdfY73sFR69K6bBJ80GYryaQi2v2s7cjZl2sDMuv5tDNmiOZCxtDJpRS4oaILnRh0gPQaYem0Hl2AGsETsYzqbXsvKkKd96hUtKmoDQ/voHaqFvB6/don12BFQDkTtCGqOCkga7JIGWhAdZbD3+owvOPaPAvK7Q==
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCsmFCXWlhPlews0fXhcW5y1R8+Zudq64eRPN3buKiZ6uTJlpPmJTuo/dnA34Zgb+CXhz4LxEWdS8BYLVcupwIU9GrtLfipIc249WYRPDm8g0PL2S/PEv65ZGTfOzm8ncQBgOYi+1sBoP8ssRDIZzGSUmDfMPhFF2KbAQAq/a1M0hdxwQ4rFJgmPGpIPw8SsOIro10ewp1o+qRGCobdWkMIbexT5XF3Kab9Zg6yWv0XsyNBJ+VwIoD9T7NYYbXU6dXrl82YLKaPkQFGKd7TG6Pdk/5yO71+MPpU8kpQtRSLhGUMLrF3BszYVbK0l+cXLTbrsldtOi+g348WSXFo8SCV root@k8smansvr.k8sdemo
+EOF
+### set permissions
+chmod 0600 /root/.ssh/authorized_keys
+### fix up selinux context if you are using it.
+#restorecon -R /root/.ssh/
+%end
+
 
 ## 4.2 Unmount Kickstart images
 Once images are ready, you can unmount them. 
