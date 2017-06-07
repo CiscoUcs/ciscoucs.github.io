@@ -69,4 +69,6 @@ cd ~/Code/KUBaM/stage3/ansible
 ansible-playbook cluster.yml
 ```
 
+This operation will take around 10 minutes and install the kubernetes cluster downloading the necessary pieces.  It uses [kubeadm](https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/) and will evolve with the project as more features are supported. 
+
 You are now ready to move to [stage 4](https://ciscoucs.github.io/kubam/)
