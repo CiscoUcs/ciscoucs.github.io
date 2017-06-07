@@ -67,4 +67,4 @@ Install Kubernetes and Contiv using:
 ```
 cd ~/Code/KUBaM/stage3/ansible
 ansible-playbook cluster.yml
-
+```
