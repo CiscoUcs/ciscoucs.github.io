@@ -68,3 +68,5 @@ Install Kubernetes and Contiv using:
 cd ~/Code/KUBaM/stage3/ansible
 ansible-playbook cluster.yml
 ```
+
+You are now ready to move to [stage 4](https://ciscoucs.github.io/kubam/)
