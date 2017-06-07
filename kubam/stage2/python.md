@@ -90,6 +90,15 @@ Please select servers you want to install Kubernetes on separated by commas
 
 At the end of this script, the servers should boot back up and be provisioned with the OS you created and be ready to go. 
 
+## Tips
+
+If you want to reinstall the servers after installing them, you can wipe them out by ssh'ing into each server and running: 
+
+```
+dd if=/dev/zero of=/dev/sda bs=1M count=5
+```
+This will erase the master boot record.  Note that if you do this, be sure you really want to wipe out the machine.  This will make it so you do not need to change the boot order and can simply reboot the server and it will start the installation process again.  
+
 You are now ready to move to [stage 3](https://ciscoucs.github.io/kubam/)
 
 

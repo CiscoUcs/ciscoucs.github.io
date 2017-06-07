@@ -205,6 +205,11 @@ done
 ```
 Your files are now ready to go. 
 
+### 4.2.1 Changing the ks.cfg
+
+If you change the ```ks.cfg``` image by mounting the filesystem again and then modifying the text, UCS will still mount the old version.  We have found the simplist way to make sure that it remounts the image is to update the vMedia policy by changing just the IP address of the 
+
+
 # 5 Take Stock
 Check that we now have all the right files:
 
