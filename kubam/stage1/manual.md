@@ -19,6 +19,7 @@ The only service we need running for automated installation is a web server that
 ```bash
 yum -y install nginx
 systemctl start nginx
+systemctl enable nginx # so it starts on reboots
 ```
 
 Open the firewall if ```firewalld``` is running:
