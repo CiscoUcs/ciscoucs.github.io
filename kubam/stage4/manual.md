@@ -32,47 +32,38 @@ kube03    Ready          23m
 
 # 2. Kubectl
 
-You may decide you want to access your cluster remotely.  This requires you to create a file on your build server (or MacOS) and set ```kubectl``` to use it.  You create a file called:
+You may decide you want to access your cluster remotely.  This requires the ```kubectl``` command tool to be installed on the machine you want to access from as well as creating a file on your build server (or MacOS) and set ```kubectl``` to use it.  
+
+## 2.1 Get kubectl
+
+Instructions are [posted here](https://kubernetes.io/docs/tasks/tools/install-kubectl/).  We recommend version 1.5.4 as this is the version that works with contiv.
+
+```
+curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.5.4/bin/linux/amd64/kubectl
+chmod 755 kubectl
+sudo mv kubectl /usr/local/bin
+```
+
+## 2.2 Config Kubectl
+
+
+You create a file called:
 
 ```
 ~/.kubectl/config
 ```
 
 Most of the contents of the file can be retrieved from ```kube01``` in ```/etc/kubernetes/admin.conf```
-To make it simple we have an example that looks as follows: 
+To make it simple just run the following: 
 
 ```
-apiVersion: v1
-clusters:
-- cluster:
-    certificate-authority-data: <long-key>
-    server: https://10.61.124.170:6443
-  name: ams
-contexts:
-- context:
-    cluster: ams
-    user: admin
-  name: default-context
-current-context: default-context
-kind: Config
-preferences: {}
-users:
-- name: admin
-  user:
-    user:
-    client-certificate-data: <long-key>
-    client-key-data: <long-key> 
+mkdir -p ~/.kube
+scp kube01:/etc/kubernetes/admin.conf ~/.kube/config
 ```
-
-
-The values for the keys are found on ```kube01``` in ```/etc/kubernetes/admin.conf```
-
-The value for the server is the IP address of ```kube01```
-
-Once you have this file you set kubectl to use the default context you created:
+After doing this, ```kubectl``` should work right away:
 
 ```
-kubectl config use-context default-context
+kubectl get componentstatus
 ```
 
 ## 2.1 troubleshooting
