@@ -6,13 +6,10 @@ tags: Kubernetes, containers
 {% include JB/setup %}
 
  
-<div class="alert alert-warning">
-This is a <b>WORK IN PROGRESS</b>.  We are building the airplane while its in the air.  If you've stumbled upon this page then please know that we are in pre-Alpha mode!
-</div>
 
-Hello! Shalom! Aloha!  Hola! Ciao!
+You have UCS and you want Kubernetes running on it as fast as possible. Before you can even say KUBaM we will make that happen.  Here we outline the steps and process of how this all goes down.  Want to see a quick tour?  Watch the video below
 
-Welcome to KUBaM! You have UCS and you want Kubernetes running on it as fast as possible. Before you can even say KUBaM we will make that happen.  There are a few steps you'll need to do, and we are constantly improving this process to make those steps even less.
+<iframe width="560" height="315" src="https://www.youtube.com/embed/_6IBeywMoMA" frameborder="0" allowfullscreen></iframe>
 
 You may also have ways you like doing things with your tools.  Therefore, in each stage we have and will continue to add options of how each stage can be accomplished.  Have a tool?  [Let us know](http://twitter.com/vallard) and we'll prioritize it. 
 
