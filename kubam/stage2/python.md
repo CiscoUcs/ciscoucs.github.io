@@ -90,6 +90,33 @@ Please select servers you want to install Kubernetes on separated by commas
 
 At the end of this script, the servers should boot back up and be provisioned with the OS you created and be ready to go. 
 
+## Troubleshooting
+If your blade or server displays errors like the below:
+
+![error](../img/err1.png)
+
+<b>"Server unavailable There are not enough resources overall Insufficient disks for the specified raid level"</b> and you know there are enough disks in your server then we need to let UCS know that it's ok to free those disks.  
+
+This is done by going to the blade and [Configuring Local Disk Operations as specified in the Admin Guide](http://www.cisco.com/c/en/us/td/docs/unified_computing/ucs/sw/gui/config/guide/2-2/b_UCSM_GUI_Configuration_Guide_2_2/configuring_storage_profiles.html#task_5325E81B0CD84790817EC6F6644ECD4A).
+
+There are two cases that may be required.  The easiest is to go to:
+
+Equipment Tab > Select the Server > In the work pane select Inventory > Storage > Disks
+
+Select each disk and in the field below select "Set JBOD to Unconfigured Good".  If that line is grayed out, please make sure you actually click on the disk.  Do this for each of the disks to free them up. 
+
+If this is grayed out as well, go to: 
+
+Equipment Tab > Select the Server > In the work pane select Inventory > Storage > LUNS. 
+
+Here you can select an existing LUN and Delete it. 
+
+![Delete LUN](../img/err2.png)
+
+This can take about 5 minutes for the change to take effect and for the server to eventually associate with the service profile. Looking at the FSM tab on the server can get you more information as to where it is in the process. 
+
+![FSM](../img/err3.png)
+
 ## Tips
 
 If you want to reinstall the servers after installing them, you can wipe them out by ssh'ing into each server and running: 
@@ -97,7 +124,11 @@ If you want to reinstall the servers after installing them, you can wipe them ou
 ```
 dd if=/dev/zero of=/dev/sda bs=1M count=5
 ```
-This will erase the master boot record.  Note that if you do this, be sure you really want to wipe out the machine.  This will make it so you do not need to change the boot order and can simply reboot the server and it will start the installation process again.  
+This will erase the master boot record.  Note that if you do this, be sure you really want to wipe out the machine.  This will make it so you do not need to change the boot order and can simply reboot the server and it will start the installation process again. 
+
+### Storage Options
+
+KUBaM configures two disks in RAID1.  You may decide  you want more, depending on your hardware.  The easiest way to do this is to modify the Disk Group Policy in UCS.  This will allow you to use more drives and have more options.   
 
 You are now ready to move to [stage 3](https://ciscoucs.github.io/kubam/)
 
