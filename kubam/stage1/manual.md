@@ -109,13 +109,13 @@ We can now put all of our files in the ```/usr/share/nginx/html/kubam``` directo
 
 # 2. Download Installation Media
 
-## CentOS 7
+## 2.1 CentOS 7
 ```
 cd /usr/share/nginx/html/kubam
 ```
 Do a ```wget``` on one of the [mirrors that you can find here.](http://isoredirect.centos.org/centos/7/isos/x86_64/CentOS-7-x86_64-Minimal-1611.iso)
 
-## RedHat 7
+## 2.2 RedHat 7
 You'll need to get it from your subscription or wherever you get RedHat. 
 
 # 3. Prepare Boot ISO Media
@@ -132,7 +132,7 @@ The ISO image for the OS we will install should be in this directory.
 
 ```
 mkdir -p mnt stage1
-mount -o loop rhel-server-7.3-x86_64-dvd.iso mnt
+mount -o loop <YOUR ISO IMAGE>.iso mnt
 cp -a mnt/isolinux/ stage1/
 cp mnt/.discinfo stage1/isolinux
 cp -a mnt/LiveOS stage1/isolinux/
@@ -141,6 +141,8 @@ umount mnt
 ```
 
 Edit the ```stage1/isolinux/isolinux.cfg``` file: 
+
+### RedHat
 
 ```diff
 label linux
@@ -156,10 +158,39 @@ label check
 - menu default
   append initrd=initrd.img inst.stage2=hd:LABEL=RHEL-7.3\x20Server.x86_64 rd.live.check quiet
 ```
+
+### CentOS
+```diff
+label linux
+  menu label ^Install CentOS Linux 7
++ kernel vmlinuz
+  menu default
++ append initrd=initrd.img inst.stage2=hd:LABEL=CentOS\x207\x20x86_64 quiet
+- append initrd=initrd.img inst.stage2=hd:LABEL=CentOS\x207\x20xx86_64 inst.ks=hd:LABEL=KUBAM:ks.cfg quiet
+
+label check
+  menu label Test this ^media & install CentOS Linux 7
+  kernel vmlinuz
+- menu default
+  append initrd=initrd.img inst.stage2=hd:LABEL=CentOS\x207\x20x86_64 rd.live.check quiet
+```
+
+
 Now Pack up the ISO boot image: 
 
 ```
 yum -y install mkisofs
+```
+
+### CentOS
+```
+mkisofs -o $WORKDIR/centos73-boot.iso -b isolinux.bin \
+	-c boot.cat -no-emul-boot -V 'CentOS 7 x86_64' \
+	-boot-load-size 4 -boot-info-table -r -J -v -T stage1/isolinux
+```
+
+### RedHat
+```
 mkisofs -o $WORKDIR/rh73-boot.iso -b isolinux.bin \
 	-c boot.cat -no-emul-boot -V 'RHEL-7.3 Server.x86_64' \
 	-boot-load-size 4 -boot-info-table -r -J -v -T stage1/isolinux
@@ -170,6 +201,17 @@ Tragically, this is a 497MB image.  😰
 
 Create a directory with the OS name and copy the contents of the OS ISO to this directory: 
 
+### CentOS
+```
+mkdir centos7.3
+mount -o loop CentOS-7-x86_64-Minimal-1611.iso mnt
+cp -a mnt/* centos7.3/
+cp mnt/.discinfo centos7.3/
+cp mnt/.treeinfo centos7.3/
+umount  mnt
+```
+
+### RedHat
 ```
 mkdir rh7.3
 mount -o loop rhel-server-7.3-x86_64-dvd.iso mnt
