@@ -4,7 +4,7 @@ title: KUBaM! - Stage 2 UCSM Python SDK
 tags: Kubernetes, containers
 ---
 
-Before continuing, be sure you have completed [stage 1](http://localhost:4000/kubam/).  
+Before continuing, be sure you have completed [stage 1](../).  
 
 # 1. Prereqs
 
