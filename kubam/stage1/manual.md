@@ -10,6 +10,34 @@ For the UCS Bare Metal setup KUBaM uses vMedia Policies to do the automated inst
 * B200 M3 or C2XX M3 servers or higher.  Servers below these models don't allow vMedia policies. 
 * One Master Server that has access to UCSM and the Kubernetes Network.  It works easiest if the Master Server is on the same subnet of the kubernetes nodes, but this is not a requirement as long as 
 
+# 0. Make sure package management tool is working
+
+## RedHat/CentOS
+
+Make sure you have ```yum``` set up to get packages. 
+
+### Red Hat
+
+Example:  If you are behind a firewall: 
+
+```
+https_proxy=proxy.esl.cisco.com:80 subscription-manager register
+```
+
+You will need to add proxy setup to ```/etc/yum.conf```.  Add a line that looks like the following to the ```[main]``` section: 
+
+```
+proxy=http://proxy.esl.cisco.com:80
+```
+
+The easiest way to get NGINX on redhat is to add the nginx repo:
+
+```
+rpm -Uvh http://nginx.org/packages/centos/7/noarch/RPMS/nginx-release-centos-7-0.el7.ngx.noarch.rpm
+```
+You should now be able to move to the next step!
+
+
 # 1. Setup Web Server
 
 The only service we need running for automated installation is a web server that we can put remote media.  We don't require TFTP, DHCP, or other PXE services to be in place.  See this [post](https://communities.cisco.com/people/vbeninco/blog/2017/04/25/pxe-less-automated-installation-of-centosredhat-on-ucs) for more explanation.
@@ -32,21 +60,35 @@ __Note:__ this assumes that ```firewall-cmd --get-active-zones``` showed the ```
 
 The root of the webpages defaults to serve from ```/user/share/nginx/html```.  We will put all the ISO files in this directory. 
 
-### 1.1.1 Optional: Allow directory listing
+### 1.1.1 Allow directory listing
 
 By default, nginx doesn't allow the user to see the files in the root directory.  If you get rid of the ```index.html``` file you will then see a __403 Forbidden__ error when you try to access the webpage. 
 
-To change this behavior you can modify the ```/etc/nginx/nginx.conf``` file.  After the lines: 
+We desire to change this behavior so we can see the contents of the installation trees we will create.  
+
+To make this happen modify either ```/etc/nginx/nginx.conf``` (CentOS) or the ```/etc/nginx/conf.d/default.conf``` (RedHat) file.  After the lines: 
 
 ```
 location / {
+   // maybe some stuff here... maybe not. 
 }
 ```
 
-Adding the following: 
+Adding the following 
+
+#### CentOS ```/etc/nginx/nginx.conf```
 
 ```
 location /kubam {
+  autoindex on;
+}
+```
+
+#### RedHat ```/etc/nginx/conf.d/default.conf```
+
+```
+location /kubam {
+  root   /usr/share/nginx/html;
   autoindex on;
 }
 ```
@@ -58,12 +100,27 @@ mkdir /usr/share/nginx/html/kubam
 systemctl restart nginx
 ```
 
+Make sure you can now navigate to the server and see that you can access the directory: 
+
+![directory listing](../img/dir.png)
+
+
 We can now put all of our files in the ```/usr/share/nginx/html/kubam``` directory and see a listing of all of them when we navigate to ```http://example.com/kubam/```. 
 
+# 2. Download Installation Media
 
-# 2. Prepare Boot ISO Media
+## CentOS 7
+```
+cd /usr/share/nginx/html/kubam
+```
+Do a ```wget``` on one of the [mirrors that you can find here.](http://isoredirect.centos.org/centos/7/isos/x86_64/CentOS-7-x86_64-Minimal-1611.iso)
 
-For more information on this process [see this post](http://localhost:4000/os/2017/04/20/centos-redhat-baremetal) 
+## RedHat 7
+You'll need to get it from your subscription or wherever you get RedHat. 
+
+# 3. Prepare Boot ISO Media
+
+For more information on this process [see this post](https://ciscoucs.github.io/os/2017/04/20/centos-redhat-baremetal) 
 
 The working directory is the html directory of your webserver.  Assume for this example it is ```/usr/share/nginx/html/kubam/```
 
@@ -109,9 +166,7 @@ mkisofs -o $WORKDIR/rh73-boot.iso -b isolinux.bin \
 ```
 Tragically, this is a 497MB image.  😰
 
-
-
-# 3. Prepare Install Tree
+# 4. Prepare Install Tree
 
 Create a directory with the OS name and copy the contents of the OS ISO to this directory: 
 
@@ -124,7 +179,7 @@ cp mnt/.treeinfo rh7.3/
 umount mnt
 ```
 
-# 4. Prepare Kickstart Images
+# 5. Prepare Kickstart Images
 Kickstart Images are used for individual nodes.  Each image should be named after the service profile (SP) name of the server.  If there are spaces in the SP name then they should be given dashes instead of spaces for the name. 
 
 ```bash
@@ -145,7 +200,7 @@ done
 
 This will create 3 directories for a KUBaM setup of 3 nodes.  We now need to create the Kickstart files and copy them into the ```$WORKDIR/kube0$i/``` directories, then unmount the images. 
 
-## 4.1 Kickstart Images
+## 5.1 Kickstart Images
 
 The example in [Section 2.2.1.1 of this Post](http://localhost:4000/os/2017/04/20/centos-redhat-baremetal) will work for our purposes.   
 
@@ -170,7 +225,7 @@ ksvalidator my-ks.cfg
 
 Once you like your ```ks.cfg``` copy it into the ```kube0x``` directories. 
 
-### 4.1.1
+### 5.1.1
 
 Please note that we recommend putting the public key of the install server in the authorized keys of the nodes you install.  This simplifies the ansible installation as you don't have to specify passwords. 
 
@@ -196,7 +251,7 @@ chmod 0600 /root/.ssh/authorized_keys
 %end
 ```
 
-## 4.2 Unmount Kickstart images
+## 5.2 Unmount Kickstart images
 Once images are ready, you can unmount them. 
 ```
 for i in $(seq -w 3)
@@ -206,12 +261,12 @@ done
 ```
 Your files are now ready to go. 
 
-### 4.2.1 Changing the ks.cfg
+### 5.2.1 Changing the ks.cfg
 
 If you change the ```ks.cfg``` image by mounting the filesystem again and then modifying the text, UCS will still mount the old version.  We have found the simplist way to make sure that it remounts the image is to update the vMedia policy by changing just the IP address of the 
 
 
-# 5 Take Stock
+# 6 Take Stock
 Check that we now have all the right files:
 
 * http://example.com/kubam/rh7.3 - Installation Media Tree
