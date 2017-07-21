@@ -19,7 +19,7 @@ RedHat and CentOS should come with python installed by default.  You'll just nee
 
 ```
 cd /tmp/
-curl https://bootstrap.pypa.io/get-pip.py
+wget https://bootstrap.pypa.io/get-pip.py
 python get-pip.py
 pip install ucsmsdk
 ```
@@ -35,16 +35,17 @@ You may also need to prepend the other commands with this proxy information.
 ## 2.2 Get the code:
 
 ```
+yum -y install git
 mkdir -p ~/Code
-cd Code
-git clone https://github.com/vallard/KUBaM.git
+cd ~/Code
+git clone https://github.com/ciscoucs/KUBaM.git
 cd KUBaM/
 ```
 
 <div class="alert alert-info">
 <b>Proxy Issues?</b> If you are behind a proxy you may need to enter in the proxy information for the git clone to work.  Example:   
 <code>
-https_proxy=proxy.esl.cisco.com:80 git clone https://github.com/vallard/KUBaM.git
+https_proxy=proxy.esl.cisco.com:80 git clone https://github.com/ciscoucs/KUBaM.git
 </code>
 </div>
 
@@ -54,7 +55,7 @@ https_proxy=proxy.esl.cisco.com:80 git clone https://github.com/vallard/KUBaM.gi
 
 ```
 cd ~/Code/KUBaM/stage2
-./kubeucs.py admin cisco.123 172.28.225.102
+./kubeucs.py -o kubeblade admin nbv12345 172.28.224.163
 [1] VLAN default
 [2] VLAN hx-inband-mgmt
 [3] VLAN hx-vmotion

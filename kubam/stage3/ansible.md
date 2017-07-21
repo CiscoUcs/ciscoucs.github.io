@@ -12,6 +12,13 @@ Before continuing, be sure you have completed [stage 1 and stage 2](/kubam/).
 
 You will need ansible installed on your build server.  This could be the same server that you are hosting the web services from.  We have tested with ```2.2.1.0```
 
+### RedHat (YMMV)
+
+```
+yum -y install gcc python-devel
+pip install ansible
+```
+
 ## 1.2 Quick Check
 
 You should already have the [KUBaM Repo](https://github.com/CiscoUcs/KUBaM) installed on your build server.  Go to the stage 3 Ansible directory:
@@ -66,7 +73,7 @@ Install Kubernetes and Contiv using:
 
 ```
 cd ~/Code/KUBaM/stage3/ansible
-ansible-playbook cluster.yml
+ansible-playbook site.yml
 ```
 
 This operation will take around 10 minutes and install the kubernetes cluster downloading the necessary pieces.  It uses [kubeadm](https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/) and will evolve with the project as more features are supported. 
