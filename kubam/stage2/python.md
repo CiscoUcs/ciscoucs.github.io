@@ -118,6 +118,19 @@ This can take about 5 minutes for the change to take effect and for the server t
 
 ![FSM](../img/err3.png)
 
+If you get an error saying "Controller Does Not support out of band configuration" for the UCS then you may have a C-Series system with the PCH controller.  
+
+![PCH Error](../img/err4.png)
+
+The simple fix here is to create a storage controller definition as part of your storage profile.  
+
+![PCH](../img/pch.png)
+
+This is a manual step as KUBaM does not currently set this up for you automatically.  
+
+Finally, note there are many ways that storage can be configured including SAN boot that we have been able to compute but requires some manual work that we have not codified.  If you have such environments then you can modify storage profiles or SAN Boots to meet your needs. 
+
+
 ## Tips
 
 If you want to reinstall the servers after installing them, you can wipe them out by ssh'ing into each server and running: 
