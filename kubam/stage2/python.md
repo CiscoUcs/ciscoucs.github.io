@@ -130,7 +130,6 @@ This is a manual step as KUBaM does not currently set this up for you automatica
 
 Finally, note there are many ways that storage can be configured including SAN boot that we have been able to compute but requires some manual work that we have not codified.  If you have such environments then you can modify storage profiles or SAN Boots to meet your needs. 
 
-
 ## Tips
 
 If you want to reinstall the servers after installing them, you can wipe them out by ssh'ing into each server and running: 
