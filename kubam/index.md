@@ -17,6 +17,7 @@ Installing Kubernetes on UCS Bare Metal is a 4 stage process.   At each stage yo
 ## Stage 1 - Prepare 
 You will need a management server that has all the bits required for the kubernetes setup.
 
+* __Recommended:__ [Using Docker](/kubam/stage1/docker)  
 * [Manual Preparation](/kubam/stage1/manual)
 
 ## Stage 2 - UCS Bare Metal Deployment
