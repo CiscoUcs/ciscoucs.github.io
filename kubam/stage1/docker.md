@@ -21,12 +21,12 @@ An installation server can be created with a VM or another bare metal server.  T
 * Ensure there is no other web server running on this server. 
 * SELinux will just cause problems and we don't currently support it.  If running CentOS ensure to run ```setenforce 0``` or edit ```/etc/sysconfig/selinux``` and set ```SELINUX=disabled``` and reboot. 
 
-## 1.1. Install Docker
+## 1.1. Install Docker and Wget 
 
 For CentOS this can be done as follows: 
 
 ```
-yum -y install docker
+yum -y install docker wget
 systemctl enable docker
 systemctl start docker
 ```
