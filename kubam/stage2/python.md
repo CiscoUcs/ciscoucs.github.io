@@ -27,7 +27,7 @@ pip install ucsmsdk
 <div class="alert alert-info">
 <b>Proxy Issues?</b> If you are behind a proxy you may need to enter in the proxy information for the git clone to work.  Example:   
 <code>
-https_proxy=proxy.esl.cisco.com:80 curl https://bootstrap.pypa.io/get-pip.py</code>
+https_proxy=proxy.esl.cisco.com:80 wget https://bootstrap.pypa.io/get-pip.py</code>
 You may also need to prepend the other commands with this proxy information. 
 </div>
 
@@ -88,6 +88,8 @@ Please select servers you want to install Kubernetes on separated by commas
 (E.g: 2,4,8) :
 ...
 ```
+
+Note: The '-o' switch in the above command defines the name of the organization you wish to create in UCSM manager.
 
 At the end of this script, the servers should boot back up and be provisioned with the OS you created and be ready to go. 
 
