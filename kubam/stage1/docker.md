@@ -20,6 +20,7 @@ An installation server can be created with a VM or another bare metal server.  T
 * We will use CentOS for our server but really any server that can run docker should work.  
 * Ensure there is no other web server running on this server. 
 * SELinux will just cause problems and we don't currently support it.  If running CentOS ensure to run ```setenforce 0``` or edit ```/etc/sysconfig/selinux``` and set ```SELINUX=disabled``` and reboot. 
+* Ensure IP forwarding is enabled (RedHat/CentOS).  This can be done with ```echo net.ipv4.ip_forward = 1 >>/etc/sysctl.d/99-sysctl.conf```
 
 ## 1.1. Install Docker
 
