@@ -22,12 +22,12 @@ An installation server can be created with a VM or another bare metal server.  T
 * SELinux will just cause problems and we don't currently support it.  If running CentOS ensure to run ```setenforce 0``` or edit ```/etc/sysconfig/selinux``` and set ```SELINUX=disabled``` and reboot. 
 * Ensure IP forwarding is enabled (RedHat/CentOS).  This can be done with ```echo net.ipv4.ip_forward = 1 >>/etc/sysctl.d/99-sysctl.conf```
 
-## 1.1. Install Docker
+## 1.1. Install Docker and Wget 
 
 For CentOS this can be done as follows: 
 
 ```
-yum -y install docker
+yum -y install docker wget
 systemctl enable docker
 systemctl start docker
 ```
