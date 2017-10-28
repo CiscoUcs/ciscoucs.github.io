@@ -1,37 +1,44 @@
 ---
 layout: page
-title: KUBaM! - Kubernetes on UCS Bare Metal
+title: KUBAM! A Simple UCS Bare Metal Installer
 tags: Kubernetes, containers
 ---
 {% include JB/setup %}
 
  
+![img ](img/logo.png)
 
-You have UCS and you want Kubernetes running on it as fast as possible. Before you can even say KUBaM we will make that happen.  Here we outline the steps and process of how this all goes down.  Want to see a quick tour?  Watch the video below
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/_6IBeywMoMA" frameborder="0" allowfullscreen></iframe>
+You have a sweet [UCS](https://www.cisco.com/c/en/us/products/servers-unified-computing/index.html) in your datacenter, now make it dance!  
 
-You may also have ways you like doing things with your tools.  Therefore, in each stage we have and will continue to add options of how each stage can be accomplished.  Have a tool?  [Let us know](http://twitter.com/vallard) and we'll prioritize it. 
+KUBAM is the fastest way to run solutions in your data center on UCS.  It takes the pain out of bare metal operating system installations and automatically provisions solutions such as Kubernetes, Docker Datacenter and other solutions.  KUBAM gives you the power to crush those who oppose you.  It is open source but enjoys a simplified experience compared to other offerings. 
 
-Installing Kubernetes on UCS Bare Metal is a 4 stage process.   At each stage you may have several options and we will add options as they become available.  
-## Stage 1 - Prepare 
-You will need a management server that has all the bits required for the kubernetes setup.
+## Getting Started
 
-* __Recommended:__ [Using Docker](/kubam/stage1/docker)  
-* [Manual Preparation](/kubam/stage1/manual)
+#### Requirements
+* A KUBAM Server:  This can be a VM or Bare Metal machine that has about 20GB of disk space and a modern CPU that supports docker. Raspberry Pi?  Why not, we haven't tried it but maybe you can. 
+* [Install Docker](https://www.docker.com/docker-centos-distribution).  
+* [Install Docker Compose](https://docs.docker.com/compose/install/).  
 
-## Stage 2 - UCS Bare Metal Deployment
+#### Instructions
 
-In this stage you will need to setup UCS service profiles in a way so they automatically install the operating system. 
+Log into the KUBAM server and run the following: 
 
-* [UCSM Python Scripts](/kubam/stage2/python)
+```
+curl -O https://raw.githubusercontent.com/CiscoUcs/KUBaM/master/docker-compose.yml 
+docker-compose up -d
+```
+This will download two containers. We are sorry they are so large.  We are working to shrink them down.  Don't hate, give it a chance. 
 
-## Stage 3 - Install Kubernetes
+Once these are up, open the IP address of the KUBAM server in a web browser on port ```5000```.  
 
-Here we automate the installation process of Kubernetes on operating systems that are now provisioned. 
+Step through each menu, build the install images, then hit deploy.  Boom, you are done!  So fast!  So easy!
 
-* [Ansible Scripts](/kubam/stage3/ansible)
+## Glorious Underbelly
+Want to see how it works underneath?  The gory details are [here](old.md)
 
-## Stage 4 - Configure Kubernetes Client
+## Support
 
-* [Manual Setup](/kubam/stage4/manual)
+KUBAM only works with UCS Fabric Interconnects.  They can be blades or rack mount servers.  Why?  Cause only UCS has powerful APIs that make this easy.  
+
+If you have problems or questions, please open an [issue](https://github.com/CiscoUcs/KUBaM/issues).  Better yet, make a pull request.  You can also [hit us up on twitter](http://twitter.com/vallard) KUBAM is scrappy, fast, changing, and brand new. 

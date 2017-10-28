@@ -4,13 +4,110 @@
  <title>Cisco UCS Developer Resources</title>
  <link href="http://ciscoucs.github.io/atom.xml" rel="self"/>
  <link href="http://ciscoucs.github.io"/>
- <updated>2017-05-01T09:56:33-07:00</updated>
+ <updated>2017-10-27T16:54:46-07:00</updated>
  <id>http://ciscoucs.github.io</id>
  <author>
    <name>Cisco UCS</name>
    <email>vbeninco@cisco.com</email>
  </author>
 
+ 
+ <entry>
+   <title>Updating Drivers for Centos/RH7.3 7.3</title>
+   <link href="http://ciscoucs.github.io/os/2017/05/12/drivers"/>
+   <updated>2017-05-12T00:00:00-07:00</updated>
+   <id>http://ciscoucs.github.io/os/2017/05/12/drivers</id>
+   <content type="html">
+&lt;p&gt;You may need to update drivers for UCS if it doesn’t install or recognize different components.  To make this fit with our existing automated installation we need to update the initrd.img that is included in the isolinux directory.&lt;/p&gt;
+
+&lt;p&gt;Get your dependencies:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;yum -y install xz
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Now modify the initrd&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;mkdir -p /install/stage/centos7.3/exploded
+cp &amp;lt;centos7.3root&amp;gt;/isolinux/initrd.img /install/stage/centos7.3/
+cd /install/stage/centos7.3/exploded
+xz -dc &amp;lt; ../initrd.img | cpio --quiet -i --make-directories
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;You’ll now have a file system that we need to inject.&lt;/p&gt;
+
+&lt;h2 id=&quot;get-the-new-drivers-into-your-initrdimg&quot;&gt;Get the New Drivers Into your initrd.img&lt;/h2&gt;
+
+&lt;p&gt;Figure out where the RPM will install the drivers:&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;rpm -ql -p kmod-megaraid*
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Then install the drivers:&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;rpm -ivh kmod-megaraid_sas-07.701.16.00_el7.3-1.x86_64.rpm --nodeps
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Copy these ko files into the right directory.  In this case we have&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cd /lib/modules/3.10.0-514.el7.x86_64/extra/megaraid_sas
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Overwrite the old one:&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;mv megaraid_sas.ko /install/stage/centos7.3/exploded/lib/modules/3.10.0-514.el7.x86_64/kernel/drivers/scsi/megaraid/
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Pack the old image back up&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cd /lib/stage
+find . 2&amp;gt;/dev/null | cpio --quiet -c -o | xz -9 --format=lzma &amp;gt;../new_initrd.img
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; This command takes longer than you probably would like.&lt;/p&gt;
+
+&lt;p&gt;You now have a new initrd.img that you can put into your isolinux tree for installations.&lt;/p&gt;
+
+&lt;h2 id=&quot;notes&quot;&gt;Notes&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Need to update squashfs?&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;yum -y install squashfs-tools
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;find the &lt;code class=&quot;highlighter-rouge&quot;&gt;LiveOS&lt;/code&gt; directory in the &lt;code class=&quot;highlighter-rouge&quot;&gt;isolinux&lt;/code&gt; directory.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cd LiveOS
+unsquashfs squashfs.img
+cd squashfs-root/LiveOS/
+mkdir mnt
+mount -t ext4 rootfs.img mnt
+cp /lib/modules/3.10.0-514.el7.x86_64/extra/megaraid_sas/megaraid_sas.ko extra/megaraid_sas/
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Let’s see the pre/post scripts:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;rpm -q --scripts kmod-megaraid_sas
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;We get the output:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;if [ -e &quot;/boot/System.map-3.10.0-514.el7.x86_64&quot; ]; then
+    /usr/sbin/depmod -aeF &quot;/boot/System.map-3.10.0-514.el7.x86_64&quot; &quot;3.10.0-514.el7.x86_64&quot; &amp;gt; /dev/null || :
+fi
+
+modules=( $(find /lib/modules/3.10.0-514.el7.x86_64/extra/megaraid_sas | grep '\.ko$') )
+if [ -x &quot;/sbin/weak-modules&quot; ]; then
+    printf '%s\n' &quot;${modules[@]}&quot;     | /sbin/weak-modules --add-modules
+fi
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+</content>
+ </entry>
  
  <entry>
    <title>PXE-less Automated UCS Installation of RedHat/CentOS</title>
@@ -216,7 +313,7 @@ chmod 0600 /root/.ssh/authorized_keys
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;mkdir -p /tmp/kubm/kube01
 cd /tmp/kubm/kube01
 fallocate -l 1M kube01.img
-dd if=/dev/zero of=kube01.img bs=1 count=1
+dd if=/dev/zero of=kube01.img bs=1M count=1
 mkfs -t ext4 kube01.img  # select y to proceed anyway
 mkdir mnt
 mount -o loop kube01.img mnt
