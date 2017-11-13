@@ -5,7 +5,7 @@ tags: Kubernetes, containers
 ---
 {% include JB/setup %}
 
-#Settings
+# Settings
 
 The settings portion has additional information on how to configure your environment. 
 
