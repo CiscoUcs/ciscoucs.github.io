@@ -36,6 +36,7 @@ Step through each menu, build the install images, then hit deploy.  Boom, you ar
 
 ## More Documentation
 
+* [Detailed Instructions](docs/index.md) - Work in progress documentation
 * [Advanced Connections](docs/connect.md) - For if your KUBAM service is behind some complicated network environment. 
 
 ## Glorious Underbelly
