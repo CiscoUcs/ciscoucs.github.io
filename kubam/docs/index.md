@@ -9,4 +9,12 @@ tags: Kubernetes, containers
 
 KUBAM aims to be self explanitory but sometimes we aren't as clever as we like to think we are.  So these docs will talk about things that may seem a little mysterious to users. Also, it is a work in progress and points are documented when users have questions. 
 
+* [Installation](kubam-node.md) Specific instructions for getting a KUBAM node up. Also how to navigate tricky installation scenarios.
 * [Settings](settings.md) (SSH keys, KUBAM IP address, Proxy information)
+
+
+## Developer Documentation
+
+Oh, the GUI is not good enough for you?  KUBAM understands that you may be super advanced and that its GUI is just not enough for you and your super powers.  KUBAM will try to help you out here too. 
+
+* [API Documentation](api.md)
