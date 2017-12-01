@@ -12,6 +12,11 @@ KUBAM aims to be self explanitory but sometimes we aren't as clever as we like t
 * [Installation](kubam-node.md) Specific instructions for getting a KUBAM node up. Also how to navigate tricky installation scenarios.
 * [Settings](settings.md) (SSH keys, KUBAM IP address, Proxy information)
 
+## Trouble Shooting
+
+Having problems?  Unbelievable!  Well KUBAM is here to help you out. 
+
+* [Troubleshooting](trouble.md)
 
 ## Developer Documentation
 
