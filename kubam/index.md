@@ -34,10 +34,10 @@ Once these are up, open the IP address of the KUBAM server in a web browser on p
 
 Step through each menu, build the install images, then hit deploy.  Boom, you are done!  So fast!  So easy!
 
-## More Documentation
+## Documentation
 
 * [Detailed Instructions](docs/index.md) - Work in progress documentation
-* [Advanced Connections](docs/connect.md) - For if your KUBAM service is behind some complicated network environment. 
+
 
 ## Glorious Underbelly
 Want to see how it works underneath?  The gory details are [here](old.md)

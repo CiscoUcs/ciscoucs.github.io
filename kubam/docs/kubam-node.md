@@ -128,7 +128,49 @@ yum -y install ./epel-release-latest-7.noarch.rpm
 yum -y install docker-compose
 ```
 
-### 4. Install Kubam
+## 4. Install Kubam
+
+### 4.1 Test to make sure you can get docker images
+
+Make sure you can get images from docker hub.  You can test by running: 
+
+```
+docker pull busybox
+```
+
+If the busybox image downloads fast go to step 4.3.  If not maybe section 4.2 can help. 
+
+### 4.2 Proxy Service  (Only required if test in section 4.1 fails)
+
+If you are behind a proxy and can't access docker hub by doing the test in section __4.1__ then using a proxy may be the way.  To allow Docker to use a proxy server run the following: 
+
+```
+mkdir -p /etc/systemd/system/docker.service.d
+touch /etc/systemd/system/docker.service.d/https-proxy.conf
+```
+Edit ```https-proxy.conf``` and add proxy settings.  The below is an example of how the file should look.  Use your own proxy server in place of the Cisco proxy service. 
+
+```
+[Service]
+Environment="HTTPS_PROXY=http://proxy.esl.cisco.com:80" "HTTP_PROXY=http://proxy.esl.cisco.com:80" "NO_PROXY=172.28.225.186"
+```
+
+Once this is complete run:
+
+```
+systemctl daemon-reload
+systemctl enable docker
+systemctl restart docker
+```
+
+Test to make sure this works: 
+
+```
+docker pull busybox
+```
+If it doesn't hang forever you are a happy person and can go to the next step. 
+
+### 4.3 Docker Compose to bring up images.  
 
 ```
 curl -O https://raw.githubusercontent.com/CiscoUcs/KUBaM/master/docker-compose.yml  

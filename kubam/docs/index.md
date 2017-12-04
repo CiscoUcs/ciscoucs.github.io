@@ -11,6 +11,8 @@ KUBAM aims to be self explanitory but sometimes we aren't as clever as we like t
 
 * [Installation](kubam-node.md) Specific instructions for getting a KUBAM node up. Also how to navigate tricky installation scenarios.
 * [Settings](settings.md) (SSH keys, KUBAM IP address, Proxy information)
+* [Advanced Customizations](advanced-topics.md) For changing the default installation settings. 
+* [Advanced Connections](docs/connect.md) - For if your KUBAM service is behind some complicated network environment. 
 
 ## Trouble Shooting
 
