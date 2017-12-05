@@ -52,3 +52,18 @@ The VIC 1240 is booting off of 2.2(2c) instead of the 4.1(2d) that the other ser
 The firmware should be activated next boot.  We reboot the blade by exiting out of the installation menu. Soon enough, boom!  Our blade comes up on next boot with the right version. 
 
 ![img](../img/error05.png)
+
+## Installation Hangs on "Starting automated installation..."
+
+If you start the installation and it looks like its about to boot up but then hangs forever and says: 
+
+```
+Starting automated install.....................
+```
+
+You may see a screen similar to the below: 
+
+![img](../img/error06.png)
+
+The question here is:  Did you used to have a Windows installation on this disk?  We've seen some issues where the GPT wasn't recognized by an anaconda installer.  To make this work, we add a ```dd``` command to the Kickstart prescript that will run that to delete the Windows partitions.  
+
