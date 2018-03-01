@@ -328,16 +328,10 @@
                                 <section class="normal markdown-section">
                                 
                                 <h1 id="cisco-ucs-developer-resources">Cisco UCS Developer Resources</h1>
-<p>Building this site. We created a branch: </p>
-<pre><code>git branch gh-pages
-</code></pre><p>Make sure it is still there: </p>
-<pre><code>git branch
-</code></pre><p>You should see two branches: </p>
-<pre><code>  gh-pages
-* master
-</code></pre><p>If you&apos;ve been testing, stop testing and run <code>rm -rf _book</code>.  </p>
-<p>Now just run <code>publish_gitbook.sh</code> and it will check in the code and publish the book. </p>
-
+<p>We have to sub the  </p>
+<pre><code>:%s#href=&quot;gitbook#href=&quot;_book/gitbook#g
+:%s#src=&quot;gitbook#src=&quot;_book/gitbook#g
+</code></pre>
                                 
                                 </section>
                             
@@ -376,7 +370,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Introduction","level":"1.1","depth":1,"next":{"title":"Cisco UCS Developer Resources","level":"1.2","depth":1,"path":"HOME.md","ref":"HOME.md","articles":[{"title":"UCS API","level":"1.2.1","depth":2,"path":"API.md","ref":"API.md","articles":[]},{"title":"Programming Languages","level":"1.2.2","depth":2,"path":"Programming.md","ref":"Programming.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"README.md","mtime":"2018-03-01T06:26:30.360Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-03-01T07:00:54.868Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Introduction","level":"1.1","depth":1,"next":{"title":"Cisco UCS Developer Resources","level":"1.2","depth":1,"path":"HOME.md","ref":"HOME.md","articles":[{"title":"UCS API","level":"1.2.1","depth":2,"path":"API.md","ref":"API.md","articles":[]},{"title":"Programming Languages","level":"1.2.2","depth":2,"path":"Programming.md","ref":"Programming.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["livereload"],"pluginsConfig":{"livereload":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"README.md","mtime":"2018-03-01T07:09:40.462Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-03-01T06:39:37.734Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>
@@ -384,6 +378,10 @@
         
     <script src="gitbook/gitbook.js"></script>
     <script src="gitbook/theme.js"></script>
+    
+        
+        <script src="gitbook/gitbook-plugin-livereload/plugin.js"></script>
+        
     
         
         <script src="gitbook/gitbook-plugin-search/search-engine.js"></script>
