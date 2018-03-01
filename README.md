@@ -1,11 +1,22 @@
 # Cisco UCS Developer Resources
 
-This site provides documentation for the UCS platform for the following topics: 
+Building this site. We created a branch: 
 
-* Programmability
-* DevOps
-* Containers 
+```
+git branch gh-pages
+```
+Make sure it is still there: 
 
-Here you’ll find how the power of UCS can be unleashed through integration with Open Source tools.
+```
+git branch
+```
 
+You should see two branches: 
+
+```
+  gh-pages
+* master
+```
+
+Now just run ```publish_gitbook.sh``` and it will check in the code and publish the book. 
 
