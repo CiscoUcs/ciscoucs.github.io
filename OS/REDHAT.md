@@ -35,7 +35,7 @@ We are going to create two images for bootstrapping the operating system:
 
 We will also use the entire CentOS ISO image and place it in a directory on our webserver.  So there are three parts here that need to be in place for this to all work.  Please download an appropriate ISO file 
 
-![Boot Media](/images/boot-media.png)
+![Boot Media](img/boot-media.png)
 
 
 ### 2.1 Create the Boot ISO Image
