@@ -4,7 +4,7 @@
 
 ### Why KUBAM? 
 
-We set out with one goal: Make deploying [Kubernetes](http://kubernetes.io) on UCS simple.  But as we backtracked down the rabbit hole we found that we first needed a simple way to install Operating Systems on UCS.
+We set out with one goal: Make deploying [Kubernetes](http://kubernetes.io) on UCS simple.  But as we backtracked down the rabbit hole we found that we first needed a simple way to install Operating Systems on UCS. So while KUBAM works well installing Kubernetes, it also works well installing other operating systems like ESXi and generic Linux stuff.  Windows you say?  Yes, that is on the roadmap as well. 
 
 Most legacy solutions install bare metal using PXE.  PXE works well but is complicated: It requires MAC address mapping, DHCP, TFTP, etc. It also has security issues which make it not something that can always be placed in a production network. 
 
