@@ -1,8 +1,11 @@
-# Cisco UCS Developer Resources
+# Document Deployment
 
-We have to sub the  
+To update these docs and deploy them to production run:
 
 ```
-:%s#href="gitbook#href="_book/gitbook#g
-:%s#src="gitbook#src="_book/gitbook#g
+gitbook build
+./deploy.py
+git add .
+git commit -am "updates"
+git push
 ```

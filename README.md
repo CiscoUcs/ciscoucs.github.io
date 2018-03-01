@@ -1,3 +1,11 @@
 # Cisco UCS Developer Resources
 
-We are currently migrating the documentation to a new system.  We should be back up 2 Mar 2018.  Thanks for understanding!
+This site provides documentation for the UCS platform for the following topics: 
+
+* Programmability
+* DevOps
+* Containers 
+
+Here you’ll find how the power of UCS can be unleashed through integration with Open Source tools.
+
+
