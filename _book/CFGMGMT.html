@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <title>Introduction · GitBook</title>
+        <title>Configuration Management · GitBook</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="GitBook 3.2.3">
@@ -57,8 +57,10 @@
     <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="API.html" />
+    <link rel="next" href="OS/" />
     
+    
+    <link rel="prev" href="PROGRAMMING.html" />
     
 
     </head>
@@ -87,7 +89,7 @@
         
         
     
-        <li class="chapter active" data-level="1.1" data-path="./">
+        <li class="chapter " data-level="1.1" data-path="./">
             
                 <a href="./">
             
@@ -133,7 +135,7 @@
             
         </li>
     
-        <li class="chapter " data-level="2.3" data-path="CFGMGMT.html">
+        <li class="chapter active" data-level="2.3" data-path="CFGMGMT.html">
             
                 <a href="CFGMGMT.html">
             
@@ -371,7 +373,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href="." >Introduction</a>
+        <a href="." >Configuration Management</a>
     </h1>
 </div>
 
@@ -386,16 +388,19 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="cisco-ucs-developer-resources">Cisco UCS Developer Resources</h1>
-<p>This site provides documentation for a number of Open Source related projects for the UCS platform.  These resources cover:</p>
+                                <p>We are working to make your favorite configuration management tool work with UCS. If there is something more you would like to see here <a href="https://github.com/CiscoUcs/ciscoucs.github.io/issues" target="_blank">open an issue</a></p>
+<h3 id="ansible">Ansible</h3>
 <ul>
-<li>Programmability</li>
-<li>DevOps</li>
-<li>Configuration Management</li>
-<li>Containers </li>
-<li>Automation</li>
+<li><a href="https://github.com/CiscoUcs/imc-ansible" target="_blank">C-Series Ansible Plugin</a></li>
+<li><p><a href="https://communities.cisco.com/docs/DOC-71511" target="_blank">C-Series Ansible Blog</a></p>
+</li>
+<li><p><a href="https://github.com/CiscoUcs/UCS-Terraform" target="_blank">UCSM Ansible Plugin</a> (Community Supported)</p>
+</li>
 </ul>
-<p>Here you&#x2019;ll find how the power of UCS can be unleashed through the use of the API. </p>
+<h3 id="terraform">Terraform</h3>
+<ul>
+<li><a href="https://github.com/CiscoUcs/UCS-Terraform" target="_blank">UCS Terraform Plugin</a></li>
+</ul>
 
                                 
                                 </section>
@@ -423,8 +428,12 @@
 
             
                 
+                <a href="PROGRAMMING.html" class="navigation navigation-prev " aria-label="Previous page: Programming Languages">
+                    <i class="fa fa-angle-left"></i>
+                </a>
                 
-                <a href="API.html" class="navigation navigation-next navigation-unique" aria-label="Next page: UCS API">
+                
+                <a href="OS/" class="navigation navigation-next " aria-label="Next page: Operating Systems">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -435,7 +444,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Introduction","level":"1.1","depth":1,"next":{"title":"UCS API","level":"2.1","depth":1,"path":"API.md","ref":"API.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"README.md","mtime":"2018-03-01T18:14:19.745Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-03-01T18:18:59.778Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Configuration Management","level":"2.3","depth":1,"next":{"title":"Operating Systems","level":"2.4","depth":1,"path":"OS/README.md","ref":"OS/README.md","articles":[{"title":"CoreOS","level":"2.4.1","depth":2,"path":"OS/COREOS.md","ref":"OS/COREOS.md","articles":[]},{"title":"RedHat","level":"2.4.2","depth":2,"path":"OS/REDHAT.md","ref":"OS/REDHAT.md","articles":[]}]},"previous":{"title":"Programming Languages","level":"2.2","depth":1,"path":"PROGRAMMING.md","ref":"PROGRAMMING.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"CFGMGMT.md","mtime":"2018-03-01T18:17:42.541Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-03-01T18:18:59.778Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>
