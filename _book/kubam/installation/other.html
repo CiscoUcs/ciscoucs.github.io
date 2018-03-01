@@ -1,0 +1,701 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>Other Tricky Installation Tips · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        
+        
+        
+    
+    <link rel="stylesheet" href="../../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="../configure/" />
+    
+    
+    <link rel="prev" href="network.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../../">
+            
+                <a href="../../">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">UCS Developer Resources</li>
+        
+        
+    
+        <li class="chapter " data-level="2.1" data-path="../../API.html">
+            
+                <a href="../../API.html">
+            
+                    
+                    UCS API
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.2" data-path="../../PROGRAMMING.html">
+            
+                <a href="../../PROGRAMMING.html">
+            
+                    
+                    Programming Languages
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.3" data-path="../../CFGMGMT.html">
+            
+                <a href="../../CFGMGMT.html">
+            
+                    
+                    Configuration Management
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.4" data-path="../../OS/">
+            
+                <a href="../../OS/">
+            
+                    
+                    Operating Systems
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="2.4.1" data-path="../../OS/COREOS.html">
+            
+                <a href="../../OS/COREOS.html">
+            
+                    
+                    CoreOS
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.4.2" data-path="../../OS/REDHAT.html">
+            
+                <a href="../../OS/REDHAT.html">
+            
+                    
+                    RedHat
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="2.5" data-path="../../CONTAINERS/">
+            
+                <a href="../../CONTAINERS/">
+            
+                    
+                    Containers
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.6" data-path="../../SUPPORT.html">
+            
+                <a href="../../SUPPORT.html">
+            
+                    
+                    Support
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">KUBAM</li>
+        
+        
+    
+        <li class="chapter " data-level="3.1" data-path="../">
+            
+                <a href="../">
+            
+                    
+                    KUBAM Overview
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.2" data-path="./">
+            
+                <a href="./">
+            
+                    
+                    Installation
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="3.2.1" data-path="standard.html">
+            
+                <a href="standard.html">
+            
+                    
+                    Standard Installation
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.2.2" data-path="source.html">
+            
+                <a href="source.html">
+            
+                    
+                    VM based Installation
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.2.3" data-path="security.html">
+            
+                <a href="security.html">
+            
+                    
+                    Security
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.2.4" data-path="network.html">
+            
+                <a href="network.html">
+            
+                    
+                    Networking
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="3.2.5" data-path="other.html">
+            
+                <a href="other.html">
+            
+                    
+                    Other Tricky Installation Tips
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="3.3" data-path="../configure/">
+            
+                <a href="../configure/">
+            
+                    
+                    Configuration
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="3.3.1" data-path="../configure/creds.md">
+            
+                <span>
+            
+                    
+                    Credentials
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.3.2" data-path="../configure/network.md">
+            
+                <span>
+            
+                    
+                    Networking
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.3.3" data-path="../configure/servers.md">
+            
+                <span>
+            
+                    
+                    Servers
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.3.4" data-path="../configure/iso.md">
+            
+                <span>
+            
+                    
+                    Boot Images
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.3.5" data-path="../configure/settings.html">
+            
+                <a href="../configure/settings.html">
+            
+                    
+                    Settings
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="3.4" data-path="../internals/">
+            
+                <a href="../internals/">
+            
+                    
+                    KUBAM Glorious Underbelly
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="3.4.1" data-path="../internals/stage1/docker.html">
+            
+                <a href="../internals/stage1/docker.html">
+            
+                    
+                    Stage1 - Docker
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.4.2" data-path="../internals/stage1/esxi.html">
+            
+                <a href="../internals/stage1/esxi.html">
+            
+                    
+                    Stage1 - ESXi
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.4.3" data-path="../internals/stage1/manual.html">
+            
+                <a href="../internals/stage1/manual.html">
+            
+                    
+                    Stage1 - Manual
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.4.4" data-path="../internals/stage2/python.html">
+            
+                <a href="../internals/stage2/python.html">
+            
+                    
+                    Stage2
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.4.5" data-path="../internals/stage3/ansible.html">
+            
+                <a href="../internals/stage3/ansible.html">
+            
+                    
+                    Stage3
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.4.6" data-path="../internals/stage4/manual.html">
+            
+                <a href="../internals/stage4/manual.html">
+            
+                    
+                    Stage4
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="3.5" data-path="../developer/">
+            
+                <a href="../developer/">
+            
+                    
+                    KUBAM Developer
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="3.5.1" data-path="../developer/API.html">
+            
+                <a href="../developer/API.html">
+            
+                    
+                    KUBAM API
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.5.2" data-path="../developer/YAML.html">
+            
+                <a href="../developer/YAML.html">
+            
+                    
+                    KUBAM YAML
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="../.." >Other Tricky Installation Tips</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="other-installation-topics">Other Installation Topics</h1>
+<h2 id="1-no-outside-internet-access">1. No outside internet access</h2>
+<p>If you&apos;re behind a firewall and your server can&apos;t get access docker hub because your networking people are all about sweet security that&apos;s ok.  KUBAM will help you out.  You do need to at least install docker and docker compose.  Once you do that here is how you can enjoy the sweetness of KUBAM</p>
+<h3 id="11-get-a-bastion-server">1.1 Get a bastion server</h3>
+<p>On a server that can reach the internet, install docker as specified in the <a href="standard.html">standard install instructions</a>.  This can be done on a laptop.</p>
+<p>Download the kubam files:</p>
+<pre><code>docker pull kubam/kubam
+docker pull kubam/web
+</code></pre><h3 id="12-save-and-copy-files-to-kubam-server">1.2 Save and copy files to kubam server</h3>
+<p>Now save the containers:</p>
+<pre><code>docker save -o kweb.tar kubam/web
+docker save -o kubam.tar kubam/kubam
+</code></pre><p>You&apos;ll have two files.  Upload these files to the future kubam server:</p>
+<pre><code>scp k*tar kubam:/tmp/
+</code></pre><h3 id="13-restore-the-kubam-containers">1.3 Restore the KUBAM containers</h3>
+<p>On the future kubam server run:</p>
+<pre><code>docker load &lt; kubam.tar 
+docker load &lt; kweb.tar
+</code></pre><p>Note that nodes that can&apos;t reach the internet will not be able to install kubernetes or other systems using the post install methods.  </p>
+<h3 id="14-install-kubam">1.4 Install KUBAM</h3>
+<p>Giddyup. </p>
+<p>Copy the <a href="https://raw.githubusercontent.com/CiscoUcs/KUBaM/master/docker-compose.yml" target="_blank">docker-compose</a> file to the kubam server by wading through your awesome ssh bastion landmines.  Once its on the server run: </p>
+<pre><code>cd to-the-directory-where-the-compose-file-was-copied
+docker-compose up -d
+</code></pre><p>Bam!  You are up!</p>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="network.html" class="navigation navigation-prev " aria-label="Previous page: Networking">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="../configure/" class="navigation navigation-next " aria-label="Next page: Configuration">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"Other Tricky Installation Tips","level":"3.2.5","depth":2,"next":{"title":"Configuration","level":"3.3","depth":1,"path":"kubam/configure/README.md","ref":"kubam/configure/README.md","articles":[{"title":"Credentials","level":"3.3.1","depth":2,"path":"kubam/configure/creds.md","ref":"kubam/configure/creds.md","articles":[]},{"title":"Networking","level":"3.3.2","depth":2,"path":"kubam/configure/network.md","ref":"kubam/configure/network.md","articles":[]},{"title":"Servers","level":"3.3.3","depth":2,"path":"kubam/configure/servers.md","ref":"kubam/configure/servers.md","articles":[]},{"title":"Boot Images","level":"3.3.4","depth":2,"path":"kubam/configure/iso.md","ref":"kubam/configure/iso.md","articles":[]},{"title":"Settings","level":"3.3.5","depth":2,"path":"kubam/configure/settings.md","ref":"kubam/configure/settings.md","articles":[]}]},"previous":{"title":"Networking","level":"3.2.4","depth":2,"path":"kubam/installation/network.md","ref":"kubam/installation/network.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"kubam/installation/other.md","mtime":"2018-03-01T19:55:07.449Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-03-01T20:15:25.283Z"},"basePath":"../..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="../../gitbook/gitbook.js"></script>
+    <script src="../../gitbook/theme.js"></script>
+    
+        
+        <script src="../../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+
