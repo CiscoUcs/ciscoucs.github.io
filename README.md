@@ -1,8 +1,3 @@
 # Cisco UCS Developer Resources
 
-We have to sub the  
-
-```
-:%s#href="gitbook#href="_book/gitbook#g
-:%s#src="gitbook#src="_book/gitbook#g
-```
+We are currently migrating the documentation to a new system.  We should be back up 2 Mar 2018.  Thanks for understanding!
