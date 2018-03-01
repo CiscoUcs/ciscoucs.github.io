@@ -1,7 +1,7 @@
 # Summary
 
 
-* [Cisco UCS Developer Resources](README.md)
+* [Cisco UCS Developer Resources](HOME.md)
 	* [UCS API](API.md)
 	* [Programming Languages](Programming.md)
 
