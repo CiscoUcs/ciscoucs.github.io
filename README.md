@@ -18,5 +18,7 @@ You should see two branches:
 * master
 ```
 
+If you've been testing, stop testing and run ```rm -rf _book```.  
+
 Now just run ```publish_gitbook.sh``` and it will check in the code and publish the book. 
 
