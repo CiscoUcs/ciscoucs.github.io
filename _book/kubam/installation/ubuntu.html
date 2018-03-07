@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <title>Other Tricky Installation Tips · GitBook</title>
+        <title>Standard Ubuntu Installation · GitBook</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="GitBook 3.2.3">
@@ -57,10 +57,10 @@
     <link rel="shortcut icon" href="../../gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="../configure/" />
+    <link rel="next" href="source.html" />
     
     
-    <link rel="prev" href="network.html" />
+    <link rel="prev" href="standard.html" />
     
 
     </head>
@@ -266,7 +266,7 @@
             
         </li>
     
-        <li class="chapter " data-level="3.2.2" data-path="ubuntu.html">
+        <li class="chapter active" data-level="3.2.2" data-path="ubuntu.html">
             
                 <a href="ubuntu.html">
             
@@ -318,7 +318,7 @@
             
         </li>
     
-        <li class="chapter active" data-level="3.2.6" data-path="other.html">
+        <li class="chapter " data-level="3.2.6" data-path="other.html">
             
                 <a href="other.html">
             
@@ -592,7 +592,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href="../.." >Other Tricky Installation Tips</a>
+        <a href="../.." >Standard Ubuntu Installation</a>
     </h1>
 </div>
 
@@ -607,31 +607,27 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="other-installation-topics">Other Installation Topics</h1>
-<h2 id="1-no-outside-internet-access">1. No outside internet access</h2>
-<p>If you&apos;re behind a firewall and your server can&apos;t get access docker hub because your networking people are all about sweet security that&apos;s ok.  KUBAM will help you out.  You do need to at least install docker and docker compose.  Once you do that here is how you can enjoy the sweetness of KUBAM</p>
-<h3 id="11-get-a-bastion-server">1.1 Get a bastion server</h3>
-<p>On a server that can reach the internet, install docker as specified in the <a href="standard.html">standard install instructions</a>.  This can be done on a laptop.</p>
-<p>Download the kubam files:</p>
-<pre><code>docker pull kubam/kubam
-docker pull kubam/web
-</code></pre><h3 id="12-save-and-copy-files-to-kubam-server">1.2 Save and copy files to kubam server</h3>
-<p>Now save the containers:</p>
-<pre><code>docker save -o kweb.tar kubam/web
-docker save -o kubam.tar kubam/kubam
-</code></pre><p>You&apos;ll have two files.  Upload these files to the future kubam server:</p>
-<pre><code>scp k*tar kubam:/tmp/
-</code></pre><h3 id="13-restore-the-kubam-containers">1.3 Restore the KUBAM containers</h3>
-<p>On the future kubam server run:</p>
-<pre><code>docker load &lt; kubam.tar 
-docker load &lt; kweb.tar
-</code></pre><p>Note that nodes that can&apos;t reach the internet will not be able to install kubernetes or other systems using the post install methods.  </p>
-<h3 id="14-install-kubam">1.4 Install KUBAM</h3>
-<p>Giddyup. </p>
-<p>Copy the <a href="https://raw.githubusercontent.com/CiscoUcs/KUBaM/master/docker-compose.yml" target="_blank">docker-compose</a> file to the kubam server by wading through your awesome ssh bastion landmines.  Once its on the server run: </p>
-<pre><code>cd to-the-directory-where-the-compose-file-was-copied
+                                <h1 id="kubam-ubuntu-installation">KUBAM Ubuntu Installation</h1>
+<p>This document shows how to install KUBAM on Ubuntu </p>
+<h2 id="1-install-packages">1. Install Packages</h2>
+<pre><code>sudo apt-get update &amp;&amp; sudo apt-get upgrade 
+sudo apt-get install docker.io
+</code></pre><h3 id="docker-privileges">Docker privileges</h3>
+<pre><code>sudo usermod -aG docker $USER
+</code></pre><p>Log out and log back in again so you can run docker as the <code>ubuntu</code> user. </p>
+<h3 id="install-docker-compose">Install Docker Compose</h3>
+<pre><code>curl -L https://github.com/docker/compose/releases/download/1.17.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+chmod +x /usr/local/bin/docker-compose
+</code></pre><h2 id="2-install-kubam">2. Install Kubam</h2>
+<h3 id="21-test-to-make-sure-you-can-get-docker-images">2.1 Test to make sure you can get docker images</h3>
+<p>Make sure you can get images from docker hub.  You can test by running: </p>
+<pre><code>docker pull busybox
+</code></pre><p>If the busybox image downloads fast good. Otherwise fix your docker first.</p>
+<h3 id="22-docker-compose-to-bring-up-images">2.2 Docker Compose to bring up images.</h3>
+<pre><code>curl -O https://raw.githubusercontent.com/CiscoUcs/KUBaM/master/docker-compose.yml  
 docker-compose up -d
-</code></pre><p>Bam!  You are up!</p>
+</code></pre><p>Navigate to Port <code>5000</code> of this server and behold all the glory of KUBAM!</p>
+<p>So simple!</p>
 
                                 
                                 </section>
@@ -659,12 +655,12 @@ docker-compose up -d
 
             
                 
-                <a href="network.html" class="navigation navigation-prev " aria-label="Previous page: Networking">
+                <a href="standard.html" class="navigation navigation-prev " aria-label="Previous page: Standard CentOS/RedHat Installation">
                     <i class="fa fa-angle-left"></i>
                 </a>
                 
                 
-                <a href="../configure/" class="navigation navigation-next " aria-label="Next page: Configuration">
+                <a href="source.html" class="navigation navigation-next " aria-label="Next page: VM based Installation">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -675,7 +671,7 @@ docker-compose up -d
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Other Tricky Installation Tips","level":"3.2.6","depth":2,"next":{"title":"Configuration","level":"3.3","depth":1,"path":"kubam/configure/README.md","ref":"kubam/configure/README.md","articles":[{"title":"Credentials","level":"3.3.1","depth":2,"path":"kubam/configure/creds.md","ref":"kubam/configure/creds.md","articles":[]},{"title":"Networking","level":"3.3.2","depth":2,"path":"kubam/configure/network.md","ref":"kubam/configure/network.md","articles":[]},{"title":"Servers","level":"3.3.3","depth":2,"path":"kubam/configure/servers.md","ref":"kubam/configure/servers.md","articles":[]},{"title":"Boot Images","level":"3.3.4","depth":2,"path":"kubam/configure/iso.md","ref":"kubam/configure/iso.md","articles":[]},{"title":"Settings","level":"3.3.5","depth":2,"path":"kubam/configure/settings.md","ref":"kubam/configure/settings.md","articles":[]}]},"previous":{"title":"Networking","level":"3.2.5","depth":2,"path":"kubam/installation/network.md","ref":"kubam/installation/network.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"kubam/installation/other.md","mtime":"2018-03-01T19:55:07.449Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-03-07T21:55:09.466Z"},"basePath":"../..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Standard Ubuntu Installation","level":"3.2.2","depth":2,"next":{"title":"VM based Installation","level":"3.2.3","depth":2,"path":"kubam/installation/source.md","ref":"kubam/installation/source.md","articles":[]},"previous":{"title":"Standard CentOS/RedHat Installation","level":"3.2.1","depth":2,"path":"kubam/installation/standard.md","ref":"kubam/installation/standard.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"kubam/installation/ubuntu.md","mtime":"2018-03-07T21:43:27.175Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-03-07T21:55:09.466Z"},"basePath":"../..","book":{"language":""}});
         });
     </script>
 </div>

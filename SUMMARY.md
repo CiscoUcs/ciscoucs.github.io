@@ -17,7 +17,8 @@
 ### KUBAM
 * [KUBAM Overview](kubam/README.md)
 * [Installation](kubam/installation/README.md)
-	* [Standard Installation](kubam/installation/standard.md)
+	* [Standard CentOS/RedHat Installation](kubam/installation/standard.md)
+	* [Standard Ubuntu Installation](kubam/installation/ubuntu.md)
 	* [VM based Installation](kubam/installation/source.md)
 	* [Security](kubam/installation/security.md)
 	* [Networking](kubam/installation/network.md)
