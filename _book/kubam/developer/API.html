@@ -597,6 +597,180 @@
                                 <h1 id="kubam-api">KUBAM API</h1>
 <p>KUBAM is developed API first!  The GUI is just a front end and calls the API when updating parts of it. </p>
 <p>The entire API is a python flask application and commands can be seen in the <a href="https://github.com/CiscoUcs/KUBaM/blob/master/kubam/app/app.py" target="_blank">code itself.</a></p>
+<h2 id="status">Status</h2>
+<p>Simple API to check it the service is still alive.</p>
+<h3 id=""><code>/</code></h3>
+<ul>
+<li><code>GET</code> returns <code>{ &quot;status&quot; : &quot;ok&quot;}</code> if the service is up. </li>
+</ul>
+<h2 id="session-credentials">Session Credentials</h2>
+<p>KUBAM stores values for UCS logins inside the <code>kubam.yaml</code> This API just offers a way to make this happen.  </p>
+<h3 id="apiv1session"><code>/api/v1/session</code></h3>
+<ul>
+<li><p><code>GET</code>: Get the current credentials</p>
+<ul>
+<li>Parameters: None</li>
+<li>Returns: The current credentials without the password.  <code>{
+&quot;credentials&quot;: {
+&quot;ip&quot;: &quot;172.28.225.163&quot;,
+&quot;password&quot;: &quot;REDACTED&quot;,
+&quot;user&quot;: &quot;admin&quot;
+}
+}</code></li>
+<li>Error: </li>
+</ul>
+</li>
+<li><p><code>POST</code> - Add your UCS Credentials into KUBAM</p>
+<ul>
+<li>Parameters Example: <code>{&quot;credentials&quot; : {&quot;user&quot;: &quot;admin&quot;, &quot;password&quot; : &quot;nbv12345&quot;, &quot;server&quot; : &quot;172.28.225.163&quot; }}</code></li>
+<li>Returns: <code>{ &quot;login&quot; : &quot;success&quot; }</code></li>
+<li>Error: </li>
+<li>Example: <code>curl -X POST -H &quot;Content-Type: application/json&quot;  -d &apos;{&quot;credentials&quot; : {&quot;user&quot;: &quot;admin&quot;, &quot;password&quot; : &quot;nbv12345&quot;, &quot;server&quot; : &quot;172.28.225.163&quot; }}&apos; http://172.28.225.135/api/v1/session</code></li>
+</ul>
+</li>
+<li><p><code>DELETE</code></p>
+</li>
+</ul>
+<h2 id="settings">Settings</h2>
+<h3 id="apiv1settings"><code>/api/v1/settings</code></h3>
+<ul>
+<li><code>POST</code></li>
+</ul>
+<h3 id="apiv1ip"><code>/api/v1/ip</code></h3>
+<ul>
+<li><code>GET</code></li>
+<li><code>POST</code></li>
+</ul>
+<h3 id="apiv1org"><code>/api/v1/org</code></h3>
+<ul>
+<li><code>GET</code></li>
+<li><code>POST</code></li>
+</ul>
+<h3 id="apiv1proxy"><code>/api/v1/proxy</code></h3>
+<ul>
+<li><code>GET</code></li>
+<li><code>POST</code></li>
+</ul>
+<h3 id="apiv1keys"><code>/api/v1/keys</code></h3>
+<ul>
+<li><code>GET</code></li>
+<li><code>POST</code></li>
+</ul>
+<h2 id="networks">Networks</h2>
+<h3 id="apiv1networks"><code>/api/v1/networks</code></h3>
+<ul>
+<li><code>GET</code> Get the current network settings of KUBAM including all the UCS VLANs and the current routers, netmask, gateway, etc. <ul>
+<li>Parameters: None</li>
+<li>Returns: <code>{
+&quot;network&quot;: {
+&quot;gateway&quot;: &quot;172.28.224.1&quot;,
+&quot;nameserver&quot;: &quot;171.70.168.183&quot;,
+&quot;netmask&quot;: &quot;255.255.254.0&quot;,
+&quot;ntpserver&quot;: &quot;72.163.32.44&quot;
+},
+&quot;vlans&quot;: [
+{
+&quot;id&quot;: &quot;3095&quot;,
+&quot;name&quot;: &quot;default&quot;,
+&quot;selected&quot;: true
+},{ &quot;id&quot;: &quot;1&quot;, &quot;name&quot;: &quot;one&quot;, &quot;selected&quot; : false}]}</code></li>
+</ul>
+</li>
+<li><code>POST</code> Update the KUBAM networks to get all the </li>
+</ul>
+<h3 id="apiv1networksvlan"><code>/api/v1/networks/vlan</code></h3>
+<ul>
+<li><code>POST</code></li>
+</ul>
+<h2 id="servers">Servers</h2>
+<h3 id="apiv1servers"><code>/api/v1/servers</code></h3>
+<ul>
+<li><code>GET</code> Get a list of all the UCS Servers and whether they are selected or not.  Also gets the mapping between the OS and the server. <ul>
+<li>Parameters: none</li>
+<li>Returns: </li>
+</ul>
+</li>
+</ul>
+<pre><code>{
+  &quot;hosts&quot;: [
+    {
+      &quot;ip&quot;: &quot;172.28.225.130&quot;,
+      &quot;name&quot;: &quot;kube01&quot;,
+      &quot;os&quot;: &quot;centos7.4&quot;,
+      &quot;role&quot;: &quot;k8s master&quot;
+    },
+    {
+      &quot;ip&quot;: &quot;172.28.225.130&quot;,
+      &quot;name&quot;: &quot;kube01&quot;,
+      &quot;os&quot;: &quot;centos7.4&quot;,
+      &quot;role&quot;: &quot;k8s master&quot;
+    }],&quot;servers&quot;: [
+    {
+      &quot;association&quot;: &quot;associated&quot;,
+      &quot;chassis_id&quot;: &quot;1&quot;,
+      &quot;label&quot;: &quot;kubam - master&quot;,
+      &quot;model&quot;: &quot;UCSB-B200-M3&quot;,
+      &quot;service_profile&quot;: &quot;org-root/org-devi/ls-devi1&quot;,
+      &quot;slot&quot;: &quot;8&quot;,
+      &quot;type&quot;: &quot;blade&quot;
+    },{
+      &quot;association&quot;: &quot;associated&quot;,
+      &quot;label&quot;: &quot;HX21-Devi - Rk-10&quot;,
+      &quot;model&quot;: &quot;HX240C-M4SX&quot;,
+      &quot;rack_id&quot;: &quot;1&quot;,
+      &quot;service_profile&quot;: &quot;org-root/org-hx-cluster/ls-rack-unit-1&quot;,
+      &quot;type&quot;: &quot;rack&quot;
+    }]}
+</code></pre><ul>
+<li><code>POST</code></li>
+</ul>
+<h3 id="apiv1serversimages"><code>/api/v1/servers/images</code></h3>
+<ul>
+<li><code>POST</code> Builds the server images.  This is the API to use after all parameters have been filled in.  It will then build <code>*.iso</code> and <code>*.img</code> files in the <code>~/kubam</code> directory. <ul>
+<li>Parameters: none</li>
+<li>Returns: <code>{ &quot;status&quot; : &quot;ok&quot;}</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="iso-images">ISO Images</h2>
+<h3 id="apiv1catalog"><code>/api/v1/catalog</code></h3>
+<ul>
+<li><code>GET</code></li>
+</ul>
+<h3 id="apiv1isos"><code>/api/v1/isos</code></h3>
+<ul>
+<li><code>GET</code></li>
+</ul>
+<h3 id="apiv1isosextract"><code>/api/v1/isos/extract</code></h3>
+<ul>
+<li><code>POST</code></li>
+</ul>
+<h3 id="apiv1isosboot"><code>/api/v1/isos/boot</code></h3>
+<ul>
+<li><code>POST</code></li>
+</ul>
+<h3 id="apiv1isosmap"><code>/api/v1/isos/map</code></h3>
+<ul>
+<li><code>GET</code></li>
+<li><code>POST</code></li>
+</ul>
+<h2 id="deploy">Deploy</h2>
+<h3 id="apiv1deploy"><code>/api/v1/deploy</code></h3>
+<p>After all parameters are filled in and boot images have been created the deploy API is used to create the UCS resources.  It logs into UCS Manager and creates the policies, pools, and profiles.  If they have already been created this command does not change them. </p>
+<ul>
+<li><p><code>POST</code></p>
+<ul>
+<li>Parameters: none</li>
+<li>Return: </li>
+</ul>
+</li>
+<li><p><code>DELETE</code>: Delete the UCS resources.  This is a very disruptive command and will completely tear down any UCS servers that are in use. </p>
+<ul>
+<li>Parameters: none</li>
+<li>Return: </li>
+</ul>
+</li>
+</ul>
 
                                 
                                 </section>
@@ -640,7 +814,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"KUBAM API","level":"3.5.1","depth":2,"next":{"title":"KUBAM YAML","level":"3.5.2","depth":2,"path":"kubam/developer/YAML.md","ref":"kubam/developer/YAML.md","articles":[]},"previous":{"title":"KUBAM Developer","level":"3.5","depth":1,"path":"kubam/developer/README.md","ref":"kubam/developer/README.md","articles":[{"title":"KUBAM API","level":"3.5.1","depth":2,"path":"kubam/developer/API.md","ref":"kubam/developer/API.md","articles":[]},{"title":"KUBAM YAML","level":"3.5.2","depth":2,"path":"kubam/developer/YAML.md","ref":"kubam/developer/YAML.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"kubam/developer/API.md","mtime":"2018-03-01T20:03:22.030Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-03-01T23:23:10.995Z"},"basePath":"../..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"KUBAM API","level":"3.5.1","depth":2,"next":{"title":"KUBAM YAML","level":"3.5.2","depth":2,"path":"kubam/developer/YAML.md","ref":"kubam/developer/YAML.md","articles":[]},"previous":{"title":"KUBAM Developer","level":"3.5","depth":1,"path":"kubam/developer/README.md","ref":"kubam/developer/README.md","articles":[{"title":"KUBAM API","level":"3.5.1","depth":2,"path":"kubam/developer/API.md","ref":"kubam/developer/API.md","articles":[]},{"title":"KUBAM YAML","level":"3.5.2","depth":2,"path":"kubam/developer/YAML.md","ref":"kubam/developer/YAML.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"kubam/developer/API.md","mtime":"2018-03-07T00:50:51.357Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-03-07T01:20:27.073Z"},"basePath":"../..","book":{"language":""}});
         });
     </script>
 </div>
