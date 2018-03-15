@@ -606,9 +606,8 @@
                                 <section class="normal markdown-section">
                                 
                                 <h1 id="kubam-yaml-file">KUBAM YAML file</h1>
-<h2 id="version-2-wip">Version 2 (WIP)</h2>
 <h2 id="version-1-current">Version 1 (current)</h2>
-<p>KUBAM stores everything in YAML file.  We show the parts of the YAML file as well as a description of the fields, then at the end show a full example. </p>
+<p>KUBAM stores everything in YAML file.  The file is created in <code>~/kubam/kubam.yaml</code>.  We show the parts of the YAML file as well as a description of the fields, then at the end show a full example. </p>
 <h3 id="hosts">hosts</h3>
 <pre><code>hosts:
 - ip: &lt;ipaddress&gt;
@@ -709,6 +708,95 @@
 <span class="hljs-bullet">    -</span> <span class="hljs-string">&apos;7&apos;</span>
 </code></pre>
 <p>Notice in kubam v1 the password is stored in plain text.  This is clearly a bad idea. </p>
+<h2 id="version-2-proposed">Version 2 (Proposed)</h2>
+<p>KUBAM stores everything in YAML file.  The file is created in <code>~/kubam/kubam.yaml</code>.  We show the parts of the YAML file as well as a description of the fields, then at the end show a full example. </p>
+<h3 id="hosts">hosts</h3>
+<pre><code>hosts:
+- ip: &lt;ipaddress&gt;
+  name: &lt;hostname / service profile name&gt;
+  os: &lt;operating system&gt;
+  role: {k8s master, &apos;&apos;, k8s node}
+  network_group: &lt;net group&gt;
+  server_group: &lt;server group&gt;
+</code></pre><h3 id="iso-map">iso map</h3>
+<pre><code>iso_map:
+- file: &lt;file directory|url&gt;
+  type: {iso_raw, iso_dir, iso_boot}
+  os: &lt;os name&gt;
+</code></pre><p>The ISO map maps the iso file name to the operating system that KUBAM expects it to be.  When images are created, KUBAM extracts the file to a <code>/kubam/tmp/</code> directory then moves it to the <code>/kubam/&lt;os&gt;</code> directory after making sure everything checks out.  </p>
+<p>Notice that the container mounts the <code>~/kubam</code> directory to the <code>/kubam</code> directory.  That is why you should reference your iso image file in the <code>/kubam</code> directory.  </p>
+<p>The new system here allows for iso&apos;s to be hosted elsewhere.  The onlything KUBAM should host is the kickstart files that are automatically generated and created and live on the KUBAM server. </p>
+<ul>
+<li><code>iso_raw</code> - This is the current v1 option where its just a raw option.</li>
+<li><code>iso_dir</code> - Exploded directory used for installation so as to not host on the kubam server</li>
+<li><code>iso_boot</code> - If you take the kubam generated iso image and want it hosted elsewhere. </li>
+</ul>
+<h3 id="kubam-ip">kubam IP</h3>
+<pre><code>kubam_ip: &lt;kubam_ip&gt;
+</code></pre><p>This should be the IP address of the KUBAM VM/server.</p>
+<h3 id="network-group">Network Group</h3>
+<pre><code>networks:
+- name: &lt;required: group name&gt;
+  gateway: &lt;required: ip&gt;
+  nameserver: &lt;required: ip&gt;
+  netmask: &lt;required: netmask: e.g: 255.255.255.0&gt;
+  ntpserver: &lt;required: ip&gt;
+  vlan: &lt;optional: for VMware sometimes we need a vlan on a trunk port&gt; 
+  proxy: &lt;ip, url, etc E.g: http://173.36.224.109:80&gt;
+  aci_group: &lt;aci, &apos;&apos;&gt;
+- ...
+</code></pre><p>Network groups allow different hosts to use different networking parameters to keep them unique.  </p>
+<p>On the GUI advanced settings should be shown for: </p>
+<ul>
+<li>vlan</li>
+<li>proxy</li>
+<li>aci_group</li>
+</ul>
+<p>Some notes: </p>
+<ul>
+<li>VLANs are used for VMware nodes installed on trunk ports with no default vlan.
+Each network should specify whether an ACI network is used or </li>
+<li>Proxy is only set if you are behind a firewall that requires an http proxy to get out to the public network.</li>
+<li>ACI Group is a mapping of the Netmask/Gateway/Settings to an ACI group. </li>
+</ul>
+<h3 id="aci-group">ACI Group</h3>
+<pre><code>aci:
+- name: ACI group name
+  credentials:
+    ip: &lt;ip&gt;
+    password: &lt;secret-password&gt;
+    user: &lt;admin&gt;
+  tenant_name: &lt;tenant name&gt; 
+  tenant_descr: &lt;tenant description&gt;
+  vrf_name: &lt;vrf name&gt;
+  vrf_description: &lt;vrf descr&gt;
+  bridge_domain: &lt;name of bridge domain&gt; 
+- ...
+</code></pre><p>The ACI group is for inputting settings to ACI.  If a node uses kubernetes and is mapped to an ACI group through the network settings the kubernetes will automatically use the ACI plugins instead of Contiv for kubernetes networking. </p>
+<h3 id="public-keys">Public Keys</h3>
+<pre><code>- &lt;key1&gt;
+- &lt;key2&gt;
+- ...
+</code></pre><p>KUBAM wants you to log in using keypairs and no passwords. An example key would be: </p>
+<pre><code>ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCc/7HrOIZB2wk8FvmZXzLMS1ZJ8TvS9OWBf5xosp59NRvcAbwbclLRD2f9z5KvOF1n5a4mK03OetymTQQX08rBpZJZ5ZWztdjiFjIce6rm7V87CRjeuwa97XyhacKx98QcijOJWBbLf1TE/cRd8KVopfG/RPZeMMx1n3J071QRiVhbHEzVw3xuY4KruIb/2kLGHEyYqtx//y8c3k6UaMF180nOIaq6WBZVHnpYXZZ+EkolpJ+10objpueuWPcJe4OU7AIRP1JGsaDHrmXNoy9ygeWceSqOIqRLOdPneHtC6xU78t3ttpnRdC9OgtawIVqaq0wpvd7G0sQ7Jv2DO2hZ
+</code></pre><h3 id="server-groups">Server Groups</h3>
+<pre><code>server_groups:
+- name: &lt;server group name&gt;
+  type: {imc, ucsm}
+  credentials:
+    ip: &lt;ip address or hostname&gt;
+    password: &lt;password&gt;
+    user: &lt;admin&gt;
+  org: &lt;org name&gt; | ucsm-only
+  vlan: &lt;vlan name&gt; | ucsm-only
+  disk_config: {raid 1, ignore, default} | ucsm-only
+  server_pool: | ucsm-only
+    blades:
+    - &lt;chassis-number&gt;/&lt;blade slot&gt;
+    - ...
+    rack_servers:
+    - &apos;&lt;server number&gt;&apos;
+</code></pre><p>Server groups are mappings from UCSM login domains so we can support IMC and UCSM to map to. </p>
 
                                 
                                 </section>
@@ -748,7 +836,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"KUBAM YAML","level":"3.5.2","depth":2,"previous":{"title":"KUBAM API","level":"3.5.1","depth":2,"path":"kubam/developer/API.md","ref":"kubam/developer/API.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"kubam/developer/YAML.md","mtime":"2018-03-15T17:55:47.923Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-03-15T17:56:06.637Z"},"basePath":"../..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"KUBAM YAML","level":"3.5.2","depth":2,"previous":{"title":"KUBAM API","level":"3.5.1","depth":2,"path":"kubam/developer/API.md","ref":"kubam/developer/API.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"kubam/developer/YAML.md","mtime":"2018-03-15T18:36:57.873Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-03-15T18:37:10.276Z"},"basePath":"../..","book":{"language":""}});
         });
     </script>
 </div>
