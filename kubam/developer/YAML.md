@@ -134,7 +134,7 @@ public_keys:
 ucsm:
   credentials:
     ip: 172.28.225.163
-    password: nbv12345
+    password: secret-password
     user: admin
   org: root
   ucs_network:
