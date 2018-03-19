@@ -1,4 +1,4 @@
-# Custom Installations
+# Kickstart Templates
 
 KUBAM uses [kickstart](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html/installation_guide/s1-kickstart2-file) for automated installs for RedHat and VMware ESXi.  Further supported operating systems will also use the native automated answer file for rapid installation. 
 
@@ -15,13 +15,13 @@ KUBAM uses the [Jinja2](http://jinja.pocoo.org/docs/2.10/)
 
 The following jinja2 variables found in a kickstart file will be automatically filled: 
 
-* ```{{ masterIP }}```
-* ```{{ netmask }}```
-* ```{{ gateway }}```
-* ```{{ nameserver }}```
-* ```{{ name }}``` - The hostname of the server, not the FQDN.
-* ```{{ keys }}``` - A list of public keys authorized to log into this server. 
-* ```{{ proxy }}``` - A proxy server if the machine is behind a firewall.  This can be used in post scripts. 
+* ```\{\{ masterIP \}\}```
+* ```\{\{ netmask \}\}```
+* ```\{\{ gateway \}\}```
+* ```\{\{ nameserver \}\}```
+* ```\{\{ name \}\}``` - The hostname of the server, not the FQDN.
+* ```\{\{ keys \}\}``` - A list of public keys authorized to log into this server. 
+* ```\{\{ proxy \}\}``` - A proxy server if the machine is behind a firewall.  This can be used in post scripts. 
 
 
 ## Workflow
