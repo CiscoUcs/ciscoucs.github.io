@@ -15,12 +15,12 @@ KUBAM uses the [Jinja2](http://jinja.pocoo.org/docs/2.10/)
 
 The following jinja2 variables found in a kickstart file will be automatically filled: 
 
-* ```\{\{ masterIP \}\}```
-* ```\{\{ netmask \}\}```
-* ```\{\{ gateway \}\}```
-* ```\{\{ nameserver \}\}```
-* ```\{\{ name \}\}``` - The hostname of the server, not the FQDN.
-* ```\{\{ keys \}\}``` - A list of public keys authorized to log into this server. 
+* ``` {{ masterIP }} ```
+* ``` \{{ netmask }} ```
+* ``` {\{ gateway }} ```
+* ``` {{ nameserver }} ```
+* ``` {{ name }} ``` - The hostname of the server, not the FQDN.
+* ``` {{ keys }} ``` - A list of public keys authorized to log into this server. 
 * ```\{\{ proxy \}\}``` - A proxy server if the machine is behind a firewall.  This can be used in post scripts. 
 
 
