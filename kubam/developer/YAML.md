@@ -153,7 +153,8 @@ KUBAM stores everything in YAML file.  The file is created in ```~/kubam/kubam.y
 
 ```
 hosts:
-- ip: <ipaddress>
+- guid: <guid>
+  ip: <ipaddress>
   name: <hostname / service profile name>
   os: <operating system>
   role: {k8s master, '', k8s node}
@@ -191,7 +192,8 @@ This should be the IP address of the KUBAM VM/server.
 
 ```
 networks:
-- name: <required: group name>
+- id: <guid>
+  name: <required: group name>
   gateway: <required: ip>
   nameserver: <required: ip>
   netmask: <required: netmask: e.g: 255.255.255.0>
@@ -220,7 +222,8 @@ Each network should specify whether an ACI network is used or
 
 ```
 aci:
-- name: ACI group name
+- id: <guid>
+  name: ACI group name
   credentials:
     ip: <ip>
     password: <secret-password>
@@ -254,7 +257,8 @@ ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCc/7HrOIZB2wk8FvmZXzLMS1ZJ8TvS9OWBf5xosp59
 
 ```
 server_groups:
-- name: <server group name>
+- id: <guid>
+  name: <server group name>
   type: {imc, ucsm}
   credentials:
     ip: <ip address or hostname>

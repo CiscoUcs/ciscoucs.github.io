@@ -654,7 +654,7 @@
 <li>Example: <code>curl -X POST -H &quot;Content-Type: application/json&quot;  -d &apos;{&quot;credentials&quot; : {&quot;user&quot;: &quot;admin&quot;, &quot;password&quot; : &quot;nbv12345&quot;, &quot;server&quot; : &quot;172.28.225.163&quot; }}&apos; http://172.28.225.135/api/v1/session</code></li>
 </ul>
 </li>
-<li><p><code>DELETE</code></p>
+<li><p><code>DELETE</code> - Removes the credentials from the database</p>
 </li>
 </ul>
 <h2 id="settings">Settings</h2>
@@ -797,6 +797,109 @@
 </ul>
 </li>
 </ul>
+<h1 id="api-v2">API v2</h1>
+<p>For the next iteration of KUBAM APIs will be refactored to create a better experience. </p>
+<h2 id="server-groups">Server Groups</h2>
+<p>KUBAM stores values for UCS logins inside the <code>kubam.yaml</code> This API just offers a way to make this happen.  </p>
+<h3 id="apiv2server-groups"><code>/api/v2/server-groups</code></h3>
+<ul>
+<li><p><code>GET</code>: Get the current server groups</p>
+<ul>
+<li>Parameters: None</li>
+<li><p>Returns: The current server groups without the password.  It doesn&apos;t return all information, just the essential user information. </p>
+<pre><code>{
+    &quot;server-groups&quot;: [
+      {&quot;uid&quot;: 1, &quot;name&quot; : &quot;ucs01&quot;, &quot;type&quot;: &quot;ucsm&quot;, &quot;credentials&quot; : {&quot;ip&quot; : &quot;192.168.40.1&quot;, &quot;user&quot; : &quot;admin&quot;, &quot;password&quot; : &quot;REDACTED&quot;},
+      {&quot;name&quot; : &quot;ucs02&quot;, &quot;type&quot;: &quot;ucsm&quot;, &quot;credentials&quot; : {&quot;ip&quot; : &quot;192.168.40.20&quot;, &quot;user&quot; : &quot;admin&quot;, &quot;password&quot; : &quot;REDACTED&quot;}
+    ]
+}
+</code></pre></li>
+<li><p>Error: </p>
+</li>
+</ul>
+</li>
+<li><p><code>POST</code> - Create a new UCS Domain</p>
+<ul>
+<li><p>Parameters Example: </p>
+<pre><code>{&quot;name&quot;, &quot;ucs01&quot;, &quot;type&quot; : &quot;ucsm&quot;, &quot;credentials&quot; : {&quot;user&quot;: &quot;admin&quot;, &quot;password&quot; : &quot;secret-password&quot;, &quot;server&quot; : &quot;172.28.225.163&quot; }}
+</code></pre></li>
+<li>Returns: <code>{ &quot;login&quot; : &quot;success&quot; }</code></li>
+<li>Error: </li>
+<li>Example: <code>curl -X POST -H &quot;Content-Type: application/json&quot;  -d &apos;{&quot;credentials&quot; : {&quot;user&quot;: &quot;admin&quot;, &quot;password&quot; : &quot;nbv12345&quot;, &quot;server&quot; : &quot;172.28.225.163&quot; }}&apos; http://172.28.225.135/api/v1/session</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="apiv2server-groupsuid"><code>/api/v2/server-groups/{uid}</code></h3>
+<ul>
+<li><code>GET</code> : Get the entire information of one of the server groups</li>
+<li><code>DELETE</code>: Delete the server group</li>
+<li><code>POST</code>: Update the server group</li>
+</ul>
+<h2 id="aci">ACI</h2>
+<h3 id="apiv2aci"><code>/api/v2/aci/</code></h3>
+<ul>
+<li><code>GET</code>: Get all ACI instances.  If there are any there will probably only be one. </li>
+</ul>
+<h3 id="apiv2aciuuid"><code>/api/v2/aci/{uuid}</code></h3>
+<ul>
+<li><code>GET</code>: Get the full information of the ACI platform.</li>
+<li><code>POST</code>: Update the ACI information of a particular ACI group.</li>
+</ul>
+<h2 id="network-group">Network Group</h2>
+<h3 id="apiv2networks"><code>/api/v2/networks</code></h3>
+<ul>
+<li><code>GET</code>: Get all network settings</li>
+</ul>
+<h3 id="apiv2networksuuid"><code>/api/v2/networks/{uuid}</code></h3>
+<ul>
+<li><code>GET</code>: Get info from perticular network.</li>
+<li><code>POST</code>: Update the network settings of a particular network group.</li>
+</ul>
+<h2 id="hosts">Hosts</h2>
+<h3 id="apiv2hosts"><code>/api/v2/hosts</code></h3>
+<ul>
+<li><code>GET</code>: Get all the hosts</li>
+<li><code>POST</code>: Update all the hosts. </li>
+</ul>
+<h2 id="iso">ISO</h2>
+<h3 id="apiv1catalog"><code>/api/v1/catalog</code></h3>
+<ul>
+<li><code>GET</code></li>
+</ul>
+<h3 id="apiv1isos"><code>/api/v1/isos</code></h3>
+<ul>
+<li><code>GET</code></li>
+</ul>
+<h3 id="apiv1isosboot"><code>/api/v1/isos/boot</code></h3>
+<ul>
+<li><code>POST</code></li>
+</ul>
+<h3 id="apiv1isosmap"><code>/api/v1/isos/map</code></h3>
+<ul>
+<li><code>GET</code></li>
+<li><code>POST</code></li>
+</ul>
+<h2 id="ssh-keys">SSH Keys</h2>
+<h3 id="apiv1keys"><code>/api/v1/keys</code></h3>
+<ul>
+<li><code>GET</code></li>
+<li><code>POST</code></li>
+</ul>
+<h2 id="deploy">Deploy</h2>
+<h3 id="apiv2deployimages"><code>/api/v2/deploy/images</code></h3>
+<p>Deploy the boot media. </p>
+<ul>
+<li><code>POST</code></li>
+</ul>
+<p>Unique or all of them.  Allow multiple servers to be created.  If nothing is passed in, all servers will have boot images created for them. </p>
+<h3 id="apiv2deployucs"><code>/api/v2/deploy/ucs</code></h3>
+<p>Deploy the UCS </p>
+<ul>
+<li><code>POST</code></li>
+</ul>
+<p>Unique or all of them.</p>
+<h3 id="apiv2deploy"><code>/api/v2/deploy</code></h3>
+<p>Does it all for you!  Do the Boot images and deploy UCS. </p>
 
                                 
                                 </section>
@@ -840,7 +943,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"KUBAM API","level":"3.5.1","depth":2,"next":{"title":"KUBAM YAML","level":"3.5.2","depth":2,"path":"kubam/developer/YAML.md","ref":"kubam/developer/YAML.md","articles":[]},"previous":{"title":"KUBAM Developer","level":"3.5","depth":1,"path":"kubam/developer/README.md","ref":"kubam/developer/README.md","articles":[{"title":"KUBAM API","level":"3.5.1","depth":2,"path":"kubam/developer/API.md","ref":"kubam/developer/API.md","articles":[]},{"title":"KUBAM YAML","level":"3.5.2","depth":2,"path":"kubam/developer/YAML.md","ref":"kubam/developer/YAML.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"kubam/developer/API.md","mtime":"2018-03-07T00:50:51.357Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-03-19T16:48:19.381Z"},"basePath":"../..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"KUBAM API","level":"3.5.1","depth":2,"next":{"title":"KUBAM YAML","level":"3.5.2","depth":2,"path":"kubam/developer/YAML.md","ref":"kubam/developer/YAML.md","articles":[]},"previous":{"title":"KUBAM Developer","level":"3.5","depth":1,"path":"kubam/developer/README.md","ref":"kubam/developer/README.md","articles":[{"title":"KUBAM API","level":"3.5.1","depth":2,"path":"kubam/developer/API.md","ref":"kubam/developer/API.md","articles":[]},{"title":"KUBAM YAML","level":"3.5.2","depth":2,"path":"kubam/developer/YAML.md","ref":"kubam/developer/YAML.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"kubam/developer/API.md","mtime":"2018-04-03T11:47:34.460Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-04-03T11:48:05.830Z"},"basePath":"../..","book":{"language":""}});
         });
     </script>
 </div>

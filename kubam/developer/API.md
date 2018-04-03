@@ -34,7 +34,7 @@ KUBAM stores values for UCS logins inside the ```kubam.yaml``` This API just off
 	* Error: 
 	* Example: ```curl -X POST -H "Content-Type: application/json"  -d '{"credentials" : {"user": "admin", "password" : "nbv12345", "server" : "172.28.225.163" }}' http://172.28.225.135/api/v1/session```
 	
-* ```DELETE```
+* ```DELETE``` - Removes the credentials from the database
 
 ## Settings
 
@@ -187,3 +187,131 @@ After all parameters are filled in and boot images have been created the deploy 
 
 
 
+# API v2 
+For the next iteration of KUBAM APIs will be refactored to create a better experience. 
+
+## Server Groups
+
+KUBAM stores values for UCS logins inside the ```kubam.yaml``` This API just offers a way to make this happen.  
+
+### ```/api/v2/server-groups```
+
+* ```GET```: Get the current server groups
+	* Parameters: None
+	* Returns: The current server groups without the password.  It doesn't return all information, just the essential user information. 
+	
+	```
+	{
+  		"server-groups": [
+    		{"uid": 1, "name" : "ucs01", "type": "ucsm", "credentials" : {"ip" : "192.168.40.1", "user" : "admin", "password" : "REDACTED"},
+    		{"name" : "ucs02", "type": "ucsm", "credentials" : {"ip" : "192.168.40.20", "user" : "admin", "password" : "REDACTED"}
+  		]
+	}
+```
+	
+	* Error: 
+	
+* ```POST``` - Create a new UCS Domain
+	* Parameters Example: 
+	
+	```
+	{"name", "ucs01", "type" : "ucsm", "credentials" : {"user": "admin", "password" : "secret-password", "server" : "172.28.225.163" }}
+	```
+	* Returns: ```{ "login" : "success" }```
+	* Error: 
+	* Example: ```curl -X POST -H "Content-Type: application/json"  -d '{"credentials" : {"user": "admin", "password" : "nbv12345", "server" : "172.28.225.163" }}' http://172.28.225.135/api/v1/session```
+	
+
+### ```/api/v2/server-groups/{uid}```
+
+* ```GET``` : Get the entire information of one of the server groups
+* ```DELETE```: Delete the server group
+* ```POST```: Update the server group
+
+
+
+## ACI
+
+### ```/api/v2/aci/```
+
+* ```GET```: Get all ACI instances.  If there are any there will probably only be one. 
+
+
+### ```/api/v2/aci/{uuid}```
+
+* ```GET```: Get the full information of the ACI platform.
+* ```POST```: Update the ACI information of a particular ACI group.
+
+
+## Network Group
+
+### ```/api/v2/networks```
+
+* ```GET```: Get all network settings
+
+### ```/api/v2/networks/{uuid}```
+
+* ```GET```: Get info from perticular network.
+* ```POST```: Update the network settings of a particular network group.
+
+## Hosts
+
+### ```/api/v2/hosts```
+
+* ```GET```: Get all the hosts
+* ```POST```: Update all the hosts. 
+
+
+## ISO
+
+### ```/api/v1/catalog```
+
+* ```GET```
+
+
+
+### ```/api/v1/isos```
+
+* ```GET```
+
+
+### ```/api/v1/isos/boot```
+
+* ```POST```
+
+### ```/api/v1/isos/map```
+
+* ```GET```
+* ```POST```
+
+
+
+## SSH Keys
+ 
+### ```/api/v1/keys```
+
+* ```GET```
+* ```POST```
+
+## Deploy 
+
+### ```/api/v2/deploy/images```
+
+Deploy the boot media. 
+
+* ```POST```
+
+Unique or all of them.  Allow multiple servers to be created.  If nothing is passed in, all servers will have boot images created for them. 
+
+
+### ```/api/v2/deploy/ucs```
+
+Deploy the UCS 
+
+* ```POST```
+
+Unique or all of them.
+
+### ```/api/v2/deploy```
+
+Does it all for you!  Do the Boot images and deploy UCS. 
