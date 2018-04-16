@@ -203,13 +203,14 @@ KUBAM stores values for UCS logins inside the ```kubam.yaml``` This API just off
 	```
 	{
   		"server-groups": [
-    		{"uid": 1, "name" : "ucs01", "type": "ucsm", "credentials" : {"ip" : "192.168.40.1", "user" : "admin", "password" : "REDACTED"},
-    		{"name" : "ucs02", "type": "ucsm", "credentials" : {"ip" : "192.168.40.20", "user" : "admin", "password" : "REDACTED"}
+    		{"uid": 1, "name" : "ucs01", "type": "ucsm", "credentials" : {"ip" : "192.168.40.1", "user" : "admin", "password" : "encrypted"},
+    		{"name" : "ucs02", "type": "ucsm", "credentials" : {"ip" : "192.168.40.20", "user" : "admin", "password" : "encrypted"}
   		]
 	}
 ```
+	* Example:
+   ```curl $KUBAM_API/api/v2/server-groups```
 	
-	* Error: 
 	
 * ```POST``` - Create a new UCS Domain
 	* Parameters Example: 
@@ -219,7 +220,13 @@ KUBAM stores values for UCS logins inside the ```kubam.yaml``` This API just off
 	```
 	* Returns: ```{ "login" : "success" }```
 	* Error: 
-	* Example: ```curl -X POST -H "Content-Type: application/json"  -d '{"credentials" : {"user": "admin", "password" : "nbv12345", "server" : "172.28.225.163" }}' http://172.28.225.135/api/v1/session```
+	* Example: ```curl -X POST -H "Content-Type: application/json" -d '{"credentials" : {"user": "admin", "password" : "nbv12345", "ip" : "172.28.225.163" }, "type" : "ucsm", "name" : "devi" }' http://$KUBAM_API/api/v2/server-groups```
+	
+* ```PUT``` - Update an existing UCS Domain.  You need to include the UUID of the Domain. Otherwise its the same action as ```POST```. 
+* ```DELETE``` - Delete the UCS / CIMC Server Group.  
+	* Parameters: ```{"id" : "asdfbasdf..."}```
+	* Example: ```curl -X DELETE -H "Content-Type: application/json"  d '{"id" : "04320631-191c-46f5-a105-a6077661e085"}' $KUBAM_API/api/v2/server-groups```
+
 	
 
 ### ```/api/v2/server-groups/{uid}```
@@ -314,4 +321,10 @@ Unique or all of them.
 
 ### ```/api/v2/deploy```
 
-Does it all for you!  Do the Boot images and deploy UCS. 
+* ```POST``` Does it all for you!  Do the Boot images and deploy UCS. 
+
+## UCS Actions
+
+### ```/api/v2/ucs/drives```
+
+* ```DELETE``` resets the disk arrays from JBOD to unconfigured good.

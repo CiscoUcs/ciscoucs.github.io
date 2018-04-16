@@ -48,7 +48,17 @@ yum remove docker \
 
 Run the following commands as ```root```.  Run ```sudo``` before if necessary:
 
-#### 3.1.1 Install Docker
+#### 3.1.1 Proxy?
+
+Are you behind a nasty corporate firewall?  Set up the proxy in ```/etc/yum.conf```.  This is done by adding the line:
+
+```
+proxy=http://proxy.esl.cisco.com:80
+```
+
+If you were behind a Cisco firewall.  Substitute your own proxy server. 
+
+#### 3.1.2 Install Docker
 ```
 yum install -y yum-utils
 yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
@@ -57,7 +67,7 @@ systemctl start docker
 systemctl enable docker
 ```
 
-#### 3.1.2 Install Docker Compose
+#### 3.1.3 Install Docker Compose
 ```
 curl -L https://github.com/docker/compose/releases/download/1.17.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
