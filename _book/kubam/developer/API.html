@@ -801,7 +801,7 @@
 <p>For the next iteration of KUBAM APIs will be refactored to create a better experience. </p>
 <h2 id="server-groups">Server Groups</h2>
 <p>KUBAM stores values for UCS logins inside the <code>kubam.yaml</code> This API just offers a way to make this happen.  </p>
-<h3 id="apiv2server-groups"><code>/api/v2/server-groups</code></h3>
+<h3 id="apiv2servers"><code>/api/v2/servers</code></h3>
 <ul>
 <li><p><code>GET</code>: Get the current server groups</p>
 <ul>
@@ -815,54 +815,69 @@
 }
 </code></pre></li>
 <li>Example:
-<code>curl $KUBAM_API/api/v2/server-groups</code></li>
+<code>curl $KUBAM_API/api/v2/servers</code></li>
 </ul>
 </li>
 </ul>
 <ul>
 <li><p><code>POST</code> - Create a new UCS Domain</p>
 <ul>
-<li><p>Parameters Example: </p>
+<li><p>Params: </p>
 <pre><code>{&quot;name&quot;, &quot;ucs01&quot;, &quot;type&quot; : &quot;ucsm&quot;, &quot;credentials&quot; : {&quot;user&quot;: &quot;admin&quot;, &quot;password&quot; : &quot;secret-password&quot;, &quot;server&quot; : &quot;172.28.225.163&quot; }}
 </code></pre></li>
-<li>Returns: <code>{ &quot;login&quot; : &quot;success&quot; }</code></li>
-<li>Error: </li>
-<li>Example: <code>curl -X POST -H &quot;Content-Type: application/json&quot; -d &apos;{&quot;credentials&quot; : {&quot;user&quot;: &quot;admin&quot;, &quot;password&quot; : &quot;nbv12345&quot;, &quot;ip&quot; : &quot;172.28.225.163&quot; }, &quot;type&quot; : &quot;ucsm&quot;, &quot;name&quot; : &quot;devi&quot; }&apos; http://$KUBAM_API/api/v2/server-groups</code></li>
+<li><p>Example: <code>curl -X POST -H &quot;Content-Type: application/json&quot; -d &apos;{&quot;credentials&quot; : {&quot;user&quot;: &quot;admin&quot;, &quot;password&quot; : &quot;nbv12345&quot;, &quot;ip&quot; : &quot;172.28.225.163&quot; }, &quot;type&quot; : &quot;ucsm&quot;, &quot;name&quot; : &quot;devi&quot; }&apos; http://$KUBAM_API/api/v2/servers</code></p>
+</li>
 </ul>
 </li>
 <li><p><code>PUT</code> - Update an existing UCS Domain.  You need to include the UUID of the Domain. Otherwise its the same action as <code>POST</code>. </p>
 </li>
 <li><code>DELETE</code> - Delete the UCS / CIMC Server Group.  <ul>
 <li>Parameters: <code>{&quot;id&quot; : &quot;asdfbasdf...&quot;}</code></li>
-<li>Example: <code>curl -X DELETE -H &quot;Content-Type: application/json&quot;  d &apos;{&quot;id&quot; : &quot;04320631-191c-46f5-a105-a6077661e085&quot;}&apos; $KUBAM_API/api/v2/server-groups</code></li>
+<li>Example: <code>curl -X DELETE -H &quot;Content-Type: application/json&quot;  -d &apos;{&quot;id&quot; : &quot;04320631-191c-46f5-a105-a6077661e085&quot;}&apos; $KUBAM_API/api/v2/servers</code></li>
 </ul>
 </li>
 </ul>
-<h3 id="apiv2server-groupsuid"><code>/api/v2/server-groups/{uid}</code></h3>
-<ul>
-<li><code>GET</code> : Get the entire information of one of the server groups</li>
-<li><code>DELETE</code>: Delete the server group</li>
-<li><code>POST</code>: Update the server group</li>
-</ul>
 <h2 id="aci">ACI</h2>
-<h3 id="apiv2aci"><code>/api/v2/aci/</code></h3>
+<h3 id="apiv2aci"><code>/api/v2/aci</code></h3>
 <ul>
-<li><code>GET</code>: Get all ACI instances.  If there are any there will probably only be one. </li>
+<li><p><code>GET</code>: Get all ACI instances.  If there are any there will probably only be one. </p>
+<ul>
+<li>Params: <code>none</code></li>
 </ul>
-<h3 id="apiv2aciuuid"><code>/api/v2/aci/{uuid}</code></h3>
+</li>
+<li><p><code>POST</code>: Create a new ACI instance</p>
 <ul>
-<li><code>GET</code>: Get the full information of the ACI platform.</li>
-<li><code>POST</code>: Update the ACI information of a particular ACI group.</li>
+<li>Params: <code>{&apos;name&apos;: &apos;aci01&apos;, &apos;credentials&apos; : {&quot;ip&quot; : &quot;foo&quot;, &quot;user&quot; : &quot;admin&quot;, &quot;password&quot; : &quot;password&quot;}, &quot;tenant_name&quot; : &quot;blue&quot;, &quot;vrf_name&quot; : &quot;lagoon&quot;, &quot;bridge_domain&quot; : &quot;3&quot;}</code></li>
+<li>Example: <code>curl -X POST -H &quot;Content-Type: application/json&quot; -d &apos;{&quot;name&quot;: &quot;aci01&quot;, &quot;credentials&quot; : {&quot;ip&quot; : &quot;foo&quot;, &quot;user&quot; : &quot;admin&quot;, &quot;password&quot; : &quot;password&quot;}, &quot;tenant_name&quot; : &quot;blue&quot;, &quot;vrf_name&quot; : &quot;lagoon&quot;, &quot;bridge_domain&quot; : &quot;3&quot;}&apos; $KUBAM_API/api/v2/aci</code></li>
+</ul>
+</li>
+<li><p><code>PUT</code>: Update an existing ACI instance</p>
+<ul>
+<li>Params: <code>{&quot;id&quot;: &quot;someid...&quot;, &quot;name&quot;: &quot;aci01&quot;, &quot;credentials&quot; : {&quot;ip&quot; : &quot;foo&quot;, &quot;user&quot; : &quot;admin&quot;, &quot;password&quot; : &quot;password&quot;}, &quot;tenant_name&quot; : &quot;blue&quot;, &quot;vrf_name&quot; : &quot;lagoon&quot;, &quot;bridge_domain&quot; : &quot;3&quot;}</code></li>
+<li>Example: <code>curl -X PUT -H &quot;Content-Type: application/json&quot; -d &apos;{&quot;id&quot;: &quot;blahblah&quot;, &quot;name&quot;: &quot;aci0-different&quot;, &quot;credentials&quot; : {&quot;ip&quot; : &quot;foo&quot;, &quot;user&quot; : &quot;admin&quot;, &quot;password&quot; : &quot;password&quot;}, &quot;tenant_name&quot; : &quot;blue&quot;, &quot;vrf_name&quot; : &quot;lagoon&quot;, &quot;bridge_domain&quot; : &quot;3&quot;}&apos; $KUBAM_API/api/v2/aci</code></li>
+</ul>
+</li>
+<li><p><code>DELETE</code>: Delete an existing ACI group</p>
+<ul>
+<li>Params: <code>{&quot;id&quot;: &quot;acigroupid&quot;}</code></li>
+<li>Example <code>curl -X DELETE -H &quot;Content-Type: application/json&quot; -d &apos;{&quot;id&quot;: &quot;blahblah&quot;} $KUBAM_API/api/v2/aci</code></li>
+</ul>
+</li>
 </ul>
 <h2 id="network-group">Network Group</h2>
-<h3 id="apiv2networks"><code>/api/v2/networks</code></h3>
+<h3 id="apiv2network"><code>/api/v2/network</code></h3>
 <ul>
-<li><code>GET</code>: Get all network settings</li>
+<li><code>GET</code>: Get all network settings<ul>
+<li>Params: <code>none</code></li>
+<li>Example: </li>
 </ul>
-<h3 id="apiv2networksuuid"><code>/api/v2/networks/{uuid}</code></h3>
-<ul>
-<li><code>GET</code>: Get info from perticular network.</li>
-<li><code>POST</code>: Update the network settings of a particular network group.</li>
+</li>
+<li><code>POST</code>: New Network Group</li>
+<li><code>PUT</code>: Update existing Network group</li>
+<li><code>DELETE</code>: Delete existing Network group<ul>
+<li>Params: <code>&apos;{&quot;id&quot;: &quot;somenetworkid...&quot; }&apos;</code></li>
+</ul>
+</li>
 </ul>
 <h2 id="hosts">Hosts</h2>
 <h3 id="apiv2hosts"><code>/api/v2/hosts</code></h3>
@@ -959,7 +974,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"KUBAM API","level":"3.5.1","depth":2,"next":{"title":"KUBAM YAML","level":"3.5.2","depth":2,"path":"kubam/developer/YAML.md","ref":"kubam/developer/YAML.md","articles":[]},"previous":{"title":"KUBAM Developer","level":"3.5","depth":1,"path":"kubam/developer/README.md","ref":"kubam/developer/README.md","articles":[{"title":"KUBAM API","level":"3.5.1","depth":2,"path":"kubam/developer/API.md","ref":"kubam/developer/API.md","articles":[]},{"title":"KUBAM YAML","level":"3.5.2","depth":2,"path":"kubam/developer/YAML.md","ref":"kubam/developer/YAML.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"kubam/developer/API.md","mtime":"2018-04-16T20:08:22.661Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-04-16T20:09:27.487Z"},"basePath":"../..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"KUBAM API","level":"3.5.1","depth":2,"next":{"title":"KUBAM YAML","level":"3.5.2","depth":2,"path":"kubam/developer/YAML.md","ref":"kubam/developer/YAML.md","articles":[]},"previous":{"title":"KUBAM Developer","level":"3.5","depth":1,"path":"kubam/developer/README.md","ref":"kubam/developer/README.md","articles":[{"title":"KUBAM API","level":"3.5.1","depth":2,"path":"kubam/developer/API.md","ref":"kubam/developer/API.md","articles":[]},{"title":"KUBAM YAML","level":"3.5.2","depth":2,"path":"kubam/developer/YAML.md","ref":"kubam/developer/YAML.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"kubam/developer/API.md","mtime":"2018-04-23T08:23:17.920Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-04-23T08:25:19.676Z"},"basePath":"../..","book":{"language":""}});
         });
     </script>
 </div>

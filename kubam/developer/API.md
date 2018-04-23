@@ -194,7 +194,7 @@ For the next iteration of KUBAM APIs will be refactored to create a better exper
 
 KUBAM stores values for UCS logins inside the ```kubam.yaml``` This API just offers a way to make this happen.  
 
-### ```/api/v2/server-groups```
+### ```/api/v2/servers```
 
 * ```GET```: Get the current server groups
 	* Parameters: None
@@ -209,57 +209,55 @@ KUBAM stores values for UCS logins inside the ```kubam.yaml``` This API just off
 	}
 ```
 	* Example:
-   ```curl $KUBAM_API/api/v2/server-groups```
+   ```curl $KUBAM_API/api/v2/servers```
 	
 	
 * ```POST``` - Create a new UCS Domain
-	* Parameters Example: 
-	
+	* Params: 
 	```
 	{"name", "ucs01", "type" : "ucsm", "credentials" : {"user": "admin", "password" : "secret-password", "server" : "172.28.225.163" }}
 	```
-	* Returns: ```{ "login" : "success" }```
-	* Error: 
-	* Example: ```curl -X POST -H "Content-Type: application/json" -d '{"credentials" : {"user": "admin", "password" : "nbv12345", "ip" : "172.28.225.163" }, "type" : "ucsm", "name" : "devi" }' http://$KUBAM_API/api/v2/server-groups```
+	
+	* Example: ```curl -X POST -H "Content-Type: application/json" -d '{"credentials" : {"user": "admin", "password" : "nbv12345", "ip" : "172.28.225.163" }, "type" : "ucsm", "name" : "devi" }' http://$KUBAM_API/api/v2/servers```
 	
 * ```PUT``` - Update an existing UCS Domain.  You need to include the UUID of the Domain. Otherwise its the same action as ```POST```. 
 * ```DELETE``` - Delete the UCS / CIMC Server Group.  
 	* Parameters: ```{"id" : "asdfbasdf..."}```
-	* Example: ```curl -X DELETE -H "Content-Type: application/json"  d '{"id" : "04320631-191c-46f5-a105-a6077661e085"}' $KUBAM_API/api/v2/server-groups```
-
-	
-
-### ```/api/v2/server-groups/{uid}```
-
-* ```GET``` : Get the entire information of one of the server groups
-* ```DELETE```: Delete the server group
-* ```POST```: Update the server group
-
+	* Example: ```curl -X DELETE -H "Content-Type: application/json"  -d '{"id" : "04320631-191c-46f5-a105-a6077661e085"}' $KUBAM_API/api/v2/servers```
 
 
 ## ACI
 
-### ```/api/v2/aci/```
+### ```/api/v2/aci```
 
 * ```GET```: Get all ACI instances.  If there are any there will probably only be one. 
+	* Params: ```none```
+	
+* ```POST```: Create a new ACI instance
+	* Params: ```{'name': 'aci01', 'credentials' : {"ip" : "foo", "user" : "admin", "password" : "password"}, "tenant_name" : "blue", "vrf_name" : "lagoon", "bridge_domain" : "3"}```
+	* Example: ```curl -X POST -H "Content-Type: application/json" -d '{"name": "aci01", "credentials" : {"ip" : "foo", "user" : "admin", "password" : "password"}, "tenant_name" : "blue", "vrf_name" : "lagoon", "bridge_domain" : "3"}' $KUBAM_API/api/v2/aci```
 
+* ```PUT```: Update an existing ACI instance
+	* Params: ```{"id": "someid...", "name": "aci01", "credentials" : {"ip" : "foo", "user" : "admin", "password" : "password"}, "tenant_name" : "blue", "vrf_name" : "lagoon", "bridge_domain" : "3"}```
+	* Example: ```curl -X PUT -H "Content-Type: application/json" -d '{"id": "blahblah", "name": "aci0-different", "credentials" : {"ip" : "foo", "user" : "admin", "password" : "password"}, "tenant_name" : "blue", "vrf_name" : "lagoon", "bridge_domain" : "3"}' $KUBAM_API/api/v2/aci```
 
-### ```/api/v2/aci/{uuid}```
+* ```DELETE```: Delete an existing ACI group
+	* Params: ```{"id": "acigroupid"}```
+	* Example ```curl -X DELETE -H "Content-Type: application/json" -d '{"id": "blahblah"} $KUBAM_API/api/v2/aci```
 
-* ```GET```: Get the full information of the ACI platform.
-* ```POST```: Update the ACI information of a particular ACI group.
 
 
 ## Network Group
 
-### ```/api/v2/networks```
+### ```/api/v2/network```
 
 * ```GET```: Get all network settings
-
-### ```/api/v2/networks/{uuid}```
-
-* ```GET```: Get info from perticular network.
-* ```POST```: Update the network settings of a particular network group.
+	* Params: ```none```
+	* Example: 
+* ```POST```: New Network Group
+* ```PUT```: Update existing Network group
+* ```DELETE```: Delete existing Network group
+	* Params: ```'{"id": "somenetworkid..." }'```
 
 ## Hosts
 

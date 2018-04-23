@@ -191,7 +191,7 @@ This should be the IP address of the KUBAM VM/server.
 ### Network Group
 
 ```
-networks:
+network_groups:
 - id: <guid>
   name: <required: group name>
   gateway: <required: ip>
