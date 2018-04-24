@@ -708,11 +708,76 @@
 <ul>
 <li><code>POST</code></li>
 </ul>
+<h2 id="monitor">Monitor</h2>
+<h3 id="apiv2status"><code>/api/v2/status</code></h3>
+<ul>
+<li><code>GET</code> Get the current overall status of the given server based on the passed parameters.<ul>
+<li>Parameters:<ul>
+<li>type: blade or rack</li>
+<li>chassis_id: number of the chassis in case of the blade server type</li>
+<li>slot: number of the blade slot in the chassis in case of the blade server type</li>
+<li>rack_id: number of the rack server in case of a rack mount server type</li>
+<li>example: <code>/api/v2/status?type=blade&amp;chassis_id=1&amp;slot=4</code></li>
+</ul>
+</li>
+<li>Returns: <code>{
+&quot;completion_time&quot;: &quot;2018-04-09T10:42:11.670&quot;,
+&quot;current_fsm&quot;: &quot;Turnup&quot;,
+&quot;fsm_status&quot;: &quot;success&quot;,
+&quot;progress&quot;: &quot;100&quot;,
+&quot;sacl&quot;: null
+}</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="apiv2fsm"><code>api/v2/fsm</code></h3>
+<ul>
+<li><code>GET</code> Get the current detailed status of all FSM stages given server based on the passed parameters.<ul>
+<li>Parameters:<ul>
+<li>type: blade or rack</li>
+<li>chassis_id: number of the chassis in case of the blade server type</li>
+<li>slot: number of the blade slot in the chassis in case of the blade server type</li>
+<li>rack_id: number of the rack server in case of a rack mount server type</li>
+<li>example: <code>/api/v2/status?type=rack&amp;rack_id=2</code></li>
+</ul>
+</li>
+<li>Returns: <pre><code>{
+&quot;stages&quot;: [
+  {
+      &quot;descr&quot;: &quot;Check if power can be allocated to server 1(FSM-STAGE:sam:dme:ComputePhysicalTurnup:CheckPowerAvailability)&quot;,
+      &quot;last_update_time&quot;: &quot;2018-04-09T10:42:11.093&quot;,
+      &quot;name&quot;: &quot;TurnupCheckPowerAvailability&quot;,
+      &quot;order&quot;: &quot;1&quot;,
+      &quot;retry&quot;: &quot;0&quot;,
+      &quot;stage_status&quot;: &quot;skip&quot;
+  },
+  {
+      &quot;descr&quot;: &quot;Waiting for power allocation to server 1(FSM-STAGE:sam:dme:ComputePhysicalTurnup:PowerDeployWait)&quot;,
+      &quot;last_update_time&quot;: &quot;2018-04-09T10:42:11.093&quot;,
+      &quot;name&quot;: &quot;TurnupPowerDeployWait&quot;,
+      &quot;order&quot;: &quot;2&quot;,
+      &quot;retry&quot;: &quot;0&quot;,
+      &quot;stage_status&quot;: &quot;skip&quot;
+  },
+  {
+      &quot;descr&quot;: &quot;Power-on server sys/rack-unit-1(FSM-STAGE:sam:dme:ComputePhysicalTurnup:Execute)&quot;,
+      &quot;last_update_time&quot;: &quot;2018-04-09T10:42:11.670&quot;,
+      &quot;name&quot;: &quot;TurnupExecute&quot;,
+      &quot;order&quot;: &quot;3&quot;,
+      &quot;retry&quot;: &quot;1&quot;,
+      &quot;stage_status&quot;: &quot;success&quot;
+  }
+]
+}
+</code></pre></li>
+</ul>
+</li>
+</ul>
 <h2 id="servers">Servers</h2>
 <h3 id="apiv1servers"><code>/api/v1/servers</code></h3>
 <ul>
 <li><code>GET</code> Get a list of all the UCS Servers and whether they are selected or not.  Also gets the mapping between the OS and the server. <ul>
-<li>Parameters: none</li>
+<li>Parameters: None</li>
 <li>Returns: </li>
 </ul>
 </li>
@@ -753,7 +818,7 @@
 <h3 id="apiv1serversimages"><code>/api/v1/servers/images</code></h3>
 <ul>
 <li><code>POST</code> Builds the server images.  This is the API to use after all parameters have been filled in.  It will then build <code>*.iso</code> and <code>*.img</code> files in the <code>~/kubam</code> directory. <ul>
-<li>Parameters: none</li>
+<li>Parameters: None</li>
 <li>Returns: <code>{ &quot;status&quot; : &quot;ok&quot;}</code></li>
 </ul>
 </li>
@@ -786,13 +851,13 @@
 <ul>
 <li><p><code>POST</code></p>
 <ul>
-<li>Parameters: none</li>
+<li>Parameters: None</li>
 <li>Return: </li>
 </ul>
 </li>
 <li><p><code>DELETE</code>: Delete the UCS resources.  This is a very disruptive command and will completely tear down any UCS servers that are in use. </p>
 <ul>
-<li>Parameters: none</li>
+<li>Parameters: None</li>
 <li>Return: </li>
 </ul>
 </li>
@@ -974,7 +1039,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"KUBAM API","level":"3.5.1","depth":2,"next":{"title":"KUBAM YAML","level":"3.5.2","depth":2,"path":"kubam/developer/YAML.md","ref":"kubam/developer/YAML.md","articles":[]},"previous":{"title":"KUBAM Developer","level":"3.5","depth":1,"path":"kubam/developer/README.md","ref":"kubam/developer/README.md","articles":[{"title":"KUBAM API","level":"3.5.1","depth":2,"path":"kubam/developer/API.md","ref":"kubam/developer/API.md","articles":[]},{"title":"KUBAM YAML","level":"3.5.2","depth":2,"path":"kubam/developer/YAML.md","ref":"kubam/developer/YAML.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"kubam/developer/API.md","mtime":"2018-04-23T08:23:17.920Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-04-23T08:25:19.676Z"},"basePath":"../..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"KUBAM API","level":"3.5.1","depth":2,"next":{"title":"KUBAM YAML","level":"3.5.2","depth":2,"path":"kubam/developer/YAML.md","ref":"kubam/developer/YAML.md","articles":[]},"previous":{"title":"KUBAM Developer","level":"3.5","depth":1,"path":"kubam/developer/README.md","ref":"kubam/developer/README.md","articles":[{"title":"KUBAM API","level":"3.5.1","depth":2,"path":"kubam/developer/API.md","ref":"kubam/developer/API.md","articles":[]},{"title":"KUBAM YAML","level":"3.5.2","depth":2,"path":"kubam/developer/YAML.md","ref":"kubam/developer/YAML.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"kubam/developer/API.md","mtime":"2018-04-23T15:09:10.008Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-04-24T08:00:51.426Z"},"basePath":"../..","book":{"language":""}});
         });
     </script>
 </div>
