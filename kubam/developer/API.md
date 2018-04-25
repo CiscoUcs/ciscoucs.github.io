@@ -88,13 +88,72 @@ KUBAM stores values for UCS logins inside the ```kubam.yaml``` This API just off
 
 * ```POST```
 
+## Monitor
+
+### ```/api/v2/status```
+
+* ```GET``` Get the current overall status of the given server based on the passed parameters.
+    * Parameters:
+        - type: blade or rack
+        - chassis_id: number of the chassis in case of the blade server type
+        - slot: number of the blade slot in the chassis in case of the blade server type
+        - rack_id: number of the rack server in case of a rack mount server type
+        - example: ```/api/v2/status?type=blade&chassis_id=1&slot=4```
+    * Returns: ```{
+    "completion_time": "2018-04-09T10:42:11.670",
+    "current_fsm": "Turnup",
+    "fsm_status": "success",
+    "progress": "100",
+    "sacl": null
+}```
+
+### ```api/v2/fsm```
+
+* ```GET``` Get the current detailed status of all FSM stages given server based on the passed parameters.
+    * Parameters:
+        - type: blade or rack
+        - chassis_id: number of the chassis in case of the blade server type
+        - slot: number of the blade slot in the chassis in case of the blade server type
+        - rack_id: number of the rack server in case of a rack mount server type
+        - example: ```/api/v2/status?type=rack&rack_id=2```
+    * Returns: 
+```
+{
+    "stages": [
+        {
+            "descr": "Check if power can be allocated to server 1(FSM-STAGE:sam:dme:ComputePhysicalTurnup:CheckPowerAvailability)",
+            "last_update_time": "2018-04-09T10:42:11.093",
+            "name": "TurnupCheckPowerAvailability",
+            "order": "1",
+            "retry": "0",
+            "stage_status": "skip"
+        },
+        {
+            "descr": "Waiting for power allocation to server 1(FSM-STAGE:sam:dme:ComputePhysicalTurnup:PowerDeployWait)",
+            "last_update_time": "2018-04-09T10:42:11.093",
+            "name": "TurnupPowerDeployWait",
+            "order": "2",
+            "retry": "0",
+            "stage_status": "skip"
+        },
+        {
+            "descr": "Power-on server sys/rack-unit-1(FSM-STAGE:sam:dme:ComputePhysicalTurnup:Execute)",
+            "last_update_time": "2018-04-09T10:42:11.670",
+            "name": "TurnupExecute",
+            "order": "3",
+            "retry": "1",
+            "stage_status": "success"
+        }
+    ]
+}
+```
 
 ## Servers
 
 ### ```/api/v1/servers```
 
 * ```GET``` Get a list of all the UCS Servers and whether they are selected or not.  Also gets the mapping between the OS and the server. 
-	* Parameters: none
+	* Parameters: None
 	* Returns: 
 
 ```
@@ -135,7 +194,7 @@ KUBAM stores values for UCS logins inside the ```kubam.yaml``` This API just off
 ### ```/api/v1/servers/images```
 
 * ```POST``` Builds the server images.  This is the API to use after all parameters have been filled in.  It will then build ```*.iso``` and ```*.img``` files in the ```~/kubam``` directory. 
-	* Parameters: none
+	* Parameters: None
 	* Returns: ```{ "status" : "ok"}```
 
 
@@ -176,11 +235,11 @@ KUBAM stores values for UCS logins inside the ```kubam.yaml``` This API just off
 After all parameters are filled in and boot images have been created the deploy API is used to create the UCS resources.  It logs into UCS Manager and creates the policies, pools, and profiles.  If they have already been created this command does not change them. 
 
 * ```POST```
-	* Parameters: none
+	* Parameters: None
 	* Return: 
 	
 * ```DELETE```: Delete the UCS resources.  This is a very disruptive command and will completely tear down any UCS servers that are in use. 
-	* Parameters: none
+	* Parameters: None
 	* Return: 
 
 
