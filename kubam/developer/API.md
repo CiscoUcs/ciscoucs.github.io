@@ -251,13 +251,45 @@ KUBAM stores values for UCS logins inside the ```kubam.yaml``` This API just off
 
 ### ```/api/v2/network```
 
-* ```GET```: Get all network settings
+Network parameters are clustered together that can then be added to a server.  
+
+* ```GET```: Get all network settings.
 	* Params: ```none```
-	* Example: 
+	* Example:  ```curl -X GET $KUBAM_API/api/v2/network```
+	* Returns:  The current list of network groups
+	
+	```
+	{ "networks" : 
+		[
+		{"id": "1234-2342-1234-1234-1234",
+		"name": "net01", 
+		"netmask":"255.255.255.0", 
+		"gateway" : "192.168.1.1", 
+		"nameserver" : "8.8.8.8", 
+		"ntpserver" : "ntp.esl.cisco.com"},
+		
+		{"id": "1234-2342-1234-1234-1234",
+		"name": "net02", 
+		"netmask":"255.255.255.0", 
+		"gateway" : "192.168.2.1", 
+		"nameserver" : "8.8.8.8", 
+		"ntpserver" : "ntp.esl.cisco.com"},
+		]
+	}
+	```
 * ```POST```: New Network Group
-* ```PUT```: Update existing Network group
+	* Params:  A new Network group
+	```
+	{ "name": "net01", "netmask" : "255.255.255.0", "nameserver" : "208.67.222.222", "ntpserver" : "ntp.esl.cisco.com", "proxy": "http://proxy.esl.cisco.com:80", "vlan" : "30" }
+	```
+* ```PUT```: Similar to a POST call but you need to add the ```id``` of the network group you are updating.  This is for modifying an existing network group. 
+	* Params: 
+	```
+	{ "id": "1234-1234-1234-1234" , "name": "newName", "netmask" : "255.255.255.0", "nameserver" : "208.67.222.222", "ntpserver" : "ntp.esl.cisco.com", "proxy": "http://proxy.esl.cisco.com:80", "vlan" : "30" }
+	```
 * ```DELETE```: Delete existing Network group
 	* Params: ```'{"id": "somenetworkid..." }'```
+	* Errors:  You should get an error if a network group is already in use by one or most hosts. 
 
 ## Hosts
 
@@ -320,6 +352,11 @@ Unique or all of them.
 ### ```/api/v2/deploy```
 
 * ```POST``` Does it all for you!  Do the Boot images and deploy UCS. 
+
+
+### ```/api/v2/deploy/vmedia```
+
+* ```POST```: Deploys a VMedia policy only that can be used by existing Service Profiles. 
 
 ## UCS Actions
 

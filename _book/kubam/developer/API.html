@@ -866,16 +866,46 @@
 </ul>
 <h2 id="network-group">Network Group</h2>
 <h3 id="apiv2network"><code>/api/v2/network</code></h3>
+<p>Network parameters are clustered together that can then be added to a server.  </p>
 <ul>
-<li><code>GET</code>: Get all network settings<ul>
+<li><p><code>GET</code>: Get all network settings.</p>
+<ul>
 <li>Params: <code>none</code></li>
-<li>Example: </li>
+<li>Example:  <code>curl -X GET $KUBAM_API/api/v2/network</code></li>
+<li><p>Returns:  The current list of network groups</p>
+<pre><code>{ &quot;networks&quot; : 
+  [
+  {&quot;id&quot;: &quot;1234-2342-1234-1234-1234&quot;,
+  &quot;name&quot;: &quot;net01&quot;, 
+  &quot;netmask&quot;:&quot;255.255.255.0&quot;, 
+  &quot;gateway&quot; : &quot;192.168.1.1&quot;, 
+  &quot;nameserver&quot; : &quot;8.8.8.8&quot;, 
+  &quot;ntpserver&quot; : &quot;ntp.esl.cisco.com&quot;},
+
+  {&quot;id&quot;: &quot;1234-2342-1234-1234-1234&quot;,
+  &quot;name&quot;: &quot;net02&quot;, 
+  &quot;netmask&quot;:&quot;255.255.255.0&quot;, 
+  &quot;gateway&quot; : &quot;192.168.2.1&quot;, 
+  &quot;nameserver&quot; : &quot;8.8.8.8&quot;, 
+  &quot;ntpserver&quot; : &quot;ntp.esl.cisco.com&quot;},
+  ]
+}
+</code></pre></li>
 </ul>
 </li>
-<li><code>POST</code>: New Network Group</li>
-<li><code>PUT</code>: Update existing Network group</li>
+<li><code>POST</code>: New Network Group<ul>
+<li>Params:  A new Network group<pre><code>{ &quot;name&quot;: &quot;net01&quot;, &quot;netmask&quot; : &quot;255.255.255.0&quot;, &quot;nameserver&quot; : &quot;208.67.222.222&quot;, &quot;ntpserver&quot; : &quot;ntp.esl.cisco.com&quot;, &quot;proxy&quot;: &quot;http://proxy.esl.cisco.com:80&quot;, &quot;vlan&quot; : &quot;30&quot; }
+</code></pre></li>
+</ul>
+</li>
+<li><code>PUT</code>: Similar to a POST call but you need to add the <code>id</code> of the network group you are updating.  This is for modifying an existing network group. <ul>
+<li>Params: <pre><code>{ &quot;id&quot;: &quot;1234-1234-1234-1234&quot; , &quot;name&quot;: &quot;newName&quot;, &quot;netmask&quot; : &quot;255.255.255.0&quot;, &quot;nameserver&quot; : &quot;208.67.222.222&quot;, &quot;ntpserver&quot; : &quot;ntp.esl.cisco.com&quot;, &quot;proxy&quot;: &quot;http://proxy.esl.cisco.com:80&quot;, &quot;vlan&quot; : &quot;30&quot; }
+</code></pre></li>
+</ul>
+</li>
 <li><code>DELETE</code>: Delete existing Network group<ul>
 <li>Params: <code>&apos;{&quot;id&quot;: &quot;somenetworkid...&quot; }&apos;</code></li>
+<li>Errors:  You should get an error if a network group is already in use by one or most hosts. </li>
 </ul>
 </li>
 </ul>
@@ -926,6 +956,10 @@
 <ul>
 <li><code>POST</code> Does it all for you!  Do the Boot images and deploy UCS. </li>
 </ul>
+<h3 id="apiv2deployvmedia"><code>/api/v2/deploy/vmedia</code></h3>
+<ul>
+<li><code>POST</code>: Deploys a VMedia policy only that can be used by existing Service Profiles. </li>
+</ul>
 <h2 id="ucs-actions">UCS Actions</h2>
 <h3 id="apiv2ucsdrives"><code>/api/v2/ucs/drives</code></h3>
 <ul>
@@ -974,7 +1008,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"KUBAM API","level":"3.5.1","depth":2,"next":{"title":"KUBAM YAML","level":"3.5.2","depth":2,"path":"kubam/developer/YAML.md","ref":"kubam/developer/YAML.md","articles":[]},"previous":{"title":"KUBAM Developer","level":"3.5","depth":1,"path":"kubam/developer/README.md","ref":"kubam/developer/README.md","articles":[{"title":"KUBAM API","level":"3.5.1","depth":2,"path":"kubam/developer/API.md","ref":"kubam/developer/API.md","articles":[]},{"title":"KUBAM YAML","level":"3.5.2","depth":2,"path":"kubam/developer/YAML.md","ref":"kubam/developer/YAML.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"kubam/developer/API.md","mtime":"2018-04-23T08:23:17.920Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-04-23T08:25:19.676Z"},"basePath":"../..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"KUBAM API","level":"3.5.1","depth":2,"next":{"title":"KUBAM YAML","level":"3.5.2","depth":2,"path":"kubam/developer/YAML.md","ref":"kubam/developer/YAML.md","articles":[]},"previous":{"title":"KUBAM Developer","level":"3.5","depth":1,"path":"kubam/developer/README.md","ref":"kubam/developer/README.md","articles":[{"title":"KUBAM API","level":"3.5.1","depth":2,"path":"kubam/developer/API.md","ref":"kubam/developer/API.md","articles":[]},{"title":"KUBAM YAML","level":"3.5.2","depth":2,"path":"kubam/developer/YAML.md","ref":"kubam/developer/YAML.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"kubam/developer/API.md","mtime":"2018-04-25T13:25:34.308Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-04-25T13:26:18.457Z"},"basePath":"../..","book":{"language":""}});
         });
     </script>
 </div>
