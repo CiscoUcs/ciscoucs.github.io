@@ -210,7 +210,19 @@ KUBAM stores values for UCS logins inside the ```kubam.yaml``` This API just off
 
 ### ```/api/v1/isos```
 
-* ```GET```
+* ```GET```  Gets the current ISO files that exist in the ```/kubam/``` directory.  
+	* Example: 
+	
+	```
+	curl http://10.93.234.96:8001/api/v1/isos
+{
+  "isos": [
+    "CentOS-7-x86_64-Minimal-1708.iso"
+  ]
+}
+
+	```
+
 
 
 
@@ -225,8 +237,51 @@ KUBAM stores values for UCS logins inside the ```kubam.yaml``` This API just off
 
 ### ```/api/v1/isos/map```
 
-* ```GET```
-* ```POST```
+We Map the file of the operating system to the name of what operating system it is.  We are not smart enough to figure it out in code at this time.  Actually, we are just a little lazy. 
+
+* ```GET``` Gets the current Mapping of OS name to OS iso files.  These are OSes that can be deployed. 
+	* Parameters:  None
+	* Example:
+	```
+	curl http://10.93.234.96:8001/api/v1/isos/map
+{
+  "iso_map": [
+    {
+      "file": "/kubam/CentOS-7-x86_64-Minimal-1708.iso",
+      "os": "centos7.4"
+    }
+  ]
+}
+	```
+
+
+* ```POST``` Maps all ISOS to files.  You should include all previously mapped ISO maps in this request if you want to add one.  KUBAM expects all ISO files to be in the ```/kubam/``` directory of the container.  (this directory is mounted when KUBAM starts from something like ```/root/kubam```.  
+   * Parameters: Should be a map of all the isos in the file to the name of the operating systems. 
+   	```
+   	{
+  		"iso_map": [
+    		{
+      			"file": "/kubam/CentOS-7-x86_64-Minimal-1708.iso",
+      			"os": "centos7.4"
+    		},
+    		{...
+    		},
+  		]
+	}
+   	```
+	* Example: 
+	```
+	curl -X POST http://10.93.234.96:8001/api/v1/isos/ma -d '{"iso_map" : [{"os" : "centos7.4", "file" : "/kubam/CentOS-7-x86_64-Minimal-1708.iso"}]}' -H "Content-Type: application/json"
+{
+  "iso_map": [
+    {
+      "file": "/kubam/CentOS-7-x86_64-Minimal-1708.iso",
+      "os": "centos7.4"
+    }
+  ]
+}
+```
+
 
 ## Deploy
 
@@ -266,7 +321,7 @@ KUBAM stores values for UCS logins inside the ```kubam.yaml``` This API just off
     		{"name" : "ucs02", "type": "ucsm", "credentials" : {"ip" : "192.168.40.20", "user" : "admin", "password" : "encrypted"}
   		]
 	}
-```
+    ```
 	* Example:
    ```curl $KUBAM_API/api/v2/servers```
 	
@@ -308,13 +363,13 @@ KUBAM stores values for UCS logins inside the ```kubam.yaml``` This API just off
 
 ## Network Group
 
-### ```/api/v2/network```
+### ```/api/v2/networks```
 
 Network parameters are clustered together that can then be added to a server.  
 
 * ```GET```: Get all network settings.
 	* Params: ```none```
-	* Example:  ```curl -X GET $KUBAM_API/api/v2/network```
+	* Example:  ```curl -X GET $KUBAM_API/api/v2/networks```
 	* Returns:  The current list of network groups
 	
 	```
@@ -355,7 +410,22 @@ Network parameters are clustered together that can then be added to a server.
 ### ```/api/v2/hosts```
 
 * ```GET```: Get all the hosts
-* ```POST```: Update all the hosts. 
+    * Params:   ```none```
+    * Example:  ```curl -X GET $KUBAM_API/api/v2/hosts```
+    * Returns:  Current list of hosts
+    
+* ```POST```: Update all the hosts.
+    *Params:    list of all hosts
+    ```
+    [
+        {'name': 'kube01', 'ip': '172.20.30.1', 'os': 'centos7.4', 'role': 'generic', 'network_group': ''},
+        {'name': 'kube02', 'ip': '172.20.30.2', 'os': 'centos7.4', 'role': 'k8s master', 'network_group': '', 'server_group': ''}
+    ]
+    ```
+    
+* ```DELETE```: Delete existing Host. 
+    * Params:   ```{'name': 'kube01'}```
+    * Errors:   An error will occur if there is no hosts to delete.
 
 
 ## ISO

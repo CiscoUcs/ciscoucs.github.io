@@ -30,6 +30,7 @@
 	* [Boot Images](kubam/configure/iso.md)
 	* [Settings](kubam/configure/settings.md)
 	* [Kickstart Templates](kubam/configure/template.md)
+  * [Windows Support (alpha)](kubam/configure/windows.md)
 * [KUBAM Glorious Underbelly](kubam/internals/README.md)
 	* [Stage1 - Docker](kubam/internals/stage1/docker.md)
 	* [Stage1 - ESXi](kubam/internals/stage1/esxi.md)
