@@ -210,7 +210,19 @@ KUBAM stores values for UCS logins inside the ```kubam.yaml``` This API just off
 
 ### ```/api/v1/isos```
 
-* ```GET```
+* ```GET```  Gets the current ISO files that exist in the ```/kubam/``` directory.  
+	* Example: 
+	
+	```
+	curl http://10.93.234.96:8001/api/v1/isos
+{
+  "isos": [
+    "CentOS-7-x86_64-Minimal-1708.iso"
+  ]
+}
+
+	```
+
 
 
 
@@ -225,8 +237,51 @@ KUBAM stores values for UCS logins inside the ```kubam.yaml``` This API just off
 
 ### ```/api/v1/isos/map```
 
-* ```GET```
-* ```POST```
+We Map the file of the operating system to the name of what operating system it is.  We are not smart enough to figure it out in code at this time.  Actually, we are just a little lazy. 
+
+* ```GET``` Gets the current Mapping of OS name to OS iso files.  These are OSes that can be deployed. 
+	* Parameters:  None
+	* Example:
+	```
+	curl http://10.93.234.96:8001/api/v1/isos/map
+{
+  "iso_map": [
+    {
+      "file": "/kubam/CentOS-7-x86_64-Minimal-1708.iso",
+      "os": "centos7.4"
+    }
+  ]
+}
+	```
+
+
+* ```POST``` Maps all ISOS to files.  You should include all previously mapped ISO maps in this request if you want to add one.  KUBAM expects all ISO files to be in the ```/kubam/``` directory of the container.  (this directory is mounted when KUBAM starts from something like ```/root/kubam```.  
+   * Parameters: Should be a map of all the isos in the file to the name of the operating systems. 
+   	```
+   	{
+  		"iso_map": [
+    		{
+      			"file": "/kubam/CentOS-7-x86_64-Minimal-1708.iso",
+      			"os": "centos7.4"
+    		},
+    		{...
+    		},
+  		]
+	}
+   	```
+	* Example: 
+	```
+	curl -X POST http://10.93.234.96:8001/api/v1/isos/ma -d '{"iso_map" : [{"os" : "centos7.4", "file" : "/kubam/CentOS-7-x86_64-Minimal-1708.iso"}]}' -H "Content-Type: application/json"
+{
+  "iso_map": [
+    {
+      "file": "/kubam/CentOS-7-x86_64-Minimal-1708.iso",
+      "os": "centos7.4"
+    }
+  ]
+}
+```
+
 
 ## Deploy
 
