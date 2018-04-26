@@ -3,6 +3,7 @@
 ### run:
 
 ```
+git pull 
 gitbook build
 git add . 
 git commit -am "changes"
