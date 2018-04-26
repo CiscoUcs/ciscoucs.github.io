@@ -153,14 +153,18 @@ KUBAM stores everything in YAML file.  The file is created in ```~/kubam/kubam.y
 
 ```
 hosts:
-- guid: <guid>
-  ip: <ipaddress>
-  name: <hostname / service profile name>
-  os: <operating system>
-  role: {k8s master, '', k8s node}
-  network_group: <net group>
-  server_group: <server group>
+- name: <required, unique: hostname / service profile name>
+  ip: <required: ipaddress>
+  os: <required: operating system>
+  role: required: {k8s master, '', k8s node}
+  network_group: <required: net group>
+  server_group: <optional: server group>
 ```
+
+Stores the list of hosts.
+
+Name should be unique. Name, ip address, os, role and network_group are required field.
+OS specifies what roles host can have.
 
 ### iso map
 

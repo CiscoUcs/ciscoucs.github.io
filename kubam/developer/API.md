@@ -266,7 +266,7 @@ KUBAM stores values for UCS logins inside the ```kubam.yaml``` This API just off
     		{"name" : "ucs02", "type": "ucsm", "credentials" : {"ip" : "192.168.40.20", "user" : "admin", "password" : "encrypted"}
   		]
 	}
-```
+    ```
 	* Example:
    ```curl $KUBAM_API/api/v2/servers```
 	
@@ -308,13 +308,13 @@ KUBAM stores values for UCS logins inside the ```kubam.yaml``` This API just off
 
 ## Network Group
 
-### ```/api/v2/network```
+### ```/api/v2/networks```
 
 Network parameters are clustered together that can then be added to a server.  
 
 * ```GET```: Get all network settings.
 	* Params: ```none```
-	* Example:  ```curl -X GET $KUBAM_API/api/v2/network```
+	* Example:  ```curl -X GET $KUBAM_API/api/v2/networks```
 	* Returns:  The current list of network groups
 	
 	```
@@ -355,7 +355,22 @@ Network parameters are clustered together that can then be added to a server.
 ### ```/api/v2/hosts```
 
 * ```GET```: Get all the hosts
-* ```POST```: Update all the hosts. 
+    * Params:   ```none```
+    * Example:  ```curl -X GET $KUBAM_API/api/v2/hosts```
+    * Returns:  Current list of hosts
+    
+* ```POST```: Update all the hosts.
+    *Params:    list of all hosts
+    ```
+    [
+        {'name': 'kube01', 'ip': '172.20.30.1', 'os': 'centos7.4', 'role': 'generic', 'network_group': ''},
+        {'name': 'kube02', 'ip': '172.20.30.2', 'os': 'centos7.4', 'role': 'k8s master', 'network_group': '', 'server_group': ''}
+    ]
+    ```
+    
+* ```DELETE```: Delete existing Host. 
+    * Params:   ```{'name': 'kube01'}```
+    * Errors:   An error will occur if there is no hosts to delete.
 
 
 ## ISO
