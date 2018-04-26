@@ -744,14 +744,16 @@
 <p>KUBAM stores everything in YAML file.  The file is created in <code>~/kubam/kubam.yaml</code>.  We show the parts of the YAML file as well as a description of the fields, then at the end show a full example. </p>
 <h3 id="hosts">hosts</h3>
 <pre><code>hosts:
-- guid: &lt;guid&gt;
-  ip: &lt;ipaddress&gt;
-  name: &lt;hostname / service profile name&gt;
-  os: &lt;operating system&gt;
-  role: {k8s master, &apos;&apos;, k8s node}
-  network_group: &lt;net group&gt;
-  server_group: &lt;server group&gt;
-</code></pre><h3 id="iso-map">iso map</h3>
+- name: &lt;required, unique: hostname / service profile name&gt;
+  ip: &lt;required: ipaddress&gt;
+  os: &lt;required: operating system&gt;
+  role: required: {k8s master, &apos;&apos;, k8s node}
+  network_group: &lt;required: net group&gt;
+  server_group: &lt;optional: server group&gt;
+</code></pre><p>Stores the list of hosts.</p>
+<p>Name should be unique. Name, ip address, os, role and network_group are required field.
+OS specifies what roles host can have.</p>
+<h3 id="iso-map">iso map</h3>
 <pre><code>iso_map:
 - file: &lt;file directory|url&gt;
   type: {iso_raw, iso_dir, iso_boot}
@@ -872,7 +874,7 @@ Each network should specify whether an ACI network is used or </li>
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"KUBAM YAML","level":"3.5.2","depth":2,"previous":{"title":"KUBAM API","level":"3.5.1","depth":2,"path":"kubam/developer/API.md","ref":"kubam/developer/API.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"kubam/developer/YAML.md","mtime":"2018-04-17T17:16:19.412Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-04-26T12:12:57.285Z"},"basePath":"../..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"KUBAM YAML","level":"3.5.2","depth":2,"previous":{"title":"KUBAM API","level":"3.5.1","depth":2,"path":"kubam/developer/API.md","ref":"kubam/developer/API.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"kubam/developer/YAML.md","mtime":"2018-04-26T13:36:52.597Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-04-26T13:37:06.687Z"},"basePath":"../..","book":{"language":""}});
         });
     </script>
 </div>

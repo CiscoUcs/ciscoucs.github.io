@@ -646,11 +646,45 @@
 <li>Windows 2016</li>
 </ul>
 <p>At this time KUBAM requires a decent amount of manual steps to install Windows.  We are working to make this easier but we still hope this method sucks less than other installers that you are using.  </p>
-<h2 id="windows-server-2012-r2-wip">Windows Server 2012 R2 (WIP)</h2>
+<h1 id="windows-server-2016">Windows Server 2016</h1>
+<p>To install Windows Server 2016, we will use unattended instalation feature. That will give us zero-touch deployment. We will use original Windows Server 2016 instalation iso in combination with &quot;answer file&quot;. To prepare and create answer file (<strong>autounattend.xml</strong>) we are using <strong>Windows System Image Manager (SIM)</strong> tool from <strong>Windows Assessment and Deployment Kit (ADK)</strong>. Preparation of the answer file should be done on Windows workstation or server. Answer file will be packed into .img file and mounted as additional drive in UCS vMedia Policy.</p>
+<h2 id="download-and-install-latest-windows-adk">Download and install latest Windows ADK</h2>
+<p>Windows ADK can be downloaded from <a href="https://docs.microsoft.com/en-us/windows-hardware/get-started/adk-install" target="_blank">Microsoft website</a>.</p>
+<p><img src="../img/ADK download.png" alt="img"></p>
+<p>After ADK is downloaded we will start installation on the local machine. We just need to install Deployment Tools feature which consist Windows System Image Manager.</p>
+<p><img src="../img/ADK setup.png" alt="img"></p>
+<h2 id="creating-answer-file-autounattendxml">Creating &quot;answer file&quot; (autounattend.xml)</h2>
+<p>To be able to generate answer file, we need to copy content of Windows Server 2016 instalation image (.iso) to some folder on our workstation (or server). We can mount it to virtual optical drive, or extract it using archiver. In this example we are using <a href="https://www.microsoft.com/en-us/evalcenter/evaluate-windows-server-2016" target="_blank">Windows Server 2016 Evaluation</a> (14393.0.161119-1705.RS1_REFRESH_SERVER_EVAL_X64FRE_EN-US.ISO). </p>
+<p><img src="../img/ISO extraction.png" alt="img"></p>
+<p>After we have instalation files on our workstation, we will run Windows System Image Manager that we installed in previous step.</p>
+<p><img src="../img/Run SIM.png" alt="img"></p>
+<p>In System Image Manager we have to import instalation image for creation of the answer file.  </p>
+<p><img src="../img/Select Windows Image.png" alt="img"></p>
+<p>We are selecting <strong>install.wim</strong> from the <strong>/sources</strong> folder in extracted .iso image.
+<img src="../img/Install wim.png" alt="img"></p>
+<p>We have option to choose which version of operative system we want to prepare answer file for. We are selecting <strong>Windows Server 2016 SERVERDATACENTER</strong>
+<img src="../img/Select OS.png" alt="img"></p>
+<p>We have to wait for few minutes while SIM is generating catalog file. After catalog file is created we will create new answer file (File &gt; New Answer File). Now we can start adding components for our answer file.</p>
+<p>First we are selecting <strong>amd64_Microsoft-Windows-International-Core-WinPE_neutral</strong> from lower left pane, and place it in answer file pane under <strong>1. windowsPE</strong>.</p>
+<p>Then we have to specify language settings, you will enter values for your language preferences, we are entering <strong>en-US</strong>:</p>
+<ul>
+<li>InputLocale: Keyboard layout (<strong>en-US</strong>)</li>
+<li>SystemLocale: system locale language (<strong>en-US</strong>)</li>
+<li>UILanguage: User Interface language (<strong>en-US</strong>)</li>
+<li>UserLocale: per-user settings for currency, time, numbers... (<strong>en-US</strong>)</li>
+</ul>
+<p><img src="../img/1windowsPE1.png" alt="img"></p>
+<p>Click <strong>+</strong> next to <strong>amd64_Microsoft-Windows-International-Core-WinPE_neutral</strong> in middle pane and navigate to <strong>SetupUILanguage</strong> to specify the language used during Windows Setup.</p>
+<p><img src="../img/Setup Language.png" alt="img"></p>
+<p>To get a list of included OS instalations, we are going to run <strong>dism</strong> tool (included in Windows OS) in command prompt and point to <strong>install.wim</strong>.</p>
+<pre><code>dism /Get-ImageInfo /ImageFile:&lt;Path to file&gt;\install.wim
+</code></pre><p>We are getting following output from <strong>dism</strong> tool:</p>
+<p><img src="../img/dism.png" alt="img"></p>
+<h1 id="windows-server-2012-r2">Windows Server 2012 R2</h1>
 <p>KUBAM requires that you stage an install image on an existing &apos;Stage&apos; Server.  The Stage server should be running the same version of Windows that you would like to install.  These instructions are for Windows Server 2012 R2 Datacenter.</p>
 <p>The stage server can be a virtual machine or physical machine.  If it is a physical machine it does not need to be running on Cisco hardware. </p>
 <p>The following should be performed on the Stage Server:</p>
-<h3 id="download-windows-adk">Download Windows ADK</h3>
+<h2 id="download-windows-adk">Download Windows ADK</h2>
 <p>The Windows Assessment and Deployment Kit (ADK) is required to build WinPE images that KUBAM can use.  <a href="">Download this from Microsoft</a>.</p>
 <p>Install using the default directory.</p>
 <p><img src="../img/adk.png" alt="img"></p>
@@ -661,7 +695,7 @@
 </ul>
 <p><img src="../img/adk2.png" alt="img"></p>
 <p>While this installs about 3 GB, have a look at one of our <a href="http://www.opg-brlekovic.hr/" target="_blank">developers bee keeping websites</a>.  If you happen to be in Croatia you can order some honey.</p>
-<h3 id="download-cisco-drivers">Download Cisco Drivers</h3>
+<h2 id="download-cisco-drivers">Download Cisco Drivers</h2>
 <p>The latest Cisco device drivers can be downloaded from Cisco&apos;s Support site. URLs seem to change from time to time, but was last available <a href="https://software.cisco.com/download/home/283853163/type" target="_blank">here</a>. If that link is dead, go to <a href="https://cisco.com/support" target="_blank">https://cisco.com/support</a> and in the Downloads menu type <strong>UCS B-Series Blade Server Software</strong> the main Cisco Site, then download the drivers.  It seems to be a 1GB file.  </p>
 <p>Copy the Windows VNIC drivers to the Windows server.  Put it in the <code>C:\Drivers</code> directory:</p>
 <pre><code>mkdir c:\drivers
@@ -669,9 +703,9 @@
 <pre><code>enic6x64.cat
 enic6x64.inf
 enic6x64.sys
-</code></pre><h3 id="run-winkubamcmd">Run <code>winkubam.cmd</code></h3>
+</code></pre><h2 id="run-winkubambat">Run <code>winkubam.bat</code></h2>
 <p>With the two prereqs in place you are ready to generate the WinPE image that will be used for the boot process. </p>
-<h3 id="manually-creating-autoinstallation-files">Manually Creating Autoinstallation Files</h3>
+<h2 id="manually-creating-autoinstallation-files">Manually Creating Autoinstallation Files</h2>
 <p>UCS needs a hard drive image that includes the <code>autounattend.xml</code> file.  This image can be created using: </p>
 <pre><code>dd if=/dev/zero of=kube0${i}.img bs=1M count=1
 mkfs -t fat win.img
@@ -723,7 +757,7 @@ rmdir tmpmnt
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Windows Support (alpha)","level":"3.3.6.1","depth":3,"next":{"title":"KUBAM Glorious Underbelly","level":"3.4","depth":1,"path":"kubam/internals/README.md","ref":"kubam/internals/README.md","articles":[{"title":"Stage1 - Docker","level":"3.4.1","depth":2,"path":"kubam/internals/stage1/docker.md","ref":"kubam/internals/stage1/docker.md","articles":[]},{"title":"Stage1 - ESXi","level":"3.4.2","depth":2,"path":"kubam/internals/stage1/esxi.md","ref":"kubam/internals/stage1/esxi.md","articles":[]},{"title":"Stage1 - Manual","level":"3.4.3","depth":2,"path":"kubam/internals/stage1/manual.md","ref":"kubam/internals/stage1/manual.md","articles":[]},{"title":"Stage2","level":"3.4.4","depth":2,"path":"kubam/internals/stage2/python.md","ref":"kubam/internals/stage2/python.md","articles":[]},{"title":"Stage3","level":"3.4.5","depth":2,"path":"kubam/internals/stage3/ansible.md","ref":"kubam/internals/stage3/ansible.md","articles":[]},{"title":"Stage4","level":"3.4.6","depth":2,"path":"kubam/internals/stage4/manual.md","ref":"kubam/internals/stage4/manual.md","articles":[]}]},"previous":{"title":"Kickstart Templates","level":"3.3.6","depth":2,"path":"kubam/configure/template.md","ref":"kubam/configure/template.md","articles":[{"title":"Windows Support (alpha)","level":"3.3.6.1","depth":3,"path":"kubam/configure/windows.md","ref":"kubam/configure/windows.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"kubam/configure/windows.md","mtime":"2018-04-26T08:07:37.888Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-04-26T12:12:57.285Z"},"basePath":"../..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Windows Support (alpha)","level":"3.3.6.1","depth":3,"next":{"title":"KUBAM Glorious Underbelly","level":"3.4","depth":1,"path":"kubam/internals/README.md","ref":"kubam/internals/README.md","articles":[{"title":"Stage1 - Docker","level":"3.4.1","depth":2,"path":"kubam/internals/stage1/docker.md","ref":"kubam/internals/stage1/docker.md","articles":[]},{"title":"Stage1 - ESXi","level":"3.4.2","depth":2,"path":"kubam/internals/stage1/esxi.md","ref":"kubam/internals/stage1/esxi.md","articles":[]},{"title":"Stage1 - Manual","level":"3.4.3","depth":2,"path":"kubam/internals/stage1/manual.md","ref":"kubam/internals/stage1/manual.md","articles":[]},{"title":"Stage2","level":"3.4.4","depth":2,"path":"kubam/internals/stage2/python.md","ref":"kubam/internals/stage2/python.md","articles":[]},{"title":"Stage3","level":"3.4.5","depth":2,"path":"kubam/internals/stage3/ansible.md","ref":"kubam/internals/stage3/ansible.md","articles":[]},{"title":"Stage4","level":"3.4.6","depth":2,"path":"kubam/internals/stage4/manual.md","ref":"kubam/internals/stage4/manual.md","articles":[]}]},"previous":{"title":"Kickstart Templates","level":"3.3.6","depth":2,"path":"kubam/configure/template.md","ref":"kubam/configure/template.md","articles":[{"title":"Windows Support (alpha)","level":"3.3.6.1","depth":3,"path":"kubam/configure/windows.md","ref":"kubam/configure/windows.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"kubam/configure/windows.md","mtime":"2018-04-26T13:36:52.596Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-04-26T13:37:06.687Z"},"basePath":"../..","book":{"language":""}});
         });
     </script>
 </div>
