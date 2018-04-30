@@ -23,15 +23,15 @@ After ADK is downloaded we will start installation on the local machine. We just
 
 ## Creating "answer file" (autounattend.xml)
 
-To be able to generate answer file, we need to copy content of Windows Server 2016 instalation image (.iso) to some folder on our workstation (or server). We can mount it to virtual optical drive, or extract it using archiver. In this example we are using [Windows Server 2016 Evaluation](https://www.microsoft.com/en-us/evalcenter/evaluate-windows-server-2016) (14393.0.161119-1705.RS1\_REFRESH\_SERVER\_EVAL\_X64FRE\_EN-US.ISO). 
+To be able to generate answer file, we need to copy content of Windows Server 2016 instalation image (.iso) to some folder on our workstation (or server). We can mount it to virtual optical drive, or extract it using archiver. In this example we are using [Windows Server 2016 Evaluation](https://www.microsoft.com/en-us/evalcenter/evaluate-windows-server-2016) (14393.0.161119-1705.RS1\_REFRESH\_SERVER\_EVAL\_X64FRE\_EN-US.ISO), and unpacking ith with archiver.
 
 ![img](../img/ISO extraction.png)
 
-After we have instalation files on our workstation, we will run Windows System Image Manager that we installed in previous step.
+After we have instalation files on our workstation, we will run Windows System Image Manager that we have installed in previous step.
 
 ![img](../img/Run SIM.png)
 
-In System Image Manager we have to import instalation image for creation of the answer file.  
+In System Image Manager we have to import instalation image to create __answer file__.  
 
 ![img](../img/Select Windows Image.png)
 
@@ -39,7 +39,7 @@ In System Image Manager we have to import instalation image for creation of the 
 We are selecting __install.wim__ from the __/sources__ folder in extracted .iso image.
 ![img](../img/Install wim.png)
 
-We have option to choose which version of operative system we want to prepare answer file for. We are selecting __Windows Server 2016 SERVERDATACENTER__
+We have option to choose which version of operative system we want to prepare answer file for. We are selecting __Windows Server 2016 SERVERDATACENTER__.
 ![img](../img/Select OS.png)
 
 We have to wait for few minutes while SIM is generating catalog file. After catalog file is created we will create new answer file (File > New Answer File). Now we can start adding components for our answer file.
@@ -48,16 +48,41 @@ First we are selecting __amd64_Microsoft-Windows-International-Core-WinPE\_neutr
 
 Then we have to specify language settings, you will enter values for your language preferences, we are entering __en-US__:
 
-* InputLocale: Keyboard layout (__en-US__)
-* SystemLocale: system locale language (__en-US__)
-* UILanguage: User Interface language (__en-US__)
-* UserLocale: per-user settings for currency, time, numbers... (__en-US__)
+* __InputLocale:__ Keyboard layout (__en-US__)
+* __SystemLocale:__ system locale language (__en-US__)
+* __UILanguage:__ User Interface language (__en-US__)
+* __UserLocale:__ per-user settings for currency, time, numbers... (__en-US__)
 
 ![img](../img/1windowsPE1.png)
 
 Click __+__ next to __amd64_Microsoft-Windows-International-Core-WinPE\_neutral__ in middle pane and navigate to __SetupUILanguage__ to specify the language used during Windows Setup.
 
 ![img](../img/Setup Language.png)
+
+
+Next, we are selecting amd64_Microsoft-Windows-Setup, placing it in __1. WindowsPE__, navigating to __DiskConfiguration__ and right clicking on it to __Insert New Disk__.
+
+![img](../img/Insert Disk.png)
+
+
+
+We have to create partitions on Hard Drive. We are using [this](https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-8.1-and-8/hh825701(v%3dwin.10)) Microsoft guide for configuring __BIOS/MBR-Based Hard Drive Partitions__:
+
+![img](../img/MBR Partition.png)
+
+Click __+__ next to __Disk__ in middle pane and right click on __CreatePartition__. Select __Insert New CreatePartition__. Populate settings based on above example. Repeate procedure for adding second partition.
+
+Right click on __ModifyPartitions__. Select __Insert New ModifyPartition__. Again populate settings based on above example. Repeate procedure for modifying second partition.
+
+Click __+__ next to __ImageInstall__, navigate to __InstallTo__ and populate it according to example.
+
+After following this steps, your disk configuration should look like this:
+
+![img](../img/Disk Config.png)
+
+If you want to configure __UEFI/GPT-Based Hard Drive Partitions__, you can follow [this guide](https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-8.1-and-8/hh825702(v=win.10))
+
+Now we are setting up __InstallFrom__ under __ImageInstall__. As there can be multiple Windows images inside __install.wim__, we have to look into it to select image we want to install.
 
 To get a list of included OS instalations, we are going to run __dism__ tool (included in Windows OS) in command prompt and point to __install.wim__.
 
@@ -68,6 +93,21 @@ dism /Get-ImageInfo /ImageFile:<Path to file>\install.wim
 We are getting following output from __dism__ tool:
 
 ![img](../img/dism.png)
+
+In this example we want to install __Windows Server 2016 Datacenter Evaluation (Desktop Experience)__, which __index__ is __4__.
+
+
+Right click on __InstallFrom__ and select __Insert New MetaData__, under settings enter key __/IMAGE/INDEX__ and value __4__
+
+![img](../img/Image Index.png)
+
+Next, we have to set up user data. Click on __UserData__ section and, set __AcceptEula__ to __true__ and fill your user settings.
+
+![img](../img/User Data.png)
+
+If you want to add __licence key__, you can add it in __ProductKey__ section. We are going to skip this part as we are working with evaluation image.
+
+
 
 
 
