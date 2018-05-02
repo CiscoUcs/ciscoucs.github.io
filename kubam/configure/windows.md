@@ -101,17 +101,38 @@ Right click on __InstallFrom__ and select __Insert New MetaData__, under setting
 
 ![img](../img/Image Index.png)
 
-Next, we have to set up user data. Click on __UserData__ section and, set __AcceptEula__ to __true__ and fill your user settings.
+Next, we have to set up user data. Click on __UserData__ section and, set __AcceptEula__ to __true__ and fill in your settings.
 
 ![img](../img/User Data.png)
 
 If you want to add __licence key__, you can add it in __ProductKey__ section. We are going to skip this part as we are working with evaluation image.
 
+Next we are adding __amd64_Microsoft-Windows-Shell-Setup__ both to __4. specialize__ and __7. oobeSystem__ section. Under __4. specialize__ section fill in __ComputerName__ and __TimeZone__. For finding out right name your time zone you can use __tzutil /l__ comand in command prompt on your windows machine.
 
+![img](../img/Shell Setup.png)
 
+From oobeSystem section navigate to __UserAccounts__ > __AdministratorPassword__, and enter Administrator password (Example here is "Pa$$w0rd").
 
+![img](../img/Admin Pass.png)
 
+We will add __amd64_Microsoft-Windows-TerminalServices-LocalSessionManager__ to __4 specialize__ and set __fDenyTSConnections__ to false to enable the RDP connection.
 
+![img](../img/RDP.png)
+
+Now we are going to configure folder where we will provide drivers for operative system during installation. From the left pane drag __amd64_Microsoft-Windows-PnpCustomizationsWinPE__ to __1 windowsPE__, right click on __DriverPaths__ and __Insert New PathAndCredentials__
+
+![img](../img/Driver Path 1.png)
+
+Next we are setting __PathAndCredentials__. __Key__ value __1__ and __Path: %configsetroot%\drivers__. With __%configsetroot%__ variable we are pointing to drive containing answer file.
+
+![img](../img/Driver Path 2.png)
+
+We just need to set _UseConfigurationSet_ under __amd64_Microsoft-Windows-Setup__ to __true__ so setup is going to use Driver Paths folder that we have set up and copy it under __C:\Windows\ConfigSetRoot__ folder.
+
+![img](../img/Use Configuration Set.png)
+
+Now we have ready answer file, and we are going to save it as __autounattend.xml__. 
+![img](../img/autounattend.png)
 
 
 # Windows Server 2012 R2
