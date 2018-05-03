@@ -89,13 +89,13 @@ If you have other versions that need to be supported, [let us know](https://gith
 
 * ```winkubam.bat win2012r2 172.28.20.1``` - where ```win2012r2``` is the windows version and ```172.28.20.1``` is the KUBAM server. 
 
-At the end of this process you'll have a ```c:\WinKUBAM.iso``` file which is the WinPE.
+At the end of this process you'll have a ```c:\WinPE_<osversion>.iso``` file which is the WinPE.
 
 ### Copy Files to KUBAM Server
 
 #### WinPE image to KUBAM server
 
-```scp``` or use some other radical means of getting the ```c:\WinKUBAM.iso``` file to the KUBAM server.  You can name this file whatever you like on the KUBAM node.  (for example:  ```Win2012r2PE.iso```)
+```scp``` or use some other radical means of getting the ```c:\WinPE_<version>.iso``` file to the KUBAM server.  Please keep the name of this file the same as KUBAM looks for its presence. (for example:  ```WinPE_2012r2.iso``` or ```WinPE_2016.iso```)
 
 #### Drivers to KUBAM server
 
