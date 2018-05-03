@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <title>Windows Support (alpha) · GitBook</title>
+        <title>Windows vMedia Method (WIP) · GitBook</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="GitBook 3.2.3">
@@ -57,7 +57,7 @@
     <link rel="shortcut icon" href="../../gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="../internals/" />
+    <link rel="next" href="windows2.html" />
     
     
     <link rel="prev" href="template.html" />
@@ -433,7 +433,20 @@
                 <a href="windows.html">
             
                     
-                    Windows Support (alpha)
+                    Windows vMedia Method (WIP)
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.3.8" data-path="windows2.html">
+            
+                <a href="windows2.html">
+            
+                    
+                    Windows vMedia/Network Method (WIP)
             
                 </a>
             
@@ -618,7 +631,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href="../.." >Windows Support (alpha)</a>
+        <a href="../.." >Windows vMedia Method (WIP)</a>
     </h1>
 </div>
 
@@ -701,10 +714,132 @@
 <p><img src="../img/Driver Path 1.png" alt="img"></p>
 <p>Next we are setting <strong>PathAndCredentials</strong>. <strong>Key</strong> value <strong>1</strong> and <strong>Path: %configsetroot%\drivers</strong>. With <strong>%configsetroot%</strong> variable we are pointing to drive containing answer file.</p>
 <p><img src="../img/Driver Path 2.png" alt="img"></p>
-<p>We just need to set <em>UseConfigurationSet</em> under <strong>amd64_Microsoft-Windows-Setup</strong> to <strong>true</strong> so setup is going to use Driver Paths folder that we have set up and copy it under <strong>C:\Windows\ConfigSetRoot</strong> folder.</p>
+<p>We need to set <em>UseConfigurationSet</em> under <strong>amd64_Microsoft-Windows-Setup</strong> to <strong>true</strong> so setup is going to use Driver Paths folder that we have set up and copy it under <strong>C:\Windows\ConfigSetRoot</strong> folder.</p>
 <p><img src="../img/Use Configuration Set.png" alt="img"></p>
+<p>Under <strong>7 oobeSystem</strong> inside <strong>amd64_Microsoft-Windows-Shell-Setup</strong> right click to <strong>FirstLogonCommands</strong> and <strong>Insert New SychronousCommand</strong>. Insert <strong>C:\Windows\ConfigSetRoot\drivers\configure\configureos.cmd</strong> to <strong>CommandLine</strong>, add <strong>Description</strong> and set <strong>Order</strong> as <strong>1</strong>. 
+File <strong>configureos.cmd</strong> will contain instruction to run powershell script that we will do rest of the setup.</p>
+<p><img src="../img/configureos.png" alt="img"></p>
+<p>We are configuring <strong>AutoLogon</strong> under same section that will run 3 times to run a PowerShell script with additional setup that will need reboots. We also need to provide password under <strong>Password</strong> section (same that we have setup in earlier steps, in this example: Pa$$w0rd).</p>
+<p><img src="../img/autologon.png" alt="img"></p>
 <p>Now we have ready answer file, and we are going to save it as <strong>autounattend.xml</strong>. 
 <img src="../img/autounattend.png" alt="img"></p>
+<p>Our answer file now looks like this:</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;unattend xmlns=&quot;urn:schemas-microsoft-com:unattend&quot;&gt;
+    &lt;settings pass=&quot;windowsPE&quot;&gt;
+        &lt;component name=&quot;Microsoft-Windows-International-Core-WinPE&quot; processorArchitecture=&quot;amd64&quot; publicKeyToken=&quot;31bf3856ad364e35&quot; language=&quot;neutral&quot; versionScope=&quot;nonSxS&quot; xmlns:wcm=&quot;http://schemas.microsoft.com/WMIConfig/2002/State&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;&gt;
+            &lt;SetupUILanguage&gt;
+                &lt;UILanguage&gt;en-US&lt;/UILanguage&gt;
+            &lt;/SetupUILanguage&gt;
+            &lt;InputLocale&gt;en-US&lt;/InputLocale&gt;
+            &lt;SystemLocale&gt;en-US&lt;/SystemLocale&gt;
+            &lt;UILanguage&gt;en-US&lt;/UILanguage&gt;
+            &lt;UserLocale&gt;en-US&lt;/UserLocale&gt;
+        &lt;/component&gt;
+        &lt;component name=&quot;Microsoft-Windows-Setup&quot; processorArchitecture=&quot;amd64&quot; publicKeyToken=&quot;31bf3856ad364e35&quot; language=&quot;neutral&quot; versionScope=&quot;nonSxS&quot; xmlns:wcm=&quot;http://schemas.microsoft.com/WMIConfig/2002/State&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;&gt;
+            &lt;DiskConfiguration&gt;
+                &lt;Disk wcm:action=&quot;add&quot;&gt;
+                    &lt;CreatePartitions&gt;
+                        &lt;CreatePartition wcm:action=&quot;add&quot;&gt;
+                            &lt;Order&gt;1&lt;/Order&gt;
+                            &lt;Size&gt;350&lt;/Size&gt;
+                            &lt;Type&gt;Primary&lt;/Type&gt;
+                        &lt;/CreatePartition&gt;
+                        &lt;CreatePartition wcm:action=&quot;add&quot;&gt;
+                            &lt;Order&gt;2&lt;/Order&gt;
+                            &lt;Extend&gt;true&lt;/Extend&gt;
+                            &lt;Type&gt;Primary&lt;/Type&gt;
+                        &lt;/CreatePartition&gt;
+                    &lt;/CreatePartitions&gt;
+                    &lt;ModifyPartitions&gt;
+                        &lt;ModifyPartition wcm:action=&quot;add&quot;&gt;
+                            &lt;Active&gt;true&lt;/Active&gt;
+                            &lt;Format&gt;NTFS&lt;/Format&gt;
+                            &lt;Label&gt;System&lt;/Label&gt;
+                            &lt;Order&gt;1&lt;/Order&gt;
+                            &lt;PartitionID&gt;1&lt;/PartitionID&gt;
+                        &lt;/ModifyPartition&gt;
+                        &lt;ModifyPartition wcm:action=&quot;add&quot;&gt;
+                            &lt;Format&gt;NTFS&lt;/Format&gt;
+                            &lt;Label&gt;Windows&lt;/Label&gt;
+                            &lt;Letter&gt;C&lt;/Letter&gt;
+                            &lt;Order&gt;2&lt;/Order&gt;
+                            &lt;PartitionID&gt;2&lt;/PartitionID&gt;
+                        &lt;/ModifyPartition&gt;
+                    &lt;/ModifyPartitions&gt;
+                    &lt;DiskID&gt;0&lt;/DiskID&gt;
+                    &lt;WillWipeDisk&gt;true&lt;/WillWipeDisk&gt;
+                &lt;/Disk&gt;
+            &lt;/DiskConfiguration&gt;
+            &lt;ImageInstall&gt;
+                &lt;OSImage&gt;
+                    &lt;InstallFrom&gt;
+                        &lt;MetaData wcm:action=&quot;add&quot;&gt;
+                            &lt;Key&gt;/IMAGE/INDEX&lt;/Key&gt;
+                            &lt;Value&gt;4&lt;/Value&gt;
+                        &lt;/MetaData&gt;
+                    &lt;/InstallFrom&gt;
+                    &lt;InstallTo&gt;
+                        &lt;DiskID&gt;0&lt;/DiskID&gt;
+                        &lt;PartitionID&gt;2&lt;/PartitionID&gt;
+                    &lt;/InstallTo&gt;
+                &lt;/OSImage&gt;
+            &lt;/ImageInstall&gt;
+            &lt;UserData&gt;
+                &lt;AcceptEula&gt;true&lt;/AcceptEula&gt;
+                &lt;FullName&gt;Kubam&lt;/FullName&gt;
+                &lt;Organization&gt;Kubam&lt;/Organization&gt;
+            &lt;/UserData&gt;
+            &lt;UseConfigurationSet&gt;true&lt;/UseConfigurationSet&gt;
+        &lt;/component&gt;
+        &lt;component name=&quot;Microsoft-Windows-PnpCustomizationsWinPE&quot; processorArchitecture=&quot;amd64&quot; publicKeyToken=&quot;31bf3856ad364e35&quot; language=&quot;neutral&quot; versionScope=&quot;nonSxS&quot; xmlns:wcm=&quot;http://schemas.microsoft.com/WMIConfig/2002/State&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;&gt;
+            &lt;DriverPaths&gt;
+                &lt;PathAndCredentials wcm:action=&quot;add&quot; wcm:keyValue=&quot;1&quot;&gt;
+                    &lt;Path&gt;%configsetroot%\drivers&lt;/Path&gt;
+                &lt;/PathAndCredentials&gt;
+            &lt;/DriverPaths&gt;
+        &lt;/component&gt;
+    &lt;/settings&gt;
+    &lt;settings pass=&quot;specialize&quot;&gt;
+        &lt;component name=&quot;Microsoft-Windows-Shell-Setup&quot; processorArchitecture=&quot;amd64&quot; publicKeyToken=&quot;31bf3856ad364e35&quot; language=&quot;neutral&quot; versionScope=&quot;nonSxS&quot; xmlns:wcm=&quot;http://schemas.microsoft.com/WMIConfig/2002/State&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;&gt;
+            &lt;ComputerName&gt;Kubam&lt;/ComputerName&gt;
+            &lt;TimeZone&gt;Pacific Standard Time_dstoff&lt;/TimeZone&gt;
+        &lt;/component&gt;
+        &lt;component name=&quot;Microsoft-Windows-TerminalServices-LocalSessionManager&quot; processorArchitecture=&quot;amd64&quot; publicKeyToken=&quot;31bf3856ad364e35&quot; language=&quot;neutral&quot; versionScope=&quot;nonSxS&quot; xmlns:wcm=&quot;http://schemas.microsoft.com/WMIConfig/2002/State&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;&gt;
+            &lt;fDenyTSConnections&gt;false&lt;/fDenyTSConnections&gt;
+        &lt;/component&gt;
+    &lt;/settings&gt;
+    &lt;settings pass=&quot;oobeSystem&quot;&gt;
+        &lt;component name=&quot;Microsoft-Windows-Shell-Setup&quot; processorArchitecture=&quot;amd64&quot; publicKeyToken=&quot;31bf3856ad364e35&quot; language=&quot;neutral&quot; versionScope=&quot;nonSxS&quot; xmlns:wcm=&quot;http://schemas.microsoft.com/WMIConfig/2002/State&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;&gt;
+            &lt;AutoLogon&gt;
+                &lt;Password&gt;
+                    &lt;Value&gt;UABhACQAJAB3ADAAcgBkAFAAYQBzAHMAdwBvAHIAZAA=&lt;/Value&gt;
+                    &lt;PlainText&gt;false&lt;/PlainText&gt;
+                &lt;/Password&gt;
+                &lt;Enabled&gt;true&lt;/Enabled&gt;
+                &lt;LogonCount&gt;3&lt;/LogonCount&gt;
+                &lt;Username&gt;administrator&lt;/Username&gt;
+            &lt;/AutoLogon&gt;
+            &lt;FirstLogonCommands&gt;
+                &lt;SynchronousCommand wcm:action=&quot;add&quot;&gt;
+                    &lt;CommandLine&gt;c:\Windows\ConfigSetRoot\drivers\configure\configureos.cmd&lt;/CommandLine&gt;
+                    &lt;Description&gt;Configure OS&lt;/Description&gt;
+                    &lt;Order&gt;1&lt;/Order&gt;
+                &lt;/SynchronousCommand&gt;
+            &lt;/FirstLogonCommands&gt;
+            &lt;UserAccounts&gt;
+                &lt;AdministratorPassword&gt;
+                    &lt;Value&gt;UABhACQAJAB3ADAAcgBkAEEAZABtAGkAbgBpAHMAdAByAGEAdABvAHIAUABhAHMAcwB3AG8AcgBkAA==&lt;/Value&gt;
+                    &lt;PlainText&gt;false&lt;/PlainText&gt;
+                &lt;/AdministratorPassword&gt;
+            &lt;/UserAccounts&gt;
+        &lt;/component&gt;
+    &lt;/settings&gt;
+    &lt;cpi:offlineImage cpi:source=&quot;wim://vmware-host/shared%20folders/desktop/winserver2016_deploy/14393.0.161119-1705.rs1_refresh_server_eval_x64fre_en-us/sources/install.wim#Windows Server 2016 SERVERDATACENTER&quot; xmlns:cpi=&quot;urn:schemas-microsoft-com:cpi&quot; /&gt;
+&lt;/unattend&gt;
+</code></pre><p>You can use this file as a template, without need to do compleate procedure, just change values according to your preferred settings.</p>
+<p>Next step is to <a href="https://software.cisco.com/download/home/283853163/type/283853158/release/3.2%25283a%2529" target="_blank">download UCS drivers for Windows</a> from Cisco, in this example we are installing UCS B-series servers, so we are downloading drivers for UCS B.</p>
+<p><img src="../img/UCS Drivers.png" alt="img"></p>
 
                                 
                                 </section>
@@ -737,7 +872,7 @@
                 </a>
                 
                 
-                <a href="../internals/" class="navigation navigation-next " aria-label="Next page: KUBAM Glorious Underbelly">
+                <a href="windows2.html" class="navigation navigation-next " aria-label="Next page: Windows vMedia/Network Method (WIP)">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -748,7 +883,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Windows Support (alpha)","level":"3.3.7","depth":2,"next":{"title":"KUBAM Glorious Underbelly","level":"3.4","depth":1,"path":"kubam/internals/README.md","ref":"kubam/internals/README.md","articles":[{"title":"Stage1 - Docker","level":"3.4.1","depth":2,"path":"kubam/internals/stage1/docker.md","ref":"kubam/internals/stage1/docker.md","articles":[]},{"title":"Stage1 - ESXi","level":"3.4.2","depth":2,"path":"kubam/internals/stage1/esxi.md","ref":"kubam/internals/stage1/esxi.md","articles":[]},{"title":"Stage1 - Manual","level":"3.4.3","depth":2,"path":"kubam/internals/stage1/manual.md","ref":"kubam/internals/stage1/manual.md","articles":[]},{"title":"Stage2","level":"3.4.4","depth":2,"path":"kubam/internals/stage2/python.md","ref":"kubam/internals/stage2/python.md","articles":[]},{"title":"Stage3","level":"3.4.5","depth":2,"path":"kubam/internals/stage3/ansible.md","ref":"kubam/internals/stage3/ansible.md","articles":[]},{"title":"Stage4","level":"3.4.6","depth":2,"path":"kubam/internals/stage4/manual.md","ref":"kubam/internals/stage4/manual.md","articles":[]}]},"previous":{"title":"Kickstart Templates","level":"3.3.6","depth":2,"path":"kubam/configure/template.md","ref":"kubam/configure/template.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"kubam/configure/windows.md","mtime":"2018-05-02T15:17:59.897Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-05-02T15:18:20.423Z"},"basePath":"../..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Windows vMedia Method (WIP)","level":"3.3.7","depth":2,"next":{"title":"Windows vMedia/Network Method (WIP)","level":"3.3.8","depth":2,"path":"kubam/configure/windows2.md","ref":"kubam/configure/windows2.md","articles":[]},"previous":{"title":"Kickstart Templates","level":"3.3.6","depth":2,"path":"kubam/configure/template.md","ref":"kubam/configure/template.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"kubam/configure/windows.md","mtime":"2018-05-03T13:19:35.994Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-05-03T13:19:50.994Z"},"basePath":"../..","book":{"language":""}});
         });
     </script>
 </div>

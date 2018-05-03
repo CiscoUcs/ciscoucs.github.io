@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <title>Configuration · GitBook</title>
+        <title>Windows vMedia/Network Method (WIP) · GitBook</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="GitBook 3.2.3">
@@ -57,10 +57,10 @@
     <link rel="shortcut icon" href="../../gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="creds.md" />
+    <link rel="next" href="../internals/" />
     
     
-    <link rel="prev" href="../installation/other.html" />
+    <link rel="prev" href="windows.html" />
     
 
     </head>
@@ -336,7 +336,7 @@
             
         </li>
     
-        <li class="chapter active" data-level="3.3" data-path="./">
+        <li class="chapter " data-level="3.3" data-path="./">
             
                 <a href="./">
             
@@ -441,7 +441,7 @@
             
         </li>
     
-        <li class="chapter " data-level="3.3.8" data-path="windows2.html">
+        <li class="chapter active" data-level="3.3.8" data-path="windows2.html">
             
                 <a href="windows2.html">
             
@@ -631,7 +631,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href="../.." >Configuration</a>
+        <a href="../.." >Windows vMedia/Network Method (WIP)</a>
     </h1>
 </div>
 
@@ -646,8 +646,125 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="kubam-configuration">KUBAM Configuration</h1>
-<p>Now that you are installed its time to slap that UCS up into production!</p>
+                                <h1 id="windows-server-installation">Windows Server Installation</h1>
+<p>Installing Windows with KUBAM isn&apos;t as easy as we&apos;d like it to be. Still, its better than many of the other sucky methods you&apos;ll run into out there in the wild. </p>
+<p>Here is the high level list of tasks that you have to do:  </p>
+<ul>
+<li>Create a WinPE image on existing Windows Server with UCS drivers using the KUBAM <code>winkubam.bat</code> script. </li>
+<li>Copy WinPE ISO image and drivers to KUBAM server</li>
+<li>Copy Windows Server ISO image to the KUBAM server</li>
+<li>Customize the Windows Answer File</li>
+<li>In the KUBAM GUI: Extract the ISO and copy template.</li>
+<li>Setup SAMBA on the KUBAM server (1 command)</li>
+<li>Deploy Servers</li>
+</ul>
+<p>We&apos;ll go through each of these steps in detail.  </p>
+<h2 id="windows-technician-computer-setup">Windows Technician Computer Setup</h2>
+<p>Windows installs require that you create an install image on an already installed <a href="https://docs.microsoft.com/en-us/windows-server-essentials/install/prepare-the-technician-computer" target="_blank">Windows Technician Computer</a>.  The Technician computer should be running the same version of Windows that you would like to install.  These instructions are for Windows Server 2012 R2 Datacenter.</p>
+<p>The technician computer can be a virtual machine or physical machine.  If it is a physical machine it does not need to be running on Cisco hardware to create this image.</p>
+<h3 id="download-windows-adk">Download Windows ADK</h3>
+<p>The Windows Assessment and Deployment Kit (ADK) is required to build WinPE images that KUBAM can use.  <a href="">Download this from Microsoft</a>.</p>
+<p>Install using the default directory.</p>
+<p><img src="../img/adk.png" alt="img"></p>
+<p>We only require the two services to be installed:</p>
+<ul>
+<li>Windows PE</li>
+</ul>
+<p><img src="../img/adk2.png" alt="img"></p>
+<p>While this installs about 3 GB, have a look at this <a href="http://www.opg-brlekovic.hr/" target="_blank">bee keeping website</a>, run by Daniel one of our developers.  If you happen to be in Croatia you can order some honey.</p>
+<h3 id="download-cisco-drivers">Download Cisco Drivers</h3>
+<p>The latest Cisco device drivers can be downloaded from Cisco&apos;s Support site. URLs seem to change from time to time, but was last available <a href="https://software.cisco.com/download/home/283853163/type" target="_blank">here</a>. If that link is dead, go to <a href="https://cisco.com/support" target="_blank">https://cisco.com/support</a> and in the Downloads menu type <strong>UCS B-Series Blade Server Software</strong> the main Cisco Site, then download the drivers.  It seems to be a 1GB file.  </p>
+<p>Copy the Windows VNIC drivers to the Windows server.  Put it in the <code>C:\Drivers</code> directory:</p>
+<pre><code>md c:\drivers
+</code></pre><p>You should then have the VNIC drivers in this directory</p>
+<pre><code>enic6x64.cat
+enic6x64.inf
+enic6x64.sys
+</code></pre><h3 id="download-kubam-windows-scripts-on-technician-node">Download KUBAM Windows Scripts on Technician Node</h3>
+<p>We will be creating a WinPE image that uses KUBAM and an autoattend file. To make this work we need to use the following files:</p>
+<ul>
+<li><code>winkubam.bat</code> - This is the script that will create the WinPE image adding the drivers and the new <code>startnet.cmd</code> file. </li>
+<li><code>startnet.cmd</code> - This file is placed in the WinPE file and is the customized startup file we use for installing using the vMedia + the KUBAM CIFS servers. </li>
+</ul>
+<h4 id="explanation-of-startnetcmd">Explanation of <code>startnet.cmd</code></h4>
+<p><code>startnet.cmd</code> is the command that starts up the windows installation process in the WinPE image.  We customize it to do the following:</p>
+<ul>
+<li>Looks in the c:\ drive to get the IP address of the machine in the file <code>network.txt</code> (KUBAM creates this for you)</li>
+<li>Mounts the KUBAM CIFS Share that has the installation media.</li>
+<li>Runs <code>setup.exe</code> with the autoattend.xml file found in the c:\ drive placed there by KUBAM.   </li>
+</ul>
+<h3 id="run-winkubambat">Run <code>winkubam.bat</code></h3>
+<p>With the prereqs in place (WinPE and drivers) you are ready to generate the WinPE image that will be used for the boot process. Open the shell and run: </p>
+<pre><code>winkubam.bat &lt;windows version&gt; &lt;kubamIP address&gt;
+</code></pre><p>Windows Versions can be: </p>
+<ul>
+<li><code>win2012r2</code></li>
+<li><code>win2016</code></li>
+</ul>
+<p>If you have other versions that need to be supported, <a href="https://github.com/CiscoUcs/kubam/issues" target="_blank">let us know</a>.</p>
+<h4 id="example">Example</h4>
+<ul>
+<li><code>winkubam.bat win2012r2 172.28.20.1</code> - where <code>win2012r2</code> is the windows version and <code>172.28.20.1</code> is the KUBAM server. </li>
+</ul>
+<p>At the end of this process you&apos;ll have a <code>c:\WinKUBAM.iso</code> file which is the WinPE.</p>
+<h3 id="copy-files-to-kubam-server">Copy Files to KUBAM Server</h3>
+<h4 id="winpe-image-to-kubam-server">WinPE image to KUBAM server</h4>
+<p><code>scp</code> or use some other radical means of getting the <code>c:\WinKUBAM.iso</code> file to the KUBAM server.  You can name this file whatever you like on the KUBAM node.  (for example:  <code>Win2012r2PE.iso</code>)</p>
+<h4 id="drivers-to-kubam-server">Drivers to KUBAM server</h4>
+<p>KUBAM will also need the drivers to put into the image that gets installed.  To do this, log into the kubam server and run: </p>
+<pre><code>ssh &lt;kubam-server&gt;
+cd ~/kubam
+mkdir -p windows/drivers
+</code></pre><p>Now copy the drivers to the <code>~/kubam/windows/drivers</code> directory. </p>
+<p>This is a pain, but notice there are two images that get the UCS drivers:  The WinPE image for booting and then the actualy image it installs.  Copying the drivers to the KUBAM server is for the installed image to have them.  </p>
+<h2 id="extract-windows-iso-image">Extract Windows ISO image</h2>
+<p>On the KUBAM server, use the API or GUI to extract the Windows ISO image to the KUBAM server.  It will place it in either the <code>win2012r2</code> directory or <code>win2016</code> directory. </p>
+<h2 id="add-custom-template">Add Custom Template</h2>
+<p>If you have (recommended) your own autoinstall.xml file put it in the <code>~/kubam/</code> directory and name it either <code>win2016.tmpl</code> or <code>win2012r2.tmpl</code> depending on which Operating System you are using. We recommend you base it off our <a href="https://github.com/CiscoUcs/KUBaM/tree/v2.0/kubam/templates" target="_blank">sample templates</a> so you get the driver installation and RDP. </p>
+<h2 id="start-kubam-samba-server">Start KUBAM SAMBA server</h2>
+<p>The windows installation media is pretty big (4.3GB for Server 2012 R2).  As such, using the 1Gb CIMC link is pretty slow.  Instead we&apos;d like to use the 40Gb links on the server.  For that to install we use the vNICs on the UCS server to connect to the KUBAM server.  But we will need to use CIFS to do this.  This is done by running the following command on the KUBAM server: </p>
+<pre><code>docker run -d -v ~/kubam:/kubam \
+           -p 139:139 -p 445:445 \
+           dperson/samba \
+           -s &quot;kubam;/kubam&quot;
+</code></pre><p>More information on this container is available <a href="https://github.com/dperson/samba" target="_blank">here</a></p>
+<h2 id="build-images">Build Images</h2>
+<p>With all the files in place the automated deployment is ready to go.  You can now create the individual image files using the KUBAM GUI or API.  The names of these image files will be the name of the UCS Service Profile.</p>
+<h2 id="deploy-servers">Deploy Servers</h2>
+<p>Now deploying the servers either through the API or the GUI will create Service Profiles, templates and a vMedia policy that will map to the appropriate OS files.  The Server should now install. </p>
+<h1 id="appendix">Appendix</h1>
+<h2 id="manually-building-service-profile-images-used-for-autoinstallation-files">Manually Building Service Profile Images used for Autoinstallation Files</h2>
+<p><strong>This is done by KUBAM automatically but we spell out here what the process actually does</strong></p>
+<p>KUBAM works by having the WinPE image grab several files from the UCS hard drive image. This includes: </p>
+<ul>
+<li><code>autounattend.xml</code> file.  This is the template for this image to install. </li>
+<li><code>network.txt</code> file.  This file contains the network settings of our node and is used for starting up the server and mounting the CIFS share.  </li>
+</ul>
+<p>Why do we do this?  Well, we want each node to be unique.  We could cram all this into the WinPE image but then we&apos;d have a different WinPE image for every node, which means a lot of storage.  By breaking it out, we use the least amount of storage as possible with the most flexibility. </p>
+<p>Let&apos;s create the image by hand on a Linux server:   </p>
+<h3 id="the-networktxt-file">The <code>network.txt</code> file.</h3>
+<p>This is a simple file with three lines that looks like:</p>
+<pre><code>&lt;ip&gt;
+&lt;netmask&gt;
+&lt;gateway&gt;
+</code></pre><p><strong>Example:</strong></p>
+<pre><code>172.28.225.134
+255.255.254.0
+172.28.224.1
+</code></pre><h3 id="the-autoinstallxml-file">The <code>autoinstall.xml</code> file</h3>
+<p>Check out our <a href="https://github.com/CiscoUcs/KUBaM/tree/v2.0/kubam/templates" target="_blank">samples</a> for what this could look like.  Note that these are templates and appropriate values should be stored in there.  The file should be called <code>autoinstall.xml</code> when installed. </p>
+<p>You should create your own to match your org. </p>
+<h3 id="baking-the-image">Baking the Image</h3>
+<p>Now you can run the following: </p>
+<pre><code>dd if=/dev/zero of=kubam01.img bs=1M count=1
+mkfs -t fat kubam01.img
+mkdir tmpmnt
+mount -o loop kubam01.img tmpmnt
+cp autoinstall.xml tmpmnt/
+cp network.txt tmpmnt/
+umount tmpmnt
+rmdir tmpmnt
+</code></pre><p>This can get tedious for a bunch of nodes.  This is why we use KUBAM to automate this part!</p>
 
                                 
                                 </section>
@@ -675,12 +792,12 @@
 
             
                 
-                <a href="../installation/other.html" class="navigation navigation-prev " aria-label="Previous page: Other Tricky Installation Tips">
+                <a href="windows.html" class="navigation navigation-prev " aria-label="Previous page: Windows vMedia Method (WIP)">
                     <i class="fa fa-angle-left"></i>
                 </a>
                 
                 
-                <a href="creds.md" class="navigation navigation-next " aria-label="Next page: Credentials">
+                <a href="../internals/" class="navigation navigation-next " aria-label="Next page: KUBAM Glorious Underbelly">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -691,7 +808,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Configuration","level":"3.3","depth":1,"next":{"title":"Credentials","level":"3.3.1","depth":2,"path":"kubam/configure/creds.md","ref":"kubam/configure/creds.md","articles":[]},"previous":{"title":"Other Tricky Installation Tips","level":"3.2.6","depth":2,"path":"kubam/installation/other.md","ref":"kubam/installation/other.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"kubam/configure/README.md","mtime":"2018-03-01T20:05:04.418Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-05-03T13:19:50.994Z"},"basePath":"../..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Windows vMedia/Network Method (WIP)","level":"3.3.8","depth":2,"next":{"title":"KUBAM Glorious Underbelly","level":"3.4","depth":1,"path":"kubam/internals/README.md","ref":"kubam/internals/README.md","articles":[{"title":"Stage1 - Docker","level":"3.4.1","depth":2,"path":"kubam/internals/stage1/docker.md","ref":"kubam/internals/stage1/docker.md","articles":[]},{"title":"Stage1 - ESXi","level":"3.4.2","depth":2,"path":"kubam/internals/stage1/esxi.md","ref":"kubam/internals/stage1/esxi.md","articles":[]},{"title":"Stage1 - Manual","level":"3.4.3","depth":2,"path":"kubam/internals/stage1/manual.md","ref":"kubam/internals/stage1/manual.md","articles":[]},{"title":"Stage2","level":"3.4.4","depth":2,"path":"kubam/internals/stage2/python.md","ref":"kubam/internals/stage2/python.md","articles":[]},{"title":"Stage3","level":"3.4.5","depth":2,"path":"kubam/internals/stage3/ansible.md","ref":"kubam/internals/stage3/ansible.md","articles":[]},{"title":"Stage4","level":"3.4.6","depth":2,"path":"kubam/internals/stage4/manual.md","ref":"kubam/internals/stage4/manual.md","articles":[]}]},"previous":{"title":"Windows vMedia Method (WIP)","level":"3.3.7","depth":2,"path":"kubam/configure/windows.md","ref":"kubam/configure/windows.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"kubam/configure/windows2.md","mtime":"2018-05-03T12:54:14.267Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-05-03T13:19:50.994Z"},"basePath":"../..","book":{"language":""}});
         });
     </script>
 </div>
