@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <title>KUBAM Developer · GitBook</title>
+        <title>KUBAM API Walkthrough · GitBook</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="GitBook 3.2.3">
@@ -57,10 +57,10 @@
     <link rel="shortcut icon" href="../../gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="API.html" />
+    <link rel="next" href="YAML.html" />
     
     
-    <link rel="prev" href="../internals/stage4/manual.html" />
+    <link rel="prev" href="API.html" />
     
 
     </head>
@@ -556,7 +556,7 @@
             
         </li>
     
-        <li class="chapter active" data-level="3.5" data-path="./">
+        <li class="chapter " data-level="3.5" data-path="./">
             
                 <a href="./">
             
@@ -583,7 +583,7 @@
             
         </li>
     
-        <li class="chapter " data-level="3.5.2" data-path="APIGUIDE.html">
+        <li class="chapter active" data-level="3.5.2" data-path="APIGUIDE.html">
             
                 <a href="APIGUIDE.html">
             
@@ -644,7 +644,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href="../.." >KUBAM Developer</a>
+        <a href="../.." >KUBAM API Walkthrough</a>
     </h1>
 </div>
 
@@ -659,9 +659,113 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="kubam-developer-support">KUBAM Developer Support</h1>
-<p>We welcome all kinds of help!  We&apos;ll put more info in here as we go along. </p>
-
+                                <h1 id="kubam-api-guide">KUBAM API Guide</h1>
+<p>Let&apos;s suppose you don&apos;t want to use the GUI at all but you want to do everything through the KUBAM API.  Here is how you get started.</p>
+<h2 id="prereqs">Prereqs</h2>
+<p>KUBAM should be installed and you should have the ISO images of the OSes you want to install in the <code>kubam</code> directory. </p>
+<p>In the examples the KUBAM server will be <code>$KUBAM</code> so you may want to set this variable now on the shell:</p>
+<pre><code>export KUBAM=10.93.234.96:8001
+</code></pre><h2 id="1-get-the-isos-mapped">1. Get the ISOs Mapped</h2>
+<p>The ISO map tells KUBAM which ISO maps to which OS. Let&apos;s first see which ISOs are already in place: </p>
+<pre><code>curl $KUBAM/api/v1/isos
+</code></pre><p>This might output: </p>
+<pre><code>{
+  &quot;isos&quot;: [
+    &quot;en_windows_server_2012_r2_with_update_x64_dvd_4065220.iso&quot;,
+    &quot;Vmware-ESXi-6.5.0-4564106-Custom-Cisco-6.5.0.2.iso&quot;,
+    &quot;CentOS-7-x86_64-Minimal-1708.iso&quot;,
+    &quot;en_windows_server_2016_x64_dvd_9327751.iso&quot;
+  ]
+}
+</code></pre><p>Great, let&apos;s see which ISOs are already mapped, if any: </p>
+<pre><code>curl $KUBAM/api/v1/isos/map
+</code></pre><p>This gives us: </p>
+<pre><code class="lang-json">{
+  <span class="hljs-string">&quot;iso_map&quot;</span>: [
+    {
+      <span class="hljs-string">&quot;file&quot;</span>: <span class="hljs-string">&quot;/kubam/Vmware-ESXi-6.5.0-4564106-Custom-Cisco-6.5.0.2.iso&quot;</span>,
+      <span class="hljs-string">&quot;os&quot;</span>: <span class="hljs-string">&quot;esxi6.5&quot;</span>
+    }
+  ]
+}
+</code></pre>
+<p>It probably wouldn&apos;t give you anything if you didn&apos;t have anything.  Let&apos;s map one of the ISOs: </p>
+<pre><code>curl -X POST -d &apos;{&quot;iso_map&quot; : [{&quot;file&quot;: &quot;/kuam/CentOS-7-x86_64-Minimal-1708.iso&quot;, &quot;os&quot;: &quot;centos7.4&quot;}, {&quot;file&quot;: &quot;/kubam/Vmware-ESXi-6.5.0-4564106-Custom-Cisco-6.5.0.2.iso&quot;, &quot;os&quot;: &quot;esxi6.5&quot;} ]}&apos; -H &quot;Content-Type: application/json&quot; $KUBAM/api/v1/isos/map
+</code></pre><p>Notice a few things here:  </p>
+<ul>
+<li>you have to add <code>/kubam</code> to the file name</li>
+<li>make sure you add <code>-H &quot;Content-Type: application/json&quot;</code> or it won&apos;t send. </li>
+</ul>
+<h3 id="seeing-what-is-supported">Seeing what is supported</h3>
+<p>You may be wondering what OSes KUBAM can support. You can find that with </p>
+<pre><code>curl $KUBAM/api/v1/catalog
+</code></pre><p>From the output here you can see which &quot;os&quot; you can put down in the commands above. </p>
+<p>Great, now we have our ISO images up. </p>
+<h1 id="2-add-ucs-systems">2. Add UCS Systems</h1>
+<p>Now we want to add the UCS systems we&apos;ll be using.  We may want to carve 1 system up into different chunks to deploy different hosts.  Or maybe the UCS systems will have different network settings.  Whatever.  To do this we add a &quot;server group&quot;.  A server group is a collection of actual hardware resources.  It could even be an IMC.  Let&apos;s add a few right now. </p>
+<p>We can run: </p>
+<pre><code>curl $KUBAM/api/v2/servers
+</code></pre><p>Probably nothing here.  So lets add the credentials to log into one of our servers.  Suppose that we have a UCS with 4 blades that we want to put into our server group.  Let&apos;s do it: </p>
+<p>Make a file for the server group <code>kube-group1.json</code>:</p>
+<pre><code>{
+     &quot;name&quot;: &quot;kube-group1&quot;,
+     &quot;credentials&quot;: {
+       &quot;user&quot;: &quot;admin&quot;,
+       &quot;password&quot;: &quot;CiscoPassword&quot;,
+       &quot;ip&quot; : &quot;172.28.225.163&quot;
+     },
+     &quot;type&quot;: &quot;ucsm&quot;,
+     &quot;server_pool&quot;: {
+       &quot;blades&quot;: [
+           &quot;1/1&quot;, &quot;1/2&quot;, &quot;1/3&quot;, &quot;1/4&quot;
+       ]
+     }
+   }
+</code></pre><p>Now run the POST command with this: </p>
+<pre><code>curl -X POST -H &quot;Content-Type: application/json&quot; \
+ -d &quot;@./kube-group1.json \
+$KUBAM/api/v2/servers
+</code></pre><p>We could add another server group as well.  It can even be the same UCS with those credentials.  Now we can check to make sure we have entered the Server Group information:</p>
+<pre><code>curl $KUBAM/api/v2/servers
+</code></pre><p>You&apos;ll see that this group is given an ID and the password is encrypted. </p>
+<pre><code>{
+  &quot;servers&quot;: [
+    {
+      &quot;credentials&quot;: {
+        &quot;ip&quot;: &quot;172.28.225.163&quot;,
+        &quot;password&quot;: &quot;gAAAAABa7LpjGwKgGjspR4eqQyNm4ockVDVQsilOzYW0Zvha5A9AErexg46ejWE_UFMql68eDudiykxfOdf6-cdfXbOiI2luig==&quot;,
+        &quot;user&quot;: &quot;admin&quot;
+      },
+      &quot;id&quot;: &quot;6e10b961-3f9c-4ce3-926c-a8e1471c24f4&quot;,
+      &quot;name&quot;: &quot;kubernetes&quot;,
+      &quot;server_pool&quot;: {
+        &quot;blades&quot;: [
+          &quot;1/1&quot;,
+          &quot;1/2&quot;,
+          &quot;1/3&quot;,
+          &quot;1/4&quot;
+        ]
+      },
+      &quot;type&quot;: &quot;ucsm&quot;
+    }
+  ]
+}
+</code></pre><p>Let&apos;s add a C Series server as well.  Make a file called <code>c-series1.json</code> with the contents like:</p>
+<pre><code class="lang-json">{
+  <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;c240-01&quot;</span>,
+  <span class="hljs-string">&quot;credentials&quot;</span>: {
+    <span class="hljs-string">&quot;user&quot;</span>: <span class="hljs-string">&quot;admin&quot;</span>,
+    <span class="hljs-string">&quot;password&quot;</span>: <span class="hljs-string">&quot;CiscoPassword&quot;</span>,
+    <span class="hljs-string">&quot;ip&quot;</span> : <span class="hljs-string">&quot;10.93.234.140&quot;</span>
+   },
+   <span class="hljs-string">&quot;type&quot;</span>: <span class="hljs-string">&quot;imc&quot;</span>
+}
+</code></pre>
+<p>Now we can add it with the same command we ran previously: </p>
+<pre><code>curl -X POST -H &quot;Content-Type: application/json&quot; \
+ -d &quot;@./c-series1.json \
+$KUBAM/api/v2/servers
+</code></pre>
                                 
                                 </section>
                             
@@ -688,12 +792,12 @@
 
             
                 
-                <a href="../internals/stage4/manual.html" class="navigation navigation-prev " aria-label="Previous page: Stage4">
+                <a href="API.html" class="navigation navigation-prev " aria-label="Previous page: KUBAM API">
                     <i class="fa fa-angle-left"></i>
                 </a>
                 
                 
-                <a href="API.html" class="navigation navigation-next " aria-label="Next page: KUBAM API">
+                <a href="YAML.html" class="navigation navigation-next " aria-label="Next page: KUBAM YAML">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -704,7 +808,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"KUBAM Developer","level":"3.5","depth":1,"next":{"title":"KUBAM API","level":"3.5.1","depth":2,"path":"kubam/developer/API.md","ref":"kubam/developer/API.md","articles":[]},"previous":{"title":"Stage4","level":"3.4.6","depth":2,"path":"kubam/internals/stage4/manual.md","ref":"kubam/internals/stage4/manual.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"kubam/developer/README.md","mtime":"2018-03-01T20:03:59.672Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-05-04T20:04:08.858Z"},"basePath":"../..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"KUBAM API Walkthrough","level":"3.5.2","depth":2,"next":{"title":"KUBAM YAML","level":"3.5.3","depth":2,"path":"kubam/developer/YAML.md","ref":"kubam/developer/YAML.md","articles":[]},"previous":{"title":"KUBAM API","level":"3.5.1","depth":2,"path":"kubam/developer/API.md","ref":"kubam/developer/API.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"kubam/developer/APIGUIDE.md","mtime":"2018-05-04T20:03:05.325Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-05-04T20:04:08.858Z"},"basePath":"../..","book":{"language":""}});
         });
     </script>
 </div>

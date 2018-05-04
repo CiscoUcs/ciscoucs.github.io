@@ -41,6 +41,7 @@
 	* [Stage4](kubam/internals/stage4/manual.md)
 * [KUBAM Developer](kubam/developer/README.md)
 	* [KUBAM API](kubam/developer/API.md)
+	* [KUBAM API Walkthrough](kubam/developer/APIGUIDE.md)
 	* [KUBAM YAML](kubam/developer/YAML.md)
 
 

@@ -348,7 +348,7 @@ KUBAM stores values for UCS logins inside the ```kubam.yaml``` This API just off
 * ```POST``` - Create a new UCS Domain
 	* Params: 
 	```
-	{"name", "ucs01", "type" : "ucsm", "credentials" : {"user": "admin", "password" : "secret-password", "server" : "172.28.225.163" }}
+	{"name", "ucs01", "type" : "ucsm", "credentials" : {"user": "admin", "password" : "secret-password", "ip" : "172.28.225.163" }}
 	```
 	
 	* Example: ```curl -X POST -H "Content-Type: application/json" -d '{"credentials" : {"user": "admin", "password" : "nbv12345", "ip" : "172.28.225.163" }, "type" : "ucsm", "name" : "devi" }' http://$KUBAM_API/api/v2/servers```

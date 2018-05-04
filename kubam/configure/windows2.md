@@ -1,6 +1,13 @@
 # Windows Server Installation
 
-Installing Windows with KUBAM isn't as easy as we'd like it to be. Still, its better than many of the other sucky methods you'll run into out there in the wild. 
+Installing Windows with KUBAM isn't as easy as we'd like it to be. Still, its better than many of the other sucky methods you'll run into out there in the wild. KUBAM makes doing it on UCS easy as possible!
+
+We support: 
+
+* Windows Server 2012 R2
+* Windows Server 2016 
+
+Need support for a different version? [Let us know](https://github.com/CiscoUcs/KUBaM/issues)
 
 Here is the high level list of tasks that you have to do:  
 
@@ -16,13 +23,15 @@ We'll go through each of these steps in detail.
 
 ## Windows Technician Computer Setup
 
-Windows installs require that you create an install image on an already installed [Windows Technician Computer](https://docs.microsoft.com/en-us/windows-server-essentials/install/prepare-the-technician-computer).  The Technician computer should be running the same version of Windows that you would like to install.  These instructions are for Windows Server 2012 R2 Datacenter.
+Windows installs require that you create an install image on an already installed [Windows Technician Computer](https://docs.microsoft.com/en-us/windows-server-essentials/install/prepare-the-technician-computer).  The Technician computer should be running the same version of Windows that you would like to install.  These instructions are for Windows Server 2012 R2 Datacenter.  This WinPE image can be used to install Server 2016 and Server 2012 R2
 
 The technician computer can be a virtual machine or physical machine.  If it is a physical machine it does not need to be running on Cisco hardware to create this image.
 
-### Download Windows ADK
+### Download Windows ADK 8.1
 
-The Windows Assessment and Deployment Kit (ADK) is required to build WinPE images that KUBAM can use.  [Download this from Microsoft]().
+The Windows Assessment and Deployment Kit (ADK) is required to build WinPE images that KUBAM can use. Yes, we know this version is old, but it works so we use it.  We'll update it when the need arises.
+
+[Download this from Microsoft](https://www.microsoft.com/en-us/download/details.aspx?id=39982).
 
 Install using the default directory.
 
@@ -30,7 +39,10 @@ Install using the default directory.
 
 We only require the two services to be installed:
 
+* Deployment Tools
 * Windows PE
+
+(We actually probably only need Windows PE, but the other one is there for good measure)
 
 ![img](../img/adk2.png)
 
@@ -41,7 +53,7 @@ While this installs about 3 GB, have a look at this [bee keeping website](http:/
 
 The latest Cisco device drivers can be downloaded from Cisco's Support site. URLs seem to change from time to time, but was last available [here](https://software.cisco.com/download/home/283853163/type). If that link is dead, go to [https://cisco.com/support](https://cisco.com/support) and in the Downloads menu type __UCS B-Series Blade Server Software__ the main Cisco Site, then download the drivers.  It seems to be a 1GB file.  
 
-Copy the Windows VNIC drivers to the Windows server.  Put it in the ```C:\Drivers``` directory:
+Copy the __Windows 2018 R2__ VNIC drivers to the Windows server.  Put it in the ```C:\Drivers``` directory:
 
 ```
 md c:\drivers
@@ -54,6 +66,8 @@ enic6x64.cat
 enic6x64.inf
 enic6x64.sys
 ```
+
+_NOTE: Even if you are planning on deploying Server 2016 you should use the Server 2012 R2 drivers for the WinPE image.  You'll need the other drivers for 2016 for the second part of the installation so just hold on to those!_
 
 ### Download KUBAM Windows Scripts on Technician Node
 
@@ -75,27 +89,16 @@ We will be creating a WinPE image that uses KUBAM and an autoattend file. To mak
 With the prereqs in place (WinPE and drivers) you are ready to generate the WinPE image that will be used for the boot process. Open the shell and run: 
 
 ```
-winkubam.bat <windows version> <kubamIP address>
+winkubam.bat
 ``` 
 
-Windows Versions can be: 
-
-* ```win2012r2```
-* ```win2016```
-
-If you have other versions that need to be supported, [let us know](https://github.com/CiscoUcs/kubam/issues).
-
-#### Example
-
-* ```winkubam.bat win2012r2 172.28.20.1``` - where ```win2012r2``` is the windows version and ```172.28.20.1``` is the KUBAM server. 
-
-At the end of this process you'll have a ```c:\WinPE_<osversion>.iso``` file which is the WinPE.
+At the end of this process you'll have a ```c:\WinPE_KUBAM.iso``` file which is the WinPE.
 
 ### Copy Files to KUBAM Server
 
 #### WinPE image to KUBAM server
 
-```scp``` or use some other radical means of getting the ```c:\WinPE_<version>.iso``` file to the KUBAM server.  Please keep the name of this file the same as KUBAM looks for its presence. (for example:  ```WinPE_2012r2.iso``` or ```WinPE_2016.iso```)
+```scp``` or use some other radical means of getting the ```c:\WinPE_KUBAM.iso``` file to the KUBAM server.  Please keep the name of this file the same as KUBAM looks for its presence. 
 
 #### Drivers to KUBAM server
 
@@ -104,11 +107,12 @@ KUBAM will also need the drivers to put into the image that gets installed.  To 
 ```
 ssh <kubam-server>
 cd ~/kubam
-mkdir -p windows/drivers
+mkdir -p windows/drivers/win2012r2
+mkdir -p windows/drivers/win2016
 ```
-Now copy the drivers to the ```~/kubam/windows/drivers``` directory. 
+Now copy the drivers to the appropriate ```~/kubam/windows/drivers``` directory. 
 
-This is a pain, but notice there are two images that get the UCS drivers:  The WinPE image for booting and then the actualy image it installs.  Copying the drivers to the KUBAM server is for the installed image to have them.  
+This is a pain, but notice there are two images that get the UCS drivers:  The WinPE image for booting and then the actual image it installs.  Copying the drivers to the KUBAM server is for the installed image to have them.  
 
 ## Extract Windows ISO image 
 
@@ -162,6 +166,8 @@ This is a simple file with three lines that looks like:
 <ip>
 <netmask>
 <gateway>
+<KUBAM IP>
+<os>
 ```
 __Example:__
 
@@ -169,13 +175,15 @@ __Example:__
 172.28.225.134
 255.255.254.0
 172.28.224.1
+172.28.225.135
+win2016
 ```
 
 ### The ```autoinstall.xml``` file
 
 Check out our [samples](https://github.com/CiscoUcs/KUBaM/tree/v2.0/kubam/templates) for what this could look like.  Note that these are templates and appropriate values should be stored in there.  The file should be called ```autoinstall.xml``` when installed. 
 
-You should create your own to match your org. 
+You should create your own to match the stuff you need.
 
 
 ### Baking the Image
