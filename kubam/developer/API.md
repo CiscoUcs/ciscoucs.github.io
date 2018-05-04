@@ -59,8 +59,27 @@ KUBAM stores values for UCS logins inside the ```kubam.yaml``` This API just off
 
 ### ```/api/v1/keys```
 
-* ```GET```
-* ```POST```
+* ```GET``` - Returns a list of the Public SSH Keys that have been entered into KUBAM.  These keys are ones that hosts can use to ssh into the servers installed by KUBAM. 
+	* Example:
+	
+	```
+	curl 172.28.225.135/api/v1/keys
+{
+  "keys": [
+    "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCc/7HrOIZB2wk8FvmZXzLMS1ZJ8TvS9OWBf5xosp59NRvcAbwbclLRD2f9z5KvOF1n5a4mK03OetymTQQX08rBpZJZ5ZWztdjiFjIce6rm7V87CRjeuwa97XyhacKx98QcijOJWBbLf1TE/cRd8KVopfG/RPZeMMx1n3J071QRiVhbHEzVw3xuY4KruIb/2kLGHEyYqtx//y8c3k6UaMF180nOIaq6WBZVHnpYXZZ+EkolpJ+10objpueuWPcJe4OU7AIRP1JGsaDHrmXNoy9ygeWceSqOIqRLOdPneHtC6xU78t3ttpnRdC9OgtawIVqaq0wpvd7G0sQ7Jv2DO2hZ\n"
+  ]
+}
+	```
+
+* ```POST``` - Add or change public keys.  The keys are a list of Public ssh keys. KUBAM uses these keys to allow nodes to be accessed by these keys when installed.  
+	* Params: 
+	
+	```
+	{"keys" : [
+	"ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCc/7HrOIZB2wk8FvmZXzLMS1ZJ8TvS9OWBf5xosp59NRvcAbwbclLRD2f9z5KvOF1n5a4mK03OetymTQQX08rBpZJZ5ZWztdjiFjIce6rm7V87CRjeuwa97XyhacKx98QcijOJWBbLf1TE/cRd8KVopfG/RPZeMMx1n3J071QRiVhbHEzVw3xuY4KruIb/2kLGHEyYqtx//y8c3k6UaMF180nOIaq6WBZVHnpYXZZ+EkolpJ+10objpueuWPcJe4OU7AIRP1JGsaDHrmXNoy9ygeWceSqOIqRLOdPneHtC6xU78t3ttpnRdC9OgtawIVqaq0wpvd7G0sQ7Jv2DO2hZ", 
+	"ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCd2XeDE/Ev5TJxBRAmrsTglAQQG8v5JZ8VoOUdSBUCONcJilcERdpOtGOgJR4t1xr2r0G3oDZrRGEaS5/Kjo91/LIxOR01aUgNb6zFkrSdlu8ktBmLsEvocG68di3GGG9JqoICL8CoPLkRDWGcBO3GKhOEd0TEK1hwUeGOX0NBMBERQtGXPiHq4tXvoUSyzsUSdAKypfRlKJgCETG9muGmHAtF1Z5pJXq8BqiiZ/GKm8Z6R60Z8hEQnNzIySyUHp1J6wvgnsZAVrUSMTclQ8NBrnagLVPToU5SI2zXGdiVIPh9enda+warwF5TuW80EABCbEIUtbqwde2nbqIlQOP5"
+	]}
+	```
 
 ## Networks
 
@@ -415,7 +434,8 @@ Network parameters are clustered together that can then be added to a server.
     * Returns:  Current list of hosts
     
 * ```POST```: Update all the hosts.
-    *Params:    list of all hosts
+    * Params:    list of all hosts
+    
     ```
     [
         {'name': 'kube01', 'ip': '172.20.30.1', 'os': 'centos7.4', 'role': 'generic', 'network_group': ''},

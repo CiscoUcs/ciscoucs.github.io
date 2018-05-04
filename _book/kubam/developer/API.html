@@ -705,8 +705,28 @@
 </ul>
 <h3 id="apiv1keys"><code>/api/v1/keys</code></h3>
 <ul>
-<li><code>GET</code></li>
-<li><code>POST</code></li>
+<li><p><code>GET</code> - Returns a list of the Public SSH Keys that have been entered into KUBAM.  These keys are ones that hosts can use to ssh into the servers installed by KUBAM. </p>
+<ul>
+<li><p>Example:</p>
+<pre><code>curl 172.28.225.135/api/v1/keys
+{
+&quot;keys&quot;: [
+&quot;ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCc/7HrOIZB2wk8FvmZXzLMS1ZJ8TvS9OWBf5xosp59NRvcAbwbclLRD2f9z5KvOF1n5a4mK03OetymTQQX08rBpZJZ5ZWztdjiFjIce6rm7V87CRjeuwa97XyhacKx98QcijOJWBbLf1TE/cRd8KVopfG/RPZeMMx1n3J071QRiVhbHEzVw3xuY4KruIb/2kLGHEyYqtx//y8c3k6UaMF180nOIaq6WBZVHnpYXZZ+EkolpJ+10objpueuWPcJe4OU7AIRP1JGsaDHrmXNoy9ygeWceSqOIqRLOdPneHtC6xU78t3ttpnRdC9OgtawIVqaq0wpvd7G0sQ7Jv2DO2hZ\n&quot;
+]
+}
+</code></pre></li>
+</ul>
+</li>
+<li><p><code>POST</code> - Add or change public keys.  The keys are a list of Public ssh keys. KUBAM uses these keys to allow nodes to be accessed by these keys when installed.  </p>
+<ul>
+<li><p>Params: </p>
+<pre><code>{&quot;keys&quot; : [
+&quot;ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCc/7HrOIZB2wk8FvmZXzLMS1ZJ8TvS9OWBf5xosp59NRvcAbwbclLRD2f9z5KvOF1n5a4mK03OetymTQQX08rBpZJZ5ZWztdjiFjIce6rm7V87CRjeuwa97XyhacKx98QcijOJWBbLf1TE/cRd8KVopfG/RPZeMMx1n3J071QRiVhbHEzVw3xuY4KruIb/2kLGHEyYqtx//y8c3k6UaMF180nOIaq6WBZVHnpYXZZ+EkolpJ+10objpueuWPcJe4OU7AIRP1JGsaDHrmXNoy9ygeWceSqOIqRLOdPneHtC6xU78t3ttpnRdC9OgtawIVqaq0wpvd7G0sQ7Jv2DO2hZ&quot;, 
+&quot;ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCd2XeDE/Ev5TJxBRAmrsTglAQQG8v5JZ8VoOUdSBUCONcJilcERdpOtGOgJR4t1xr2r0G3oDZrRGEaS5/Kjo91/LIxOR01aUgNb6zFkrSdlu8ktBmLsEvocG68di3GGG9JqoICL8CoPLkRDWGcBO3GKhOEd0TEK1hwUeGOX0NBMBERQtGXPiHq4tXvoUSyzsUSdAKypfRlKJgCETG9muGmHAtF1Z5pJXq8BqiiZ/GKm8Z6R60Z8hEQnNzIySyUHp1J6wvgnsZAVrUSMTclQ8NBrnagLVPToU5SI2zXGdiVIPh9enda+warwF5TuW80EABCbEIUtbqwde2nbqIlQOP5&quot;
+]}
+</code></pre></li>
+</ul>
+</li>
 </ul>
 <h2 id="networks">Networks</h2>
 <h3 id="apiv1networks"><code>/api/v1/networks</code></h3>
@@ -1062,13 +1082,16 @@
 <li>Returns:  Current list of hosts</li>
 </ul>
 </li>
-<li><p><code>POST</code>: Update all the hosts.
-  *Params:    list of all hosts</p>
-<pre><code>  [
-      {&apos;name&apos;: &apos;kube01&apos;, &apos;ip&apos;: &apos;172.20.30.1&apos;, &apos;os&apos;: &apos;centos7.4&apos;, &apos;role&apos;: &apos;generic&apos;, &apos;network_group&apos;: &apos;&apos;},
-      {&apos;name&apos;: &apos;kube02&apos;, &apos;ip&apos;: &apos;172.20.30.2&apos;, &apos;os&apos;: &apos;centos7.4&apos;, &apos;role&apos;: &apos;k8s master&apos;, &apos;network_group&apos;: &apos;&apos;, &apos;server_group&apos;: &apos;&apos;}
-  ]
+<li><p><code>POST</code>: Update all the hosts.</p>
+<ul>
+<li><p>Params:    list of all hosts</p>
+<pre><code>[
+  {&apos;name&apos;: &apos;kube01&apos;, &apos;ip&apos;: &apos;172.20.30.1&apos;, &apos;os&apos;: &apos;centos7.4&apos;, &apos;role&apos;: &apos;generic&apos;, &apos;network_group&apos;: &apos;&apos;},
+  {&apos;name&apos;: &apos;kube02&apos;, &apos;ip&apos;: &apos;172.20.30.2&apos;, &apos;os&apos;: &apos;centos7.4&apos;, &apos;role&apos;: &apos;k8s master&apos;, &apos;network_group&apos;: &apos;&apos;, &apos;server_group&apos;: &apos;&apos;}
+]
 </code></pre></li>
+</ul>
+</li>
 <li><p><code>DELETE</code>: Delete existing Host. </p>
 <ul>
 <li>Params:   <code>{&apos;name&apos;: &apos;kube01&apos;}</code></li>
@@ -1169,7 +1192,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"KUBAM API","level":"3.5.1","depth":2,"next":{"title":"KUBAM YAML","level":"3.5.2","depth":2,"path":"kubam/developer/YAML.md","ref":"kubam/developer/YAML.md","articles":[]},"previous":{"title":"KUBAM Developer","level":"3.5","depth":1,"path":"kubam/developer/README.md","ref":"kubam/developer/README.md","articles":[{"title":"KUBAM API","level":"3.5.1","depth":2,"path":"kubam/developer/API.md","ref":"kubam/developer/API.md","articles":[]},{"title":"KUBAM YAML","level":"3.5.2","depth":2,"path":"kubam/developer/YAML.md","ref":"kubam/developer/YAML.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"kubam/developer/API.md","mtime":"2018-04-26T13:36:52.597Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-05-03T21:19:29.993Z"},"basePath":"../..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"KUBAM API","level":"3.5.1","depth":2,"next":{"title":"KUBAM YAML","level":"3.5.2","depth":2,"path":"kubam/developer/YAML.md","ref":"kubam/developer/YAML.md","articles":[]},"previous":{"title":"KUBAM Developer","level":"3.5","depth":1,"path":"kubam/developer/README.md","ref":"kubam/developer/README.md","articles":[{"title":"KUBAM API","level":"3.5.1","depth":2,"path":"kubam/developer/API.md","ref":"kubam/developer/API.md","articles":[]},{"title":"KUBAM YAML","level":"3.5.2","depth":2,"path":"kubam/developer/YAML.md","ref":"kubam/developer/YAML.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"kubam/developer/API.md","mtime":"2018-05-04T16:31:34.257Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-05-04T16:32:18.441Z"},"basePath":"../..","book":{"language":""}});
         });
     </script>
 </div>
