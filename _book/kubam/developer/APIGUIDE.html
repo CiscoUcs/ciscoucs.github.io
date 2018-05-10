@@ -701,29 +701,31 @@
 <pre><code>curl $KUBAM/api/v1/catalog
 </code></pre><p>From the output here you can see which &quot;os&quot; you can put down in the commands above. </p>
 <p>Great, now we have our ISO images up. </p>
-<h1 id="2-add-ucs-systems">2. Add UCS Systems</h1>
+<h2 id="2-add-ucs-systems">2. Add UCS Systems</h2>
 <p>Now we want to add the UCS systems we&apos;ll be using.  We may want to carve 1 system up into different chunks to deploy different hosts.  Or maybe the UCS systems will have different network settings.  Whatever.  To do this we add a &quot;server group&quot;.  A server group is a collection of actual hardware resources.  It could even be an IMC.  Let&apos;s add a few right now. </p>
 <p>We can run: </p>
 <pre><code>curl $KUBAM/api/v2/servers
 </code></pre><p>Probably nothing here.  So lets add the credentials to log into one of our servers.  Suppose that we have a UCS with 4 blades that we want to put into our server group.  Let&apos;s do it: </p>
 <p>Make a file for the server group <code>kube-group1.json</code>:</p>
-<pre><code>{
-     &quot;name&quot;: &quot;kube-group1&quot;,
-     &quot;credentials&quot;: {
-       &quot;user&quot;: &quot;admin&quot;,
-       &quot;password&quot;: &quot;CiscoPassword&quot;,
-       &quot;ip&quot; : &quot;172.28.225.163&quot;
+<pre><code class="lang-json">{
+     <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;kube-group1&quot;</span>,
+     <span class="hljs-string">&quot;credentials&quot;</span>: {
+       <span class="hljs-string">&quot;user&quot;</span>: <span class="hljs-string">&quot;admin&quot;</span>,
+       <span class="hljs-string">&quot;password&quot;</span>: <span class="hljs-string">&quot;CiscoPassword&quot;</span>,
+       <span class="hljs-string">&quot;ip&quot;</span> : <span class="hljs-string">&quot;172.28.225.163&quot;</span>
      },
-     &quot;type&quot;: &quot;ucsm&quot;,
-     &quot;server_pool&quot;: {
-       &quot;blades&quot;: [
-           &quot;1/1&quot;, &quot;1/2&quot;, &quot;1/3&quot;, &quot;1/4&quot;
+     <span class="hljs-string">&quot;type&quot;</span>: <span class="hljs-string">&quot;ucsm&quot;</span>,
+     <span class="hljs-string">&quot;server_pool&quot;</span>: {
+       <span class="hljs-string">&quot;blades&quot;</span>: [
+           <span class="hljs-string">&quot;1/1&quot;</span>, <span class="hljs-string">&quot;1/2&quot;</span>, <span class="hljs-string">&quot;1/3&quot;</span>, <span class="hljs-string">&quot;1/4&quot;</span>
        ]
-     }
+     },
+     <span class="hljs-string">&quot;vlan&quot;</span> : <span class="hljs-string">&quot;default&quot;</span>
    }
-</code></pre><p>Now run the POST command with this: </p>
+</code></pre>
+<p>Now run the POST command with this: </p>
 <pre><code>curl -X POST -H &quot;Content-Type: application/json&quot; \
- -d &quot;@./kube-group1.json \
+ -d &quot;@./kube-group1.json&quot; \
 $KUBAM/api/v2/servers
 </code></pre><p>We could add another server group as well.  It can even be the same UCS with those credentials.  Now we can check to make sure we have entered the Server Group information:</p>
 <pre><code>curl $KUBAM/api/v2/servers
@@ -746,7 +748,8 @@ $KUBAM/api/v2/servers
           &quot;1/4&quot;
         ]
       },
-      &quot;type&quot;: &quot;ucsm&quot;
+      &quot;type&quot;: &quot;ucsm&quot;,
+      &quot;vlan&quot;: &quot;default&quot;
     }
   ]
 }
@@ -765,7 +768,120 @@ $KUBAM/api/v2/servers
 <pre><code>curl -X POST -H &quot;Content-Type: application/json&quot; \
  -d &quot;@./c-series1.json \
 $KUBAM/api/v2/servers
+</code></pre><h2 id="3-add-ssh-keys">3. Add SSH Keys</h2>
+<p>We want to keep access to our servers secure.  Therefore we disable passwords and use SSH keys. We add a list of SSH keys with KUBAM that have access to the servers. This can be done by createing a file: <code>ssh-keys.json</code> and having the contents look like:  </p>
+<pre><code class="lang-json">{<span class="hljs-string">&quot;keys&quot;</span> : [
+    <span class="hljs-string">&quot;ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCc/7HrOIZB2wk8FvmZXzLMS1ZJ8TvS9OWBf5xosp59NRvcAbwbclLRD2f9z5KvOF1n5a4mK03OetymTQQX08rBpZJZ5ZWztdjiFjIce6rm7V87CRjeuwa97XyhacKx98QcijOJWBbLf1TE/cRd8KVopfG/RPZeMMx1n3J071QRiVhbHEzVw3xuY4KruIb/2kLGHEyYqtx//y8c3k6UaMF180nOIaq6WBZVHnpYXZZ+EkolpJ+10objpueuWPcJe4OU7AIRP1JGsaDHrmXNoy9ygeWceSqOIqRLOdPneHtC6xU78t3ttpnRdC9OgtawIVqaq0wpvd7G0sQ7Jv2DO2hZ&quot;</span>, 
+    <span class="hljs-string">&quot;ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCd2XeDE/Ev5TJxBRAmrsTglAQQG8v5JZ8VoOUdSBUCONcJilcERdpOtGOgJR4t1xr2r0G3oDZrRGEaS5/Kjo91/LIxOR01aUgNb6zFkrSdlu8ktBmLsEvocG68di3GGG9JqoICL8CoPLkRDWGcBO3GKhOEd0TEK1hwUeGOX0NBMBERQtGXPiHq4tXvoUSyzsUSdAKypfRlKJgCETG9muGmHAtF1Z5pJXq8BqiiZ/GKm8Z6R60Z8hEQnNzIySyUHp1J6wvgnsZAVrUSMTclQ8NBrnagLVPToU5SI2zXGdiVIPh9enda+warwF5TuW80EABCbEIUtbqwde2nbqIlQOP5&quot;</span>
+]}
 </code></pre>
+<p>These keys can then be added to the API with: </p>
+<pre><code>curl -X POST -d &quot;@./ssh-keys&quot; -H &quot;Content-Type: application/json&quot; $KUBAM/api/v1/keys
+</code></pre><p>To see that the keys are there you can run: </p>
+<pre><code>curl $KUBAM/api/v1/keys
+</code></pre><p>Then the keys will all be returned. </p>
+<h2 id="4-add-networking-details">4. Add Networking Details</h2>
+<p>Each host when installed needs a network configured.  Many hosts will share the same networking constructs such as gateway, DNS, subnet, etc.  To make mapping common network constructs to hosts and to avoid repitition KUBAM uses the idea of a &quot;Network Group&quot;.  The network group just contains common networking characteristics that a host would use.  A network group can be mapped to multiple hosts but a host can only map to one network group. </p>
+<p>To add a network group create a file with the network group characteristics called <code>netgrp1.json</code>.  The contents will be: </p>
+<pre><code>{
+  &quot;name&quot;: &quot;net01&quot;,
+  &quot;netmask&quot; : &quot;255.255.254.0&quot;,
+  &quot;nameserver&quot; : &quot;171.70.168.183&quot;,
+  &quot;gateway&quot;: &quot;172.28.224.1&quot;,
+  &quot;ntpserver&quot; : &quot;72.163.32.44&quot;,
+  &quot;proxy&quot;: &quot;http://proxy.esl.cisco.com:80&quot;,
+  &quot;vlan&quot; : &quot;30&quot;
+}
+</code></pre><p>A few comments about the values:</p>
+<ul>
+<li>The name should be unique but can be changed.</li>
+<li>The proxy and vlan are optional.  The rest are not.</li>
+<li>The VLAN is for ESXi templates if the management nic doesn&apos;t have a native VLAN and if one needs to be specified.  Usually you will leave this out. </li>
+<li>Proxy is for hosts that are behind firewalls like most of the environments we work on internally in Cisco. This is a way the host can get to the outside network if post install scripts (like kubernetes) need to access containers.  Leave this out if not needed.</li>
+<li>The netmask, gateway, nameserver, and ntpserver will be installed in the host. </li>
+</ul>
+<p>To add this we run: </p>
+<pre><code>curl -X POST -H &quot;Content-Type: application/json&quot; -d &quot;@./netgrp1.json&quot; $KUBAM/api/v2/networks
+</code></pre><p>We get back something like: </p>
+<pre><code>{
+  &quot;status&quot;: &quot;Network net01 created!&quot;
+}
+</code></pre><p>Performing a <code>GET</code> call and we can get back all of the details: </p>
+<pre><code>curl $KUBAM/api/v2/networks
+</code></pre><p>The output will be all the networks</p>
+<pre><code>{
+  &quot;networks&quot;: [
+    {
+      &quot;gateway&quot;: &quot;172.28.224.1&quot;,
+      &quot;id&quot;: &quot;60b25585-c1ff-4ff5-947a-9f171bd6ed38&quot;,
+      &quot;name&quot;: &quot;net01&quot;,
+      &quot;nameserver&quot;: &quot;171.70.168.183&quot;,
+      &quot;netmask&quot;: &quot;255.255.254.0&quot;,
+      &quot;ntpserver&quot;: &quot;72.163.32.44&quot;,
+      &quot;proxy&quot;: &quot;http://proxy.esl.cisco.com:80&quot;,
+      &quot;vlan&quot;: &quot;30&quot;
+    }
+  ]
+}
+</code></pre><p>Notice however that there is an <code>id</code> that was created.  If we want to delete this network we use the <code>DELETE</code> with <code>{&quot;id&quot;: &quot;60b25585-c1ff-4ff5-947a-9f171bd6ed38&quot;}</code> to delete it.  </p>
+<p>If we want to rename it then we must do a <code>PUT</code> operation and include the <code>id</code> and all the values we wish to update. This is different than some of the KUBAM resources as we can work on them individually.</p>
+<h2 id="5-hosts">5. Hosts</h2>
+<p>We now come to the main event where we specify what hosts we will deploy.  We create a <code>hosts.json</code> file that includes all the hosts we wish to deploy.  This includes the mapping to network groups and server groups.  This is where we need the <code>id</code>s of those groups.  The contents looks as follows:</p>
+<pre><code>[
+    {
+      &quot;name&quot;: &quot;kubam01&quot;,
+      &quot;ip&quot;: &quot;172.28.225.130&quot;,
+      &quot;os&quot;: &quot;centos7.4&quot;,
+      &quot;role&quot;: &quot;generic&quot;,
+      &quot;network_group&quot;: &quot;60b25585-c1ff-4ff5-947a-9f171bd6ed38&quot;,
+      &quot;server_group&quot;: &quot;4c1cb152-08c0-4c5f-9c83-e0baf6acca4d&quot;
+    },
+    {
+      &quot;name&quot;: &quot;kubam02&quot;,
+      &quot;ip&quot;: &quot;172.28.225.131&quot;,
+      &quot;os&quot;: &quot;esxi6.5&quot;,
+      &quot;role&quot;: &quot;generic&quot;,
+      &quot;network_group&quot;: &quot;60b25585-c1ff-4ff5-947a-9f171bd6ed38&quot;
+    },
+    {
+      &quot;name&quot;: &quot;kubam03&quot;,
+      &quot;ip&quot;: &quot;172.28.225.132&quot;,
+      &quot;os&quot;: &quot;win2016&quot;,
+      &quot;role&quot;: &quot;generic&quot;,
+      &quot;network_group&quot;: &quot;60b25585-c1ff-4ff5-947a-9f171bd6ed38&quot;
+    }
+]
+</code></pre><ul>
+<li>The <code>network_group</code> and <code>server_group</code> will need to match the <code>id</code> of those groups. </li>
+<li><code>os</code> and <code>roles</code> will need to be defined from the <code>/api/v1/catalog</code></li>
+<li>The <code>network_group</code> <strong>is required</strong> the <code>server_group</code> however is not required and can be omitted if you want to add the boot images yourself. </li>
+<li>Hostnames need to match the service profile name or the vMedia policy will not work. </li>
+<li>Hosts in the same <code>server_group</code> must use the same Operating system.  You can&apos;t install <code>esxi6.5</code> and <code>centos7.4</code> in the same server group.  Only one can be selected. </li>
+</ul>
+<h2 id="6-installation-image-creation">6. Installation image creation</h2>
+<p>With all the parameters we are now set to deploy the boot images.  Creating the boot images usually comprises of the following steps that KUBAM performs for you: </p>
+<ul>
+<li>Extracts the ISO image for use of the OS installation in the ~/kubam directory. </li>
+<li><p>Creates a Boot ISO image if this isn&apos;t already created for you.</p>
+<ul>
+<li>In the case of Windows, this step you must perform manually.  KUBAM checks to make sure the <code>WinPE_KUBAM.iso</code> image has been uploaded. </li>
+<li>In the case of ESXi a unique boot ISO is created for each host.  Yes this sucks, but we haven&apos;t put more time into this yet to make it better.  Disk space is cheap, life is short. Open an issue if this bugs you. </li>
+<li>In the case of RedHat/CentOS a special boot iso is created if there is not one in place already. </li>
+</ul>
+</li>
+<li><p>Creates individual 1MB hard drive images for each host (except for VMware since this is bundled in the OS ).  It takes a template that comes by default with KUBAM or a template in the <code>~/kubam</code> directory, such as <code>centos7.4.tmpl</code> or <code>win2016.tmpl</code> and fills in values.  </p>
+</li>
+</ul>
+<p>To set up the images we run: </p>
+<pre><code>curl -X POST $KUBAM/api/v2/deploy/images
+</code></pre><p>With no arguments all server images will be created.  To do just a few we can do: </p>
+<pre><code>curl -X POST -d &apos;[&quot;kubam01&quot;, &quot;kubam02&quot;]&apos; $KUBAM/api/v2/deploy/images
+</code></pre><p>Each time this is done the <code>&lt;host&gt;.img</code> file will always be rewritten.  If the boot image and ISO image already exists it will not be changed.  You would have to delete them if you wanted them to be regenerated. </p>
+<h2 id="7-ucs-deployment">7. UCS Deployment</h2>
+<p>If at this point the images are created we can now deploy the UCS resources.  This is done with </p>
+<pre><code>curl -X POST $KUBAM/api/v2/deploy/ucs
+</code></pre><p>You can include arguments </p>
+
                                 
                                 </section>
                             
@@ -808,7 +924,7 @@ $KUBAM/api/v2/servers
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"KUBAM API Walkthrough","level":"3.5.2","depth":2,"next":{"title":"KUBAM YAML","level":"3.5.3","depth":2,"path":"kubam/developer/YAML.md","ref":"kubam/developer/YAML.md","articles":[]},"previous":{"title":"KUBAM API","level":"3.5.1","depth":2,"path":"kubam/developer/API.md","ref":"kubam/developer/API.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"kubam/developer/APIGUIDE.md","mtime":"2018-05-04T20:03:05.325Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-05-04T20:04:08.858Z"},"basePath":"../..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"KUBAM API Walkthrough","level":"3.5.2","depth":2,"next":{"title":"KUBAM YAML","level":"3.5.3","depth":2,"path":"kubam/developer/YAML.md","ref":"kubam/developer/YAML.md","articles":[]},"previous":{"title":"KUBAM API","level":"3.5.1","depth":2,"path":"kubam/developer/API.md","ref":"kubam/developer/API.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"kubam/developer/APIGUIDE.md","mtime":"2018-05-10T12:40:23.050Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-05-10T12:40:59.691Z"},"basePath":"../..","book":{"language":""}});
         });
     </script>
 </div>

@@ -666,16 +666,17 @@
 <li>Windows 2016</li>
 </ul>
 <p>At this time KUBAM requires a decent amount of manual steps to install Windows.  We are working to make this easier but we still hope this method sucks less than other installers that you are using.  </p>
-<h2 id="windows-server-2016">Windows Server 2016</h2>
+<h1 id="windows-server-2016">Windows Server 2016</h1>
 <p>To install Windows Server 2016, we will use unattended instalation feature. That will give us zero-touch deployment. We will use original Windows Server 2016 instalation iso in combination with &quot;answer file&quot;. To prepare and create answer file (<strong>autounattend.xml</strong>) we are using <strong>Windows System Image Manager (SIM)</strong> tool from <strong>Windows Assessment and Deployment Kit (ADK)</strong>. Preparation of the answer file should be done on Windows workstation or server. Answer file will be packed into .img file and mounted as additional drive in UCS vMedia Policy.</p>
-<h3 id="download-and-install-latest-windows-adk">Download and install latest Windows ADK</h3>
+<h2 id="download-and-install-latest-windows-adk">Download and install latest Windows ADK</h2>
 <p>Windows ADK can be downloaded from <a href="https://docs.microsoft.com/en-us/windows-hardware/get-started/adk-install" target="_blank">Microsoft website</a>.</p>
 <p><img src="../img/ADK download.png" alt="img"></p>
 <p>After ADK is downloaded we will start installation on the local machine. We just need to install Deployment Tools feature which consist Windows System Image Manager.</p>
 <p><img src="../img/ADK setup.png" alt="img"></p>
-<h3 id="creating-answer-file-autounattendxml">Creating &quot;answer file&quot; (autounattend.xml)</h3>
+<h2 id="creating-answer-file-autounattendxml">Creating &quot;answer file&quot; (autounattend.xml)</h2>
 <p>To be able to generate answer file, we need to copy content of Windows Server 2016 instalation image (.iso) to some folder on our workstation (or server). We can mount it to virtual optical drive, or extract it using archiver. In this example we are using <a href="https://www.microsoft.com/en-us/evalcenter/evaluate-windows-server-2016" target="_blank">Windows Server 2016 Evaluation</a> (14393.0.161119-1705.RS1_REFRESH_SERVER_EVAL_X64FRE_EN-US.ISO), and unpacking ith with archiver.</p>
 <p><img src="../img/ISO extraction.png" alt="img"></p>
+<p>We will not use extracted files after answer file creation, just original .iso image.</p>
 <p>After we have instalation files on our workstation, we will run Windows System Image Manager that we have installed in previous step.</p>
 <p><img src="../img/Run SIM.png" alt="img"></p>
 <p>In System Image Manager we have to import instalation image to create <strong>answer file</strong>.  </p>
@@ -734,7 +735,7 @@ File <strong>configureos.cmd</strong> will contain instruction to run powershell
 <p><img src="../img/configureos.png" alt="img"></p>
 <p>We are configuring <strong>AutoLogon</strong> under same section that will run 3 times to run a PowerShell script with additional setup that will need reboots. We also need to provide password under <strong>Password</strong> section (same that we have setup in earlier steps, in this example: Pa$$w0rd).</p>
 <p><img src="../img/autologon.png" alt="img"></p>
-<p>Now we have ready answer file, and we are going to save it as <strong>autounattend.xml</strong>. 
+<p>Now we have ready answer file, and we are going to save it as <strong>autounattend.xml</strong> in our working folder (stage). 
 <img src="../img/autounattend.png" alt="img"></p>
 <p>Our answer file now looks like this:</p>
 <pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
@@ -851,9 +852,80 @@ File <strong>configureos.cmd</strong> will contain instruction to run powershell
     &lt;cpi:offlineImage cpi:source=&quot;wim://vmware-host/shared%20folders/desktop/winserver2016_deploy/14393.0.161119-1705.rs1_refresh_server_eval_x64fre_en-us/sources/install.wim#Windows Server 2016 SERVERDATACENTER&quot; xmlns:cpi=&quot;urn:schemas-microsoft-com:cpi&quot; /&gt;
 &lt;/unattend&gt;
 </code></pre><p>You can use this file as a template, without need to do compleate procedure, just change values according to your preferred settings.</p>
+<h2 id="downloading-drivers">Downloading drivers</h2>
 <p>Next step is to <a href="https://software.cisco.com/download/home/283853163/type/283853158/release/3.2%25283a%2529" target="_blank">download UCS drivers for Windows</a> from Cisco, in this example we are installing UCS B-series servers, so we are downloading drivers for UCS B.</p>
 <p><img src="../img/UCS Drivers.png" alt="img"></p>
-
+<h2 id="packing-answer-file-and-drivers">Packing answer file and drivers</h2>
+<p>Create new folder named <strong>drivers</strong> in working folder. Copy and extract downloaded .iso file (we were using 7-zip here) into working folder.</p>
+<p><img src="../img/extract drivers.png" alt="img"></p>
+<p>Delete <strong>Video, release.txt, tag.txt and driver .iso</strong> file from <strong>drivers</strong> folder.</p>
+<p><img src="../img/delete video.png" alt="img"></p>
+<p>Go back to working folder, select <strong>drivers</strong> filder and <strong>autoattend.xml</strong> file and pack them to <strong>stage.zip</strong></p>
+<p><img src="../img/add to zip.png" alt="img"> </p>
+<p><a href="https://winscp.net/eng/download.php" target="_blank">Download</a> and install WinScp, and create new session to connect to Kubam server using SCP protocol. Open <strong>/root/kubam</strong> folder in right pane and our working folder (stage) in left pane.</p>
+<p><img src="../img/winscp.png" alt="img"></p>
+<p>Upload <strong>stage.zip</strong> to kubam server into <strong>/root/kubam</strong> folder (drag and drop).</p>
+<p><img src="../img/upload stage.png" alt="img"></p>
+<p>Log into kubam server and navigate to /root/kubam folder. There should be <strong>stage.zip</strong> file. Using bellow commands we will create <strong>win2016.img</strong> file containing drivers and answer file. </p>
+<pre><code>unzip -qq stage.zip
+rm -f stage.zip
+dd if=/dev/zero ibs=1024 count=300000 of=win2016.img
+mkfs -t fat win2016.img  
+mkdir mnt
+mount -o loop win2016.img mnt
+mv -t mnt autounattend.xml drivers
+umount mnt
+rm -Rf mnt
+</code></pre><p>After running commands, you should have similar output on kubam server.</p>
+<p><img src="../img/unpack_pack.png" alt="img"></p>
+<p>We will copy <strong>win2016.img</strong> back to our workstation.</p>
+<p><img src="../img/win2016img.png" alt="img"></p>
+<p>Next step is to copy created <strong>win2016.img</strong> and windows 2016 installation image (14393.0.161119-1705.RS1_REFRESH_SERVER_EVAL_X64FRE_EN-US.ISO) to network share wich will be available for UCS Manager. First we will rename .iso image to <strong>win_server_2016.iso</strong> for convenience. </p>
+<p><img src="../img/copytonas.png" alt="img"></p>
+<h2 id="add-installation-files-to-vmedia-policy">Add installation files to vMedia Policy</h2>
+<p>In UCS manager create Vmedia Policy and set it according to pictures bellow, pointing <strong>win_server_2016.iso</strong> and <strong>win2016.img</strong> to shared location.</p>
+<p><img src="../img/vMedia1.png" alt="img"></p>
+<p><img src="../img/vMedia2.png" alt="img"></p>
+<p><img src="../img/vMedia3.png" alt="img"></p>
+<p>Start server, open KVM, take popcorns and enjoj:). 
+Now you have Zero-Touch Windows 2016 installation for your servers!</p>
+<p><img src="../img/kvm.png" alt="img"></p>
+<p>And after few minutes you can log on with username (administrator) and password (Pa$$w0rd) set in <strong>autounattend.xml</strong> file. </p>
+<h1 id="windows-server-2012-r2">Windows Server 2012 R2</h1>
+<p>KUBAM requires that you stage an install image on an existing &apos;Stage&apos; Server.  The Stage server should be running the same version of Windows that you would like to install.  These instructions are for Windows Server 2012 R2 Datacenter.</p>
+<p>The stage server can be a virtual machine or physical machine.  If it is a physical machine it does not need to be running on Cisco hardware. </p>
+<p>The following should be performed on the Stage Server:</p>
+<h2 id="download-windows-adk">Download Windows ADK</h2>
+<p>The Windows Assessment and Deployment Kit (ADK) is required to build WinPE images that KUBAM can use.  <a href="">Download this from Microsoft</a>.</p>
+<p>Install using the default directory.</p>
+<p><img src="../img/adk.png" alt="img"></p>
+<p>We only require the two services to be installed:</p>
+<ul>
+<li>Deployment Tools</li>
+<li>Windows PE</li>
+</ul>
+<p><img src="../img/adk2.png" alt="img"></p>
+<p>While this installs about 3 GB, have a look at one of our <a href="http://www.opg-brlekovic.hr/" target="_blank">developers bee keeping websites</a>.  If you happen to be in Croatia you can order some honey.</p>
+<h2 id="download-cisco-drivers">Download Cisco Drivers</h2>
+<p>The latest Cisco device drivers can be downloaded from Cisco&apos;s Support site. URLs seem to change from time to time, but was last available <a href="https://software.cisco.com/download/home/283853163/type" target="_blank">here</a>. If that link is dead, go to <a href="https://cisco.com/support" target="_blank">https://cisco.com/support</a> and in the Downloads menu type <strong>UCS B-Series Blade Server Software</strong> the main Cisco Site, then download the drivers.  It seems to be a 1GB file.  </p>
+<p>Copy the Windows VNIC drivers to the Windows server. Put it in the <code>C:\Drivers</code> directory:</p>
+<pre><code>mkdir c:\drivers
+</code></pre><p>You should then have the VNIC drivers in this directory</p>
+<pre><code>enic6x64.cat
+enic6x64.inf
+enic6x64.sys
+</code></pre><h2 id="run-winkubambat">Run <code>winkubam.bat</code></h2>
+<p>With the two prereqs in place you are ready to generate the WinPE image that will be used for the boot process. </p>
+<h2 id="manually-creating-autoinstallation-files">Manually Creating Autoinstallation Files</h2>
+<p>UCS needs a hard drive image that includes the <code>autounattend.xml</code> file.  This image can be created using: </p>
+<pre><code>dd if=/dev/zero of=kube0${i}.img bs=1M count=1
+mkfs -t fat win.img
+mkdir tmpmnt
+mount -o loop win.img tmpmnt
+## copy files in
+umount tmpmnt
+rmdir tmpmnt
+</code></pre>
                                 
                                 </section>
                             
@@ -896,7 +968,7 @@ File <strong>configureos.cmd</strong> will contain instruction to run powershell
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Windows vMedia Method (WIP)","level":"3.3.7","depth":2,"next":{"title":"Windows vMedia/Network Method (WIP)","level":"3.3.8","depth":2,"path":"kubam/configure/windows2.md","ref":"kubam/configure/windows2.md","articles":[]},"previous":{"title":"Kickstart Templates","level":"3.3.6","depth":2,"path":"kubam/configure/template.md","ref":"kubam/configure/template.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"kubam/configure/windows.md","mtime":"2018-05-03T13:19:35.994Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-05-04T20:04:08.858Z"},"basePath":"../..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Windows vMedia Method (WIP)","level":"3.3.7","depth":2,"next":{"title":"Windows vMedia/Network Method (WIP)","level":"3.3.8","depth":2,"path":"kubam/configure/windows2.md","ref":"kubam/configure/windows2.md","articles":[]},"previous":{"title":"Kickstart Templates","level":"3.3.6","depth":2,"path":"kubam/configure/template.md","ref":"kubam/configure/template.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"kubam/configure/windows.md","mtime":"2018-05-10T12:40:39.083Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-05-10T12:40:59.691Z"},"basePath":"../..","book":{"language":""}});
         });
     </script>
 </div>
