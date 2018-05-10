@@ -437,7 +437,7 @@ Network parameters are clustered together that can then be added to a server.
     * Params:    list of all hosts
     
     ```
-    [
+     [
         {'name': 'kube01', 'ip': '172.20.30.1', 'os': 'centos7.4', 'role': 'generic', 'network_group': ''},
         {'name': 'kube02', 'ip': '172.20.30.2', 'os': 'centos7.4', 'role': 'k8s master', 'network_group': '', 'server_group': ''}
     ]
@@ -488,6 +488,11 @@ Deploy the boot media.
 * ```POST```
 
 Unique or all of them.  Allow multiple servers to be created.  If nothing is passed in, all servers will have boot images created for them. 
+
+
+```
+[ "host1", "host2", "host3", ...]
+```
 
 
 ### ```/api/v2/deploy/ucs```
