@@ -169,7 +169,9 @@ curl -X POST -H "Content-Type: application/json" \
 $KUBAM/api/v2/servers
 ```
 
-## 3. Add SSH Keys
+## 3. Settings 
+
+### 3.1 SSH Keys
 
 We want to keep access to our servers secure.  Therefore we disable passwords and use SSH keys. We add a list of SSH keys with KUBAM that have access to the servers. This can be done by createing a file: ```ssh-keys.json``` and having the contents look like:  
 
@@ -192,6 +194,14 @@ To see that the keys are there you can run:
 curl $KUBAM/api/v1/keys
 ```
 Then the keys will all be returned. 
+
+### 3.2 KUBAM IP
+
+The servers need to know where they should get their install images from.  Typically this is the same IP address of the KUBAM server, but you might be able to host the files elsewhere and change this IP.  We will use the KUBAM IP address: 
+
+```
+curl -X POST -d '{ "kubam_ip": "10.93.234.96" }' -H "Content-Type: applicaton/json" $KUBAM/api/v1/ip
+```
 
 ## 4. Add Networking Details
 

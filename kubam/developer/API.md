@@ -38,21 +38,26 @@ KUBAM stores values for UCS logins inside the ```kubam.yaml``` This API just off
 
 ## Settings
 
-### ```/api/v1/settings```
-
-* ```POST```
-
 ### ```/api/v1/ip```
 
+Set the IP address of the boot server.  Usually this is just the KUBAM server. This is so the nodes where to get install media when they boot up.  KUBAM also uses this to set the vmedia policy to connect to this IP address. 
+
+* ```POST```
+	* Example
+	
+	```
+	curl -X POST -d '{ "kubam_ip": "10.93.234.96" }' -H "Content-Type: applicaton/json" $KUBAM/api/v1/ip
+	```
+
+
+### ```/api/v1/org``` - Depreciated, org is put in the server group
+
 * ```GET```
 * ```POST```
 
-### ```/api/v1/org```
 
-* ```GET```
-* ```POST```
 
-### ```/api/v1/proxy```
+### ```/api/v1/proxy``` - Depreciated, proxy in network group
 
 * ```GET```
 * ```POST```
@@ -345,7 +350,7 @@ KUBAM stores values for UCS logins inside the ```kubam.yaml``` This API just off
    ```curl $KUBAM_API/api/v2/servers```
 	
 	
-* ```POST``` - Create a new UCS Domain
+* ```POST``` - Create a new Server group
 	* Params: 
 	```
 	{"name", "ucs01", "type" : "ucsm", "credentials" : {"user": "admin", "password" : "secret-password", "ip" : "172.28.225.163" }}

@@ -768,7 +768,8 @@ $KUBAM/api/v2/servers
 <pre><code>curl -X POST -H &quot;Content-Type: application/json&quot; \
  -d &quot;@./c-series1.json \
 $KUBAM/api/v2/servers
-</code></pre><h2 id="3-add-ssh-keys">3. Add SSH Keys</h2>
+</code></pre><h2 id="3-settings">3. Settings</h2>
+<h3 id="31-ssh-keys">3.1 SSH Keys</h3>
 <p>We want to keep access to our servers secure.  Therefore we disable passwords and use SSH keys. We add a list of SSH keys with KUBAM that have access to the servers. This can be done by createing a file: <code>ssh-keys.json</code> and having the contents look like:  </p>
 <pre><code class="lang-json">{<span class="hljs-string">&quot;keys&quot;</span> : [
     <span class="hljs-string">&quot;ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCc/7HrOIZB2wk8FvmZXzLMS1ZJ8TvS9OWBf5xosp59NRvcAbwbclLRD2f9z5KvOF1n5a4mK03OetymTQQX08rBpZJZ5ZWztdjiFjIce6rm7V87CRjeuwa97XyhacKx98QcijOJWBbLf1TE/cRd8KVopfG/RPZeMMx1n3J071QRiVhbHEzVw3xuY4KruIb/2kLGHEyYqtx//y8c3k6UaMF180nOIaq6WBZVHnpYXZZ+EkolpJ+10objpueuWPcJe4OU7AIRP1JGsaDHrmXNoy9ygeWceSqOIqRLOdPneHtC6xU78t3ttpnRdC9OgtawIVqaq0wpvd7G0sQ7Jv2DO2hZ&quot;</span>, 
@@ -780,7 +781,10 @@ $KUBAM/api/v2/servers
 </code></pre><p>To see that the keys are there you can run: </p>
 <pre><code>curl $KUBAM/api/v1/keys
 </code></pre><p>Then the keys will all be returned. </p>
-<h2 id="4-add-networking-details">4. Add Networking Details</h2>
+<h3 id="32-kubam-ip">3.2 KUBAM IP</h3>
+<p>The servers need to know where they should get their install images from.  Typically this is the same IP address of the KUBAM server, but you might be able to host the files elsewhere and change this IP.  We will use the KUBAM IP address: </p>
+<pre><code>curl -X POST -d &apos;{ &quot;kubam_ip&quot;: &quot;10.93.234.96&quot; }&apos; -H &quot;Content-Type: applicaton/json&quot; $KUBAM/api/v1/ip
+</code></pre><h2 id="4-add-networking-details">4. Add Networking Details</h2>
 <p>Each host when installed needs a network configured.  Many hosts will share the same networking constructs such as gateway, DNS, subnet, etc.  To make mapping common network constructs to hosts and to avoid repitition KUBAM uses the idea of a &quot;Network Group&quot;.  The network group just contains common networking characteristics that a host would use.  A network group can be mapped to multiple hosts but a host can only map to one network group. </p>
 <p>To add a network group create a file with the network group characteristics called <code>netgrp1.json</code>.  The contents will be: </p>
 <pre><code>{
@@ -924,7 +928,7 @@ $KUBAM/api/v2/servers
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"KUBAM API Walkthrough","level":"3.5.2","depth":2,"next":{"title":"KUBAM YAML","level":"3.5.3","depth":2,"path":"kubam/developer/YAML.md","ref":"kubam/developer/YAML.md","articles":[]},"previous":{"title":"KUBAM API","level":"3.5.1","depth":2,"path":"kubam/developer/API.md","ref":"kubam/developer/API.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"kubam/developer/APIGUIDE.md","mtime":"2018-05-10T12:40:23.050Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-05-10T13:26:23.741Z"},"basePath":"../..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"KUBAM API Walkthrough","level":"3.5.2","depth":2,"next":{"title":"KUBAM YAML","level":"3.5.3","depth":2,"path":"kubam/developer/YAML.md","ref":"kubam/developer/YAML.md","articles":[]},"previous":{"title":"KUBAM API","level":"3.5.1","depth":2,"path":"kubam/developer/API.md","ref":"kubam/developer/API.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"kubam/developer/APIGUIDE.md","mtime":"2018-05-11T12:09:27.690Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-05-11T12:09:58.497Z"},"basePath":"../..","book":{"language":""}});
         });
     </script>
 </div>
