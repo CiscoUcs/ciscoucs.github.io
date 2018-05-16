@@ -862,7 +862,9 @@ $KUBAM/api/v2/servers
 <li>Hostnames need to match the service profile name or the vMedia policy will not work. </li>
 <li>Hosts in the same <code>server_group</code> must use the same Operating system.  You can&apos;t install <code>esxi6.5</code> and <code>centos7.4</code> in the same server group.  Only one can be selected. </li>
 </ul>
-<h2 id="6-installation-image-creation">6. Installation image creation</h2>
+<p>Call this to add the hosts: </p>
+<pre><code>curl -X POST -d &quot;@./hosts.json&quot; $KUBAM/api/v2/hosts
+</code></pre><h2 id="6-installation-image-creation">6. Installation image creation</h2>
 <p>With all the parameters we are now set to deploy the boot images.  Creating the boot images usually comprises of the following steps that KUBAM performs for you: </p>
 <ul>
 <li>Extracts the ISO image for use of the OS installation in the ~/kubam directory. </li>
@@ -883,7 +885,7 @@ $KUBAM/api/v2/servers
 </code></pre><p>Each time this is done the <code>&lt;host&gt;.img</code> file will always be rewritten.  If the boot image and ISO image already exists it will not be changed.  You would have to delete them if you wanted them to be regenerated. </p>
 <h2 id="7-ucs-deployment">7. UCS Deployment</h2>
 <p>If at this point the images are created we can now deploy the UCS resources.  This is done with </p>
-<pre><code>curl -X POST $KUBAM/api/v2/deploy/ucs
+<pre><code>curl -X POST $KUBAM/api/v2/deploy/u
 </code></pre><p>You can include arguments </p>
 
                                 
@@ -928,7 +930,7 @@ $KUBAM/api/v2/servers
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"KUBAM API Walkthrough","level":"3.5.2","depth":2,"next":{"title":"KUBAM YAML","level":"3.5.3","depth":2,"path":"kubam/developer/YAML.md","ref":"kubam/developer/YAML.md","articles":[]},"previous":{"title":"KUBAM API","level":"3.5.1","depth":2,"path":"kubam/developer/API.md","ref":"kubam/developer/API.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"kubam/developer/APIGUIDE.md","mtime":"2018-05-11T12:09:27.690Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-05-11T12:09:58.497Z"},"basePath":"../..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"KUBAM API Walkthrough","level":"3.5.2","depth":2,"next":{"title":"KUBAM YAML","level":"3.5.3","depth":2,"path":"kubam/developer/YAML.md","ref":"kubam/developer/YAML.md","articles":[]},"previous":{"title":"KUBAM API","level":"3.5.1","depth":2,"path":"kubam/developer/API.md","ref":"kubam/developer/API.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"kubam/developer/APIGUIDE.md","mtime":"2018-05-14T13:36:16.269Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-05-16T09:24:56.618Z"},"basePath":"../..","book":{"language":""}});
         });
     </script>
 </div>

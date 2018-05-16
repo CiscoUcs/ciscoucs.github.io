@@ -658,111 +658,11 @@
                                 <section class="normal markdown-section">
                                 
                                 <h1 id="kubam-yaml-file">KUBAM YAML file</h1>
-<h2 id="version-1-current">Version 1 (current)</h2>
 <p>KUBAM stores everything in YAML file.  The file is created in <code>~/kubam/kubam.yaml</code>.  We show the parts of the YAML file as well as a description of the fields, then at the end show a full example. </p>
-<h3 id="hosts">hosts</h3>
-<pre><code>hosts:
-- ip: &lt;ipaddress&gt;
-  name: &lt;hostname / service profile name
-  os: &lt;operating system&gt;
-  role: {k8s master, &apos;&apos;, k8s node}
-</code></pre><p>Each host is an item in the host list.  It is important to note that the <code>name</code> will be the hostname and the service profile name.  You should not use a fully qualified domain name (FQDN) for the name.  KUBAM requires that the hostname = service profile name. </p>
-<h3 id="iso-map">iso map</h3>
-<pre><code>iso_map:
-- file: &lt;file directory&gt;
-  os: &lt;os name&gt;
-</code></pre><p>The ISO map maps the iso file name to the operating system that KUBAM expects it to be.  When images are created, KUBAM extracts the file to a <code>/kubam/tmp/</code> directory then moves it to the <code>/kubam/&lt;os&gt;</code> directory after making sure everything checks out.  </p>
-<p>Notice that the container mounts the <code>~/kubam</code> directory to the <code>/kubam</code> directory.  That is why you should reference your iso image file in the <code>/kubam</code> directory.  </p>
 <h3 id="kubam-ip">kubam IP</h3>
+<p>We need the IP address of where the images are hosted.  This is usually the same IP address of the KUBAM server but could be another server where these images are stored. (Although this hasn&apos;t been tested)</p>
 <pre><code>kubam_ip: &lt;kubam_ip&gt;
-</code></pre><p>This should be the IP address of the KUBAM VM/server. </p>
-<h3 id="network">network</h3>
-<pre><code>network:
-  gateway: &lt;ip&gt;
-  nameserver: &lt;ip&gt;
-  netmask: &lt;netmask: e.g: 255.255.255.0&gt;
-  ntpserver: &lt;ip&gt;
-</code></pre><p>These parameters are applied to all servers in kubam. KUBAM v1 doesn&apos;t support installing nodes on different networks... yet. </p>
-<h3 id="proxy">proxy</h3>
-<pre><code>proxy: &lt;ip, url, etc. E.g: http://173.36.224.109:80&gt;
-</code></pre><p>Use this only if you are behind a firewall that requires an http proxy to get out to the public network. </p>
-<h3 id="public-keys">Public Keys</h3>
-<pre><code>- &lt;key1&gt;
-- &lt;key2&gt;
-- ...
-</code></pre><p>KUBAM wants you to log in using keypairs and no passwords. An example key would be: </p>
-<pre><code>ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCc/7HrOIZB2wk8FvmZXzLMS1ZJ8TvS9OWBf5xosp59NRvcAbwbclLRD2f9z5KvOF1n5a4mK03OetymTQQX08rBpZJZ5ZWztdjiFjIce6rm7V87CRjeuwa97XyhacKx98QcijOJWBbLf1TE/cRd8KVopfG/RPZeMMx1n3J071QRiVhbHEzVw3xuY4KruIb/2kLGHEyYqtx//y8c3k6UaMF180nOIaq6WBZVHnpYXZZ+EkolpJ+10objpueuWPcJe4OU7AIRP1JGsaDHrmXNoy9ygeWceSqOIqRLOdPneHtC6xU78t3ttpnRdC9OgtawIVqaq0wpvd7G0sQ7Jv2DO2hZ
-</code></pre><h3 id="ucs-settings">UCS Settings</h3>
-<pre><code>ucsm:
-  credentials:
-    ip: &lt;ip address or hostname&gt;
-    password: &lt;password&gt;
-    user: &lt;admin&gt;
-  org: &lt;org name&gt;
-  ucs_network:
-    vlan: &lt;vlan name&gt;
-  ucs_server_pool:
-    blades:
-    - &lt;chassis-number&gt;/&lt;blade slot&gt;
-    - ...
-    rack_servers:
-    - &apos;&lt;server number&gt;&apos;
-</code></pre><p>The settings define how to contact a particular UCS as well as what blades and rack mount servers are defined.</p>
-<h3 id="full-example">Full Example</h3>
-<pre><code class="lang-yaml"><span class="hljs-attr">hosts:</span>
-<span class="hljs-attr">- ip:</span> <span class="hljs-number">172.28</span><span class="hljs-number">.225</span><span class="hljs-number">.130</span>
-<span class="hljs-attr">  name:</span> kube01
-<span class="hljs-attr">  os:</span> centos7<span class="hljs-number">.4</span>
-<span class="hljs-attr">  role:</span> k8s master
-<span class="hljs-attr">- ip:</span> <span class="hljs-number">172.28</span><span class="hljs-number">.225</span><span class="hljs-number">.131</span>
-<span class="hljs-attr">  name:</span> kube02
-<span class="hljs-attr">  os:</span> centos7<span class="hljs-number">.4</span>
-<span class="hljs-attr">  role:</span> k8s node
-<span class="hljs-attr">- ip:</span> <span class="hljs-number">172.28</span><span class="hljs-number">.225</span><span class="hljs-number">.132</span>
-<span class="hljs-attr">  name:</span> kube03
-<span class="hljs-attr">  os:</span> centos7<span class="hljs-number">.4</span>
-<span class="hljs-attr">  role:</span> k8s node
-<span class="hljs-attr">- ip:</span> <span class="hljs-number">172.28</span><span class="hljs-number">.225</span><span class="hljs-number">.133</span>
-<span class="hljs-attr">  name:</span> kubam-test
-<span class="hljs-attr">  os:</span> centos7<span class="hljs-number">.4</span>
-<span class="hljs-attr">  role:</span> <span class="hljs-string">&apos;&apos;</span>
-<span class="hljs-attr">- ip:</span> <span class="hljs-number">172.28</span><span class="hljs-number">.225</span><span class="hljs-number">.134</span>
-<span class="hljs-attr">  name:</span> kubam-test2
-<span class="hljs-attr">  os:</span> centos7<span class="hljs-number">.4</span>
-<span class="hljs-attr">  role:</span> <span class="hljs-string">&apos;&apos;</span>
-<span class="hljs-attr">iso_map:</span>
-<span class="hljs-attr">- file:</span> /kubam/CentOS<span class="hljs-bullet">-7</span>-x86_64-Minimal<span class="hljs-bullet">-1708.</span>iso
-<span class="hljs-attr">  os:</span> centos7<span class="hljs-number">.4</span>
-<span class="hljs-attr">kubam_ip:</span> <span class="hljs-number">172.28</span><span class="hljs-number">.225</span><span class="hljs-number">.135</span>
-<span class="hljs-attr">network:</span>
-<span class="hljs-attr">  gateway:</span> <span class="hljs-number">172.28</span><span class="hljs-number">.224</span><span class="hljs-number">.1</span>
-<span class="hljs-attr">  nameserver:</span> <span class="hljs-number">171.70</span><span class="hljs-number">.168</span><span class="hljs-number">.183</span>
-<span class="hljs-attr">  netmask:</span> <span class="hljs-number">255.255</span><span class="hljs-number">.254</span><span class="hljs-number">.0</span>
-<span class="hljs-attr">  ntpserver:</span> <span class="hljs-number">72.163</span><span class="hljs-number">.32</span><span class="hljs-number">.44</span>
-<span class="hljs-attr">proxy:</span> http://<span class="hljs-number">173.36</span><span class="hljs-number">.224</span><span class="hljs-number">.109</span>:<span class="hljs-number">80</span>
-<span class="hljs-attr">public_keys:</span>
-<span class="hljs-bullet">-</span> ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCc/<span class="hljs-number">7</span>HrOIZB2wk8FvmZXzLMS1ZJ8TvS9OWBf5xosp59NRvcAbwbclLRD2f9z5KvOF1n5a4mK03OetymTQQX08rBpZJZ5ZWztdjiFjIce6rm7V87CRjeuwa97XyhacKx98QcijOJWBbLf1TE/cRd8KVopfG/RPZeMMx1n3J071QRiVhbHEzVw3xuY4KruIb/<span class="hljs-number">2</span>kLGHEyYqtx//y8c3k6UaMF180nOIaq6WBZVHnpYXZZ+EkolpJ+<span class="hljs-number">10</span>objpueuWPcJe4OU7AIRP1JGsaDHrmXNoy9ygeWceSqOIqRLOdPneHtC6xU78t3ttpnRdC9OgtawIVqaq0wpvd7G0sQ7Jv2DO2hZ
-<span class="hljs-attr">ucsm:</span>
-<span class="hljs-attr">  credentials:</span>
-<span class="hljs-attr">    ip:</span> <span class="hljs-number">172.28</span><span class="hljs-number">.225</span><span class="hljs-number">.163</span>
-<span class="hljs-attr">    password:</span> secret-password
-<span class="hljs-attr">    user:</span> admin
-<span class="hljs-attr">  org:</span> root
-<span class="hljs-attr">  ucs_network:</span>
-<span class="hljs-attr">    vlan:</span> default
-<span class="hljs-attr">  ucs_server_pool:</span>
-<span class="hljs-attr">    blades:</span>
-<span class="hljs-bullet">    -</span> <span class="hljs-number">1</span>/<span class="hljs-number">1</span>
-<span class="hljs-bullet">    -</span> <span class="hljs-number">1</span>/<span class="hljs-number">3</span>
-<span class="hljs-bullet">    -</span> <span class="hljs-number">1</span>/<span class="hljs-number">5</span>
-<span class="hljs-bullet">    -</span> <span class="hljs-number">1</span>/<span class="hljs-number">7</span>
-<span class="hljs-attr">    rack_servers:</span>
-<span class="hljs-bullet">    -</span> <span class="hljs-string">&apos;7&apos;</span>
-</code></pre>
-<p>Notice in kubam v1 the password is stored in plain text.  This is clearly a bad idea. </p>
-<h2 id="version-2-proposed">Version 2 (Proposed)</h2>
-<p>KUBAM stores everything in YAML file.  The file is created in <code>~/kubam/kubam.yaml</code>.  We show the parts of the YAML file as well as a description of the fields, then at the end show a full example. </p>
-<h3 id="hosts">hosts</h3>
+</code></pre><h3 id="hosts">hosts</h3>
 <pre><code>hosts:
 - name: &lt;required, unique: hostname / service profile name&gt;
   ip: &lt;required: ipaddress&gt;
@@ -770,9 +670,13 @@
   role: required: {k8s master, &apos;&apos;, k8s node}
   network_group: &lt;required: net group&gt;
   server_group: &lt;optional: server group&gt;
+  service_profile_template: &lt;UCS profile template name&gt;
 </code></pre><p>Stores the list of hosts.</p>
 <p>Name should be unique. Name, ip address, os, role and network_group are required field.
 OS specifies what roles host can have.</p>
+<ul>
+<li><code>service_profile_template</code>: If you want kubam to create a new service profile from this template it will do so instead of creating a whole bunch of new resources. </li>
+</ul>
 <h3 id="iso-map">iso map</h3>
 <pre><code>iso_map:
 - file: &lt;file directory|url&gt;
@@ -786,9 +690,6 @@ OS specifies what roles host can have.</p>
 <li><code>iso_dir</code> - Exploded directory used for installation so as to not host on the kubam server</li>
 <li><code>iso_boot</code> - If you take the kubam generated iso image and want it hosted elsewhere. </li>
 </ul>
-<h3 id="kubam-ip">kubam IP</h3>
-<pre><code>kubam_ip: &lt;kubam_ip&gt;
-</code></pre><p>This should be the IP address of the KUBAM VM/server.</p>
 <h3 id="network-group">Network Group</h3>
 <pre><code>network_groups:
 - id: &lt;guid&gt;
@@ -894,7 +795,7 @@ Each network should specify whether an ACI network is used or </li>
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"KUBAM YAML","level":"3.5.3","depth":2,"previous":{"title":"KUBAM API Walkthrough","level":"3.5.2","depth":2,"path":"kubam/developer/APIGUIDE.md","ref":"kubam/developer/APIGUIDE.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"kubam/developer/YAML.md","mtime":"2018-04-26T13:36:52.597Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-05-11T12:09:58.497Z"},"basePath":"../..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"KUBAM YAML","level":"3.5.3","depth":2,"previous":{"title":"KUBAM API Walkthrough","level":"3.5.2","depth":2,"path":"kubam/developer/APIGUIDE.md","ref":"kubam/developer/APIGUIDE.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"kubam/developer/YAML.md","mtime":"2018-05-16T09:23:43.062Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-05-16T09:24:56.618Z"},"basePath":"../..","book":{"language":""}});
         });
     </script>
 </div>

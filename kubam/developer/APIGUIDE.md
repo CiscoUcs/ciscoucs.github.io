@@ -305,6 +305,13 @@ We now come to the main event where we specify what hosts we will deploy.  We cr
 * Hostnames need to match the service profile name or the vMedia policy will not work. 
 * Hosts in the same ```server_group``` must use the same Operating system.  You can't install ```esxi6.5``` and ```centos7.4``` in the same server group.  Only one can be selected. 
 
+Call this to add the hosts: 
+
+```
+curl -X POST -d "@./hosts.json" $KUBAM/api/v2/hosts
+```
+
+
 
 ## 6. Installation image creation
 
@@ -338,7 +345,7 @@ Each time this is done the ```<host>.img``` file will always be rewritten.  If t
 If at this point the images are created we can now deploy the UCS resources.  This is done with 
 
 ```
-curl -X POST $KUBAM/api/v2/deploy/ucs
+curl -X POST $KUBAM/api/v2/deploy/u
 ```
 
 You can include arguments 
