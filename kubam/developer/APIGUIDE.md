@@ -279,27 +279,28 @@ We now come to the main event where we specify what hosts we will deploy.  We cr
       "ip": "172.28.225.130",
       "os": "centos7.4",
       "role": "generic",
-      "network_group": "60b25585-c1ff-4ff5-947a-9f171bd6ed38",
-      "server_group": "4c1cb152-08c0-4c5f-9c83-e0baf6acca4d"
+      "network_group": "net01",
+      "server_group": "kube-group1",
+      "service_profile_template": "org-root/ls-myprofile"
     },
     {
       "name": "kubam02",
       "ip": "172.28.225.131",
       "os": "esxi6.5",
       "role": "generic",
-      "network_group": "60b25585-c1ff-4ff5-947a-9f171bd6ed38"
+      "network_group": "net01"
     },
     {
       "name": "kubam03",
       "ip": "172.28.225.132",
       "os": "win2016",
       "role": "generic",
-      "network_group": "60b25585-c1ff-4ff5-947a-9f171bd6ed38"
+      "network_group": "net01"
     }
 ]
 ```
 
-* The ```network_group``` and ```server_group``` will need to match the ```id``` of those groups. 
+* The ```network_group``` and ```server_group``` will need to match the ```name``` of those groups. 
 * ```os``` and ```roles``` will need to be defined from the ```/api/v1/catalog```
 * The ```network_group``` __is required__ the ```server_group``` however is not required and can be omitted if you want to add the boot images yourself. 
 * Hostnames need to match the service profile name or the vMedia policy will not work. 
@@ -345,10 +346,19 @@ Each time this is done the ```<host>.img``` file will always be rewritten.  If t
 If at this point the images are created we can now deploy the UCS resources.  This is done with 
 
 ```
-curl -X POST $KUBAM/api/v2/deploy/u
+curl -X POST $KUBAM/api/v2/servers/<server_group_name>/deploy
 ```
 
-You can include arguments 
+* If the host has a ```service_profile_template``` created we will create a new service profile based on that template. If there is also a node associated: ```1/3``` then we will bind to that blade.
+* If there is no  ```service_profile_template``` or host associated, we will make a service profile template called ```KUBAM_<os>``` and then put the servers in a pool and map the blades. (This is the behavior similar to how version 1 of KUBAM worked) 
+
+
+```
+curl -X POST $KUBAM/api/v2/servers/<server_group_name>/vmedia
+```
+
+* Deploy ONLY the vmedia policy of the nodes in this server group. 
+ 
 
 
 

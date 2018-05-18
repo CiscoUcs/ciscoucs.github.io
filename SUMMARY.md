@@ -16,6 +16,7 @@
 
 ### KUBAM
 * [KUBAM Overview](kubam/README.md)
+* [Release Notes](kubam/REALEASE.md)
 * [Installation](kubam/installation/README.md)
 	* [Standard CentOS/RedHat Installation](kubam/installation/standard.md)
 	* [Standard Ubuntu Installation](kubam/installation/ubuntu.md)

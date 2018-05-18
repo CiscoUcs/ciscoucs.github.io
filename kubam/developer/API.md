@@ -218,8 +218,8 @@ KUBAM stores values for UCS logins inside the ```kubam.yaml``` This API just off
 	
 * ```PUT``` - Update an existing UCS Domain.  You need to include the UUID of the Domain. Otherwise its the same action as ```POST```. 
 * ```DELETE``` - Delete the UCS / CIMC Server Group.  
-	* Parameters: ```{"id" : "asdfbasdf..."}```
-	* Example: ```curl -X DELETE -H "Content-Type: application/json"  -d '{"id" : "04320631-191c-46f5-a105-a6077661e085"}' $KUBAM_API/api/v2/servers```
+	* Parameters: ```{"name" : "asdfbasdf..."}```
+	* Example: ```curl -X DELETE -H "Content-Type: application/json"  -d '{"name" : "net1"}' $KUBAM_API/api/v2/servers```
 
 
 ## ACI
@@ -239,7 +239,7 @@ KUBAM stores values for UCS logins inside the ```kubam.yaml``` This API just off
 
 * ```DELETE```: Delete an existing ACI group
 	* Params: ```{"id": "acigroupid"}```
-	* Example ```curl -X DELETE -H "Content-Type: application/json" -d '{"id": "blahblah"} $KUBAM_API/api/v2/aci```
+	* Example ```curl -X DELETE -H "Content-Type: application/json" -d '{"name": "blahblah"} $KUBAM_API/api/v2/aci```
 
 
 
@@ -284,7 +284,7 @@ Network parameters are clustered together that can then be added to a server.
 	{ "id": "1234-1234-1234-1234" , "name": "newName", "netmask" : "255.255.255.0", "nameserver" : "208.67.222.222", "ntpserver" : "ntp.esl.cisco.com", "proxy": "http://proxy.esl.cisco.com:80", "vlan" : "30" }
 	```
 * ```DELETE```: Delete existing Network group
-	* Params: ```'{"id": "somenetworkid..." }'```
+	* Params: ```'{"name": "somenetworkname..." }'```
 	* Errors:  You should get an error if a network group is already in use by one or most hosts. 
 
 ## Hosts

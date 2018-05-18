@@ -3,15 +3,15 @@
 This standard installation covers installing KUBAM on CentOS or RedHat.  We show how to install Docker and then KUBAM.  Do the following: 
 
 
-## 1. Disable SELinux
+## 1. SELinux
 
-SELinux is not supported. Please disable it.  To check that is disabled run
+KUBAM supports SELinux! To check that is enabled/disabled run
 
 ```
 getenforce
 ```
 
-If you get back something that says anything but ```disabled``` you lose.  If you want to start winning again do this: 
+If you want it to be ```disabled``` 
 
 Edit ```/etc/sysconfig/selinux``` and set the file to look like:
 
@@ -31,8 +31,19 @@ SELINUXTYPE=targeted
 ```
 Notice that ```SELINUX=disabled``` is set.  Once this is done you need to reboot the node!
 
+### 1.1 Issues with SELinux
+
+You may notice issues if you try to use symbolic links with the KUBAM directory.  
+
+When downloading the ```docker-compose.yaml``` file in the upcoming steps you may need to modify the ```kubam``` directory to make sure that it is not using at symbolic link. If you need to use symbolic links you have two options: 
+
+1. Change the docker-compose file to point to the real directory
+2. Disable SELinux
+
 ## 2. Remove older files
-We like to use the latest docker binaries.  Please remove the older ones that may be packaged with the operating system. 
+We recommend Docker > 1.12.6  
+
+If you have someting older you can install them as follows:
 
 #### CentOS 7
 ```
