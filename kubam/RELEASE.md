@@ -1,6 +1,6 @@
 # Release Notes
 
-## KUBAM 2.0 - Targetted (6/11/2018)
+## KUBAM 2.0 - Targeted (6/11/2018)
 
 * New OS support: 
 	* Windows 2012 R2
@@ -13,8 +13,13 @@
 * Bug fixes.
 * Support for SELinux
 
+* Kubernetes 1.10 
+	* Contiv VPP
+	* ACI CNI Plugins
+	* Slim Kernal KUBAM image
 
-## KUBAM 1.0 - Novenber 2017
+
+## KUBAM 1.0 - Released November 2017
 
 * OS Support:
 	* Centos7.2/7.3/7.4
