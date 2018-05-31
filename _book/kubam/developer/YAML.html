@@ -237,9 +237,9 @@
             
         </li>
     
-        <li class="chapter " data-level="3.2" data-path="../REALEASE.md">
+        <li class="chapter " data-level="3.2" data-path="../RELEASE.html">
             
-                <span>
+                <a href="../RELEASE.html">
             
                     
                     Release Notes
@@ -290,33 +290,7 @@
             
         </li>
     
-        <li class="chapter " data-level="3.3.3" data-path="../installation/source.html">
-            
-                <a href="../installation/source.html">
-            
-                    
-                    VM based Installation
-            
-                </a>
-            
-
-            
-        </li>
-    
-        <li class="chapter " data-level="3.3.4" data-path="../installation/security.html">
-            
-                <a href="../installation/security.html">
-            
-                    
-                    Security
-            
-                </a>
-            
-
-            
-        </li>
-    
-        <li class="chapter " data-level="3.3.5" data-path="../installation/network.html">
+        <li class="chapter " data-level="3.3.3" data-path="../installation/network.html">
             
                 <a href="../installation/network.html">
             
@@ -329,7 +303,7 @@
             
         </li>
     
-        <li class="chapter " data-level="3.3.6" data-path="../installation/other.html">
+        <li class="chapter " data-level="3.3.4" data-path="../installation/other.html">
             
                 <a href="../installation/other.html">
             
@@ -684,11 +658,18 @@
   network_group: &lt;required: net group&gt;
   server_group: &lt;optional: server group&gt;
   service_profile_template: &lt;UCS profile template name&gt;
+  server: &lt;optional: server group required&gt;
 </code></pre><p>Stores the list of hosts.</p>
 <p>Name should be unique. Name, ip address, os, role and network_group are required field.
 OS specifies what roles host can have.</p>
 <ul>
 <li><code>service_profile_template</code>: If you want kubam to create a new service profile from this template it will do so instead of creating a whole bunch of new resources. </li>
+<li><code>server</code>: You must have a <code>server_group</code> defined.  If this field is defined with a server like: <code>1/1</code> or <code>2</code> it will try to associate the server with it. <ul>
+<li>For blades the format should be <code>c/b</code> where <code>c</code> is the chassis id and <code>b</code> is the blade slot id.</li>
+<li>For rack mount servers it should be <code>x</code> where <code>x</code> is the server ID as depicted by UCS Manager. </li>
+<li>If no server group is defined this field is invalid. </li>
+</ul>
+</li>
 </ul>
 <h3 id="iso-map">iso map</h3>
 <pre><code>iso_map:
@@ -808,7 +789,7 @@ Each network should specify whether an ACI network is used or </li>
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"KUBAM YAML","level":"3.6.3","depth":2,"previous":{"title":"KUBAM API Walkthrough","level":"3.6.2","depth":2,"path":"kubam/developer/APIGUIDE.md","ref":"kubam/developer/APIGUIDE.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"kubam/developer/YAML.md","mtime":"2018-05-16T09:23:43.062Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-05-18T12:22:46.101Z"},"basePath":"../..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"KUBAM YAML","level":"3.6.3","depth":2,"previous":{"title":"KUBAM API Walkthrough","level":"3.6.2","depth":2,"path":"kubam/developer/APIGUIDE.md","ref":"kubam/developer/APIGUIDE.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"kubam/developer/YAML.md","mtime":"2018-05-25T20:04:31.153Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-05-31T02:42:21.112Z"},"basePath":"../..","book":{"language":""}});
         });
     </script>
 </div>

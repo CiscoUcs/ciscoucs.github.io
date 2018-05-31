@@ -11,3 +11,14 @@
 * UCS Central Support - Deploy with UCS Central
 * IMC Server Support - Deploy C series servers
 * Bug fixes.
+* Support for SELinux
+
+
+## KUBAM 1.0 - Novenber 2017
+
+* OS Support:
+	* Centos7.2/7.3/7.4
+	* RedHat7.2/7.3/7.4
+	* ESXi 6.0/6.5
+* Kubernetes 1.9.1
+	* Contiv 1.7

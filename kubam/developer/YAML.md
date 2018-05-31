@@ -22,6 +22,7 @@ hosts:
   network_group: <required: net group>
   server_group: <optional: server group>
   service_profile_template: <UCS profile template name>
+  server: <optional: server group required>
 ```
 
 Stores the list of hosts.
@@ -30,6 +31,10 @@ Name should be unique. Name, ip address, os, role and network_group are required
 OS specifies what roles host can have.
 
 * ```service_profile_template```: If you want kubam to create a new service profile from this template it will do so instead of creating a whole bunch of new resources. 
+* ```server```: You must have a ```server_group``` defined.  If this field is defined with a server like: ```1/1``` or ```2``` it will try to associate the server with it. 
+	* For blades the format should be ```c/b``` where ```c``` is the chassis id and ```b``` is the blade slot id.
+	* For rack mount servers it should be ```x``` where ```x``` is the server ID as depicted by UCS Manager. 
+	* If no server group is defined this field is invalid. 
 
 ### iso map
 
