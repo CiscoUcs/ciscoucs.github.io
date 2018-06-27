@@ -859,6 +859,26 @@
 </ul>
 </li>
 </ul>
+<h3 id="apiv2serversservergrouppowerpower-action"><code>api/v2/servers/&lt;server_group&gt;/power/&lt;power-action&gt;</code></h3>
+<p>These methods change the power cycle of the server</p>
+<ul>
+<li><p><code>PUT</code> - change the power cycle of a server.  The methods that are allowed are: </p>
+<ul>
+<li><code>on</code></li>
+<li><code>off</code></li>
+<li><code>hardreset</code></li>
+<li><p><code>softreset</code></p>
+</li>
+<li><p>Example: </p>
+<pre><code>curl -X PUT -d &apos;{&quot;blades&quot; : [&quot;1/1&quot;]}&apos; -H &quot;Content-Type: application/json&quot; localhost/api/v2/servers/kube-group1/power/off
+</code></pre></li>
+</ul>
+</li>
+</ul>
+<h3 id="apiv2serversservergrouppowerstat"><code>api/v2/servers/&lt;server_group&gt;/powerstat</code></h3>
+<ul>
+<li><code>GET</code> - Returns the power status of a server.</li>
+</ul>
 <h2 id="aci">ACI</h2>
 <h3 id="apiv2aci"><code>/api/v2/aci</code></h3>
 <ul>
@@ -1052,7 +1072,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"KUBAM API","level":"3.6.1","depth":2,"next":{"title":"KUBAM API Walkthrough","level":"3.6.2","depth":2,"path":"kubam/developer/APIGUIDE.md","ref":"kubam/developer/APIGUIDE.md","articles":[]},"previous":{"title":"KUBAM Developer","level":"3.6","depth":1,"path":"kubam/developer/README.md","ref":"kubam/developer/README.md","articles":[{"title":"KUBAM API","level":"3.6.1","depth":2,"path":"kubam/developer/API.md","ref":"kubam/developer/API.md","articles":[]},{"title":"KUBAM API Walkthrough","level":"3.6.2","depth":2,"path":"kubam/developer/APIGUIDE.md","ref":"kubam/developer/APIGUIDE.md","articles":[]},{"title":"KUBAM YAML","level":"3.6.3","depth":2,"path":"kubam/developer/YAML.md","ref":"kubam/developer/YAML.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"kubam/developer/API.md","mtime":"2018-05-18T12:14:22.425Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-05-31T02:47:21.880Z"},"basePath":"../..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"KUBAM API","level":"3.6.1","depth":2,"next":{"title":"KUBAM API Walkthrough","level":"3.6.2","depth":2,"path":"kubam/developer/APIGUIDE.md","ref":"kubam/developer/APIGUIDE.md","articles":[]},"previous":{"title":"KUBAM Developer","level":"3.6","depth":1,"path":"kubam/developer/README.md","ref":"kubam/developer/README.md","articles":[{"title":"KUBAM API","level":"3.6.1","depth":2,"path":"kubam/developer/API.md","ref":"kubam/developer/API.md","articles":[]},{"title":"KUBAM API Walkthrough","level":"3.6.2","depth":2,"path":"kubam/developer/APIGUIDE.md","ref":"kubam/developer/APIGUIDE.md","articles":[]},{"title":"KUBAM YAML","level":"3.6.3","depth":2,"path":"kubam/developer/YAML.md","ref":"kubam/developer/YAML.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"kubam/developer/API.md","mtime":"2018-06-25T23:23:29.083Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-06-27T00:17:21.647Z"},"basePath":"../..","book":{"language":""}});
         });
     </script>
 </div>

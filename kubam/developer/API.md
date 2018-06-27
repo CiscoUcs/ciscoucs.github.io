@@ -221,6 +221,28 @@ KUBAM stores values for UCS logins inside the ```kubam.yaml``` This API just off
 	* Parameters: ```{"name" : "asdfbasdf..."}```
 	* Example: ```curl -X DELETE -H "Content-Type: application/json"  -d '{"name" : "net1"}' $KUBAM_API/api/v2/servers```
 
+	
+### ```api/v2/servers/<server_group>/power/<power-action>```
+
+These methods change the power cycle of the server
+ 
+* ```PUT``` - change the power cycle of a server.  The methods that are allowed are: 
+	* ```on```
+	* ```off```
+	* ```hardreset```
+	* ```softreset```
+
+	* Example: 
+	```
+	curl -X PUT -d '{"blades" : ["1/1"]}' -H "Content-Type: application/json" localhost/api/v2/servers/kube-group1/power/off
+	```
+
+### ```api/v2/servers/<server_group>/powerstat```
+
+* ```GET``` - Returns the power status of a server.
+
+
+
 
 ## ACI
 
