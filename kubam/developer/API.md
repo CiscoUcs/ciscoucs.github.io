@@ -234,14 +234,56 @@ These methods change the power cycle of the server
 
 	* Example: 
 	```
-	curl -X PUT -d '{"blades" : ["1/1"]}' -H "Content-Type: application/json" localhost/api/v2/servers/kube-group1/power/off
+	curl -X PUT -d '{"servers" : {"blades" : ["1/3"], "rack_servers" : ["1"]}}' -H "Content-Type: application/json" $KUBAM_API/api/v2/servers/kube-group1/power/on
 	```
+	* Example Output: 
+	
+	```json
+	{
+  		"status": {
+   			"blades": [
+      			"1/3: off"
+    		],
+    		"rack_servers": [
+      			"1: off"
+    		]
+  		}
+	}	
+	```
+	* Example (UCS Central):
+	
+	```
+	curl -X PUT -d '{"servers" : {"blades" : ["1009/1/1"] }}' -H "Content-Type: application/json" $KUBAM_API/api/v2/servers/drury-central/power/on
+	```
+	__(Note: it takes a little bit for the status to change from off to on.)__
 
 ### ```api/v2/servers/<server_group>/powerstat```
 
 * ```GET``` - Returns the power status of a server.
-
-
+	* Example:
+	```
+	curl -X GET -d '{"servers": {"blades": ["1/3"], "rack_servers" : ["1"]}}' -H "Content-Type: application/json" $KUBAM_API/api/v2/servers/kube-group1/powerstat
+	```
+	* Example Output:
+	
+	```json
+	{
+  		"status": {
+    		"blades": [
+      			"1/3: on"
+    		],
+    		"rack_servers": [
+      			"1: on"
+    		]
+  		}
+	}
+	
+	```
+	* Example: You can also get all the servers by not passing in any arguments
+	
+	```
+	curl $KUBAM_API/api/v2/servers/kube-group1/powerstat
+	```
 
 
 ## ACI
