@@ -52,24 +52,58 @@ Set the IP address of the boot server.  Usually this is just the KUBAM server. T
 
 ## Monitor
 
-### ```/api/v2/status```
+### ```/api/v2/servers/<server-group>/status```
 
 * ```GET``` Get the current overall status of the given server based on the passed parameters.
-    * Parameters:
-        - type: blade or rack
-        - chassis_id: number of the chassis in case of the blade server type
-        - slot: number of the blade slot in the chassis in case of the blade server type
-        - rack_id: number of the rack server in case of a rack mount server type
-        - example: ```/api/v2/status?type=blade&chassis_id=1&slot=4```
-    * Returns: ```{
-    "completion_time": "2018-04-09T10:42:11.670",
-    "current_fsm": "Turnup",
-    "fsm_status": "success",
-    "progress": "100",
-    "sacl": null
-}```
+	* Examples:
+	
+	```
+	curl -X GET -d '{"servers": {"blades": ["1/3"], "rack_servers" : ["1"]}}' -H "Content-Type: application/json" $KUBAM_API/api/v2/servers/kube-group1/status
+	```
+	
+	Entering no parameters gets the status of every node
+	
+	```
+	curl $KUBAM_API/api/v2/servers/kube-group1/status
+	```
+   
+    * Returns: 
 
-### ```api/v2/fsm```
+    ```
+  	{
+  		"servers": {
+    		"blades": {
+      			"1009/1/1": {
+        			"association": "associated",
+        			"chassis_id": "1",
+        			"dn": "compute/sys-1009/chassis-1/blade-1",
+        			"domain_id": "1009",
+        			"label": "",
+        			"model": "UCSB-B200-M4",
+        			"num_cores": "36",
+        			"num_cpus": "2",
+        			"oper_power": "off",
+        			"ram": "393216",
+        			"ram_speed": "1866",
+        			"service_profile": "org-root/org-SLCLAB3/ls-SLC-RDO_OS-01",
+        			"slot": "1",
+        			"type": "blade"
+      			},
+      		...
+      		}
+     		"rack_servers": {
+       		"1009/1" : {
+       			...
+       		}
+       		...
+     		}
+     	}
+    }
+    ```
+    (The above output is for UCS Central.  UCS Manager shows similar but omits the domain id (1009) from the blade name.)
+
+
+### ```/api/v2/fsm```
 
 * ```GET``` Get the current detailed status of all FSM stages given server based on the passed parameters.
     * Parameters:
@@ -222,7 +256,7 @@ KUBAM stores values for UCS logins inside the ```kubam.yaml``` This API just off
 	* Example: ```curl -X DELETE -H "Content-Type: application/json"  -d '{"name" : "net1"}' $KUBAM_API/api/v2/servers```
 
 	
-### ```api/v2/servers/<server_group>/power/<power-action>```
+### ```/api/v2/servers/<server_group>/power/<power-action>```
 
 These methods change the power cycle of the server
  
@@ -257,7 +291,7 @@ These methods change the power cycle of the server
 	```
 	__(Note: it takes a little bit for the status to change from off to on.)__
 
-### ```api/v2/servers/<server_group>/powerstat```
+### ```/api/v2/servers/<server_group>/powerstat```
 
 * ```GET``` - Returns the power status of a server.
 	* Example:
