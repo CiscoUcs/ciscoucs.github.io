@@ -21,8 +21,9 @@ Set the IP address of the boot server.  Usually this is just the KUBAM server. T
 * ```POST```
 	* Example
 	
+	
 	```
-	curl -X POST -d '{ "kubam_ip": "10.93.234.96" }' -H "Content-Type: applicaton/json" $KUBAM/api/v1/ip
+	curl -X POST -H "Content-Type: application/jon" -d '{ "kubam_ip": "10.93.234.96" }' $KUBAM_API/api/v1/ip
 	```
 
 ### ```/api/v1/keys```
@@ -31,7 +32,7 @@ Set the IP address of the boot server.  Usually this is just the KUBAM server. T
 	* Example:
 	
 	```
-	curl 172.28.225.135/api/v1/keys
+	curl $KUBAM_API/api/v1/keys
 {
   "keys": [
     "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCc/7HrOIZB2wk8FvmZXzLMS1ZJ8TvS9OWBf5xosp59NRvcAbwbclLRD2f9z5KvOF1n5a4mK03OetymTQQX08rBpZJZ5ZWztdjiFjIce6rm7V87CRjeuwa97XyhacKx98QcijOJWBbLf1TE/cRd8KVopfG/RPZeMMx1n3J071QRiVhbHEzVw3xuY4KruIb/2kLGHEyYqtx//y8c3k6UaMF180nOIaq6WBZVHnpYXZZ+EkolpJ+10objpueuWPcJe4OU7AIRP1JGsaDHrmXNoy9ygeWceSqOIqRLOdPneHtC6xU78t3ttpnRdC9OgtawIVqaq0wpvd7G0sQ7Jv2DO2hZ\n"
@@ -319,6 +320,19 @@ These methods change the power cycle of the server
 	curl $KUBAM_API/api/v2/servers/kube-group1/powerstat
 	```
 
+### ```/api/v2/<server_group>/deploy```
+
+Deploy the UCS Service Profiles
+
+* ```POST```
+
+
+### ```/api/v2/<server_group>/vmedia```
+
+* ```POST```: Deploys a VMedia policy only that can be used by existing Service Profiles. 
+
+
+
 
 ## ACI
 
@@ -456,22 +470,6 @@ Unique or all of them.  Allow multiple servers to be created.  If nothing is pas
 ```
 
 
-### ```/api/v2/deploy/ucs```
-
-Deploy the UCS 
-
-* ```POST```
-
-Unique or all of them.
-
-### ```/api/v2/deploy```
-
-* ```POST``` Does it all for you!  Do the Boot images and deploy UCS. 
-
-
-### ```/api/v2/deploy/vmedia```
-
-* ```POST```: Deploys a VMedia policy only that can be used by existing Service Profiles. 
 
 ## UCS Actions
 

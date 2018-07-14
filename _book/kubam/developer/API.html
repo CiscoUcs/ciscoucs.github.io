@@ -659,18 +659,20 @@
 <h3 id="apiv1ip"><code>/api/v1/ip</code></h3>
 <p>Set the IP address of the boot server.  Usually this is just the KUBAM server. This is so the nodes where to get install media when they boot up.  KUBAM also uses this to set the vmedia policy to connect to this IP address. </p>
 <ul>
-<li><pre><code class="lang-POST```">  * Example
-</code></pre>
-<p>  curl -X POST -d &apos;{ &quot;kubam_ip&quot;: &quot;10.93.234.96&quot; }&apos; -H &quot;Content-Type: applicaton/json&quot; $KUBAM/api/v1/ip
-  ```</p>
+<li><code>POST</code><ul>
+<li>Example</li>
+</ul>
 </li>
 </ul>
-<h3 id="apiv1keys"><code>/api/v1/keys</code></h3>
+<pre><code>```
+curl -X POST -H &quot;Content-Type: application/jon&quot; -d &apos;{ &quot;kubam_ip&quot;: &quot;10.93.234.96&quot; }&apos; $KUBAM_API/api/v1/ip
+```
+</code></pre><h3 id="apiv1keys"><code>/api/v1/keys</code></h3>
 <ul>
 <li><p><code>GET</code> - Returns a list of the Public SSH Keys that have been entered into KUBAM.  These keys are ones that hosts can use to ssh into the servers installed by KUBAM. </p>
 <ul>
 <li><p>Example:</p>
-<pre><code>curl 172.28.225.135/api/v1/keys
+<pre><code>curl $KUBAM_API/api/v1/keys
 {
 &quot;keys&quot;: [
 &quot;ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCc/7HrOIZB2wk8FvmZXzLMS1ZJ8TvS9OWBf5xosp59NRvcAbwbclLRD2f9z5KvOF1n5a4mK03OetymTQQX08rBpZJZ5ZWztdjiFjIce6rm7V87CRjeuwa97XyhacKx98QcijOJWBbLf1TE/cRd8KVopfG/RPZeMMx1n3J071QRiVhbHEzVw3xuY4KruIb/2kLGHEyYqtx//y8c3k6UaMF180nOIaq6WBZVHnpYXZZ+EkolpJ+10objpueuWPcJe4OU7AIRP1JGsaDHrmXNoy9ygeWceSqOIqRLOdPneHtC6xU78t3ttpnRdC9OgtawIVqaq0wpvd7G0sQ7Jv2DO2hZ\n&quot;
@@ -940,6 +942,15 @@
 </ul>
 </li>
 </ul>
+<h3 id="apiv2servergroupdeploy"><code>/api/v2/&lt;server_group&gt;/deploy</code></h3>
+<p>Deploy the UCS Service Profiles</p>
+<ul>
+<li><code>POST</code></li>
+</ul>
+<h3 id="apiv2servergroupvmedia"><code>/api/v2/&lt;server_group&gt;/vmedia</code></h3>
+<ul>
+<li><code>POST</code>: Deploys a VMedia policy only that can be used by existing Service Profiles. </li>
+</ul>
 <h2 id="aci">ACI</h2>
 <h3 id="apiv2aci"><code>/api/v2/aci</code></h3>
 <ul>
@@ -1071,21 +1082,7 @@
 </ul>
 <p>Unique or all of them.  Allow multiple servers to be created.  If nothing is passed in, all servers will have boot images created for them. </p>
 <pre><code>[ &quot;host1&quot;, &quot;host2&quot;, &quot;host3&quot;, ...]
-</code></pre><h3 id="apiv2deployucs"><code>/api/v2/deploy/ucs</code></h3>
-<p>Deploy the UCS </p>
-<ul>
-<li><code>POST</code></li>
-</ul>
-<p>Unique or all of them.</p>
-<h3 id="apiv2deploy"><code>/api/v2/deploy</code></h3>
-<ul>
-<li><code>POST</code> Does it all for you!  Do the Boot images and deploy UCS. </li>
-</ul>
-<h3 id="apiv2deployvmedia"><code>/api/v2/deploy/vmedia</code></h3>
-<ul>
-<li><code>POST</code>: Deploys a VMedia policy only that can be used by existing Service Profiles. </li>
-</ul>
-<h2 id="ucs-actions">UCS Actions</h2>
+</code></pre><h2 id="ucs-actions">UCS Actions</h2>
 <h3 id="apiv2ucsdrives"><code>/api/v2/ucs/drives</code></h3>
 <ul>
 <li><code>DELETE</code> resets the disk arrays from JBOD to unconfigured good.</li>
@@ -1133,7 +1130,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"KUBAM API","level":"3.6.1","depth":2,"next":{"title":"KUBAM API Walkthrough","level":"3.6.2","depth":2,"path":"kubam/developer/APIGUIDE.md","ref":"kubam/developer/APIGUIDE.md","articles":[]},"previous":{"title":"KUBAM Developer","level":"3.6","depth":1,"path":"kubam/developer/README.md","ref":"kubam/developer/README.md","articles":[{"title":"KUBAM API","level":"3.6.1","depth":2,"path":"kubam/developer/API.md","ref":"kubam/developer/API.md","articles":[]},{"title":"KUBAM API Walkthrough","level":"3.6.2","depth":2,"path":"kubam/developer/APIGUIDE.md","ref":"kubam/developer/APIGUIDE.md","articles":[]},{"title":"KUBAM YAML","level":"3.6.3","depth":2,"path":"kubam/developer/YAML.md","ref":"kubam/developer/YAML.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"kubam/developer/API.md","mtime":"2018-07-02T23:06:29.520Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-07-02T23:06:46.541Z"},"basePath":"../..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"KUBAM API","level":"3.6.1","depth":2,"next":{"title":"KUBAM API Walkthrough","level":"3.6.2","depth":2,"path":"kubam/developer/APIGUIDE.md","ref":"kubam/developer/APIGUIDE.md","articles":[]},"previous":{"title":"KUBAM Developer","level":"3.6","depth":1,"path":"kubam/developer/README.md","ref":"kubam/developer/README.md","articles":[{"title":"KUBAM API","level":"3.6.1","depth":2,"path":"kubam/developer/API.md","ref":"kubam/developer/API.md","articles":[]},{"title":"KUBAM API Walkthrough","level":"3.6.2","depth":2,"path":"kubam/developer/APIGUIDE.md","ref":"kubam/developer/APIGUIDE.md","articles":[]},{"title":"KUBAM YAML","level":"3.6.3","depth":2,"path":"kubam/developer/YAML.md","ref":"kubam/developer/YAML.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"kubam/developer/API.md","mtime":"2018-07-14T00:21:54.227Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-07-14T00:22:16.731Z"},"basePath":"../..","book":{"language":""}});
         });
     </script>
 </div>
