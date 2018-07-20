@@ -689,6 +689,9 @@ curl -X POST -H &quot;Content-Type: application/jon&quot; -d &apos;{ &quot;kubam
 &quot;ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCd2XeDE/Ev5TJxBRAmrsTglAQQG8v5JZ8VoOUdSBUCONcJilcERdpOtGOgJR4t1xr2r0G3oDZrRGEaS5/Kjo91/LIxOR01aUgNb6zFkrSdlu8ktBmLsEvocG68di3GGG9JqoICL8CoPLkRDWGcBO3GKhOEd0TEK1hwUeGOX0NBMBERQtGXPiHq4tXvoUSyzsUSdAKypfRlKJgCETG9muGmHAtF1Z5pJXq8BqiiZ/GKm8Z6R60Z8hEQnNzIySyUHp1J6wvgnsZAVrUSMTclQ8NBrnagLVPToU5SI2zXGdiVIPh9enda+warwF5TuW80EABCbEIUtbqwde2nbqIlQOP5&quot;
 ]}
 </code></pre></li>
+<li><p>Example:</p>
+<pre><code>  curl -X POST -d &apos;{&quot;keys&quot; : [ &quot;ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCc/7HrOIZB2wk8FvmZXzLMS1ZJ8TvS9OWBf5xosp59NRvcAbwbclLRD2f9z5KvOF1n5a4mK03OetymTQQX08rBpZJZ5ZWztdjiFjIce6rm7V87CRjeuwa97XyhacKx98QcijOJWBbLf1TE/cRd8KVopfG/RPZeMMx1n3J071QRiVhbHEzVw3xuY4KruIb/2kLGHEyYqtx//y8c3k6UaMF180nOIaq6WBZVHnpYXZZ+EkolpJ+10objpueuWPcJe4OU7AIRP1JGsaDHrmXNoy9ygeWceSqOIqRLOdPneHtC6xU78t3ttpnRdC9OgtawIVqaq0wpvd7G0sQ7Jv2DO2hZ&quot;]}&apos; -H &quot;Content-Type: application/json&quot; $KUBAM_API/api/v1/keys
+</code></pre></li>
 </ul>
 </li>
 </ul>
@@ -831,7 +834,7 @@ curl -X POST -H &quot;Content-Type: application/jon&quot; -d &apos;{ &quot;kubam
      ]
 }
 </code></pre><ul>
-<li>Example: <pre><code>curl -X POST http://10.93.234.96:8001/api/v1/isos/ma -d &apos;{&quot;iso_map&quot; : [{&quot;os&quot; : &quot;centos7.4&quot;, &quot;file&quot; : &quot;/kubam/CentOS-7-x86_64-Minimal-1708.iso&quot;}]}&apos; -H &quot;Content-Type: application/json&quot;
+<li>Example: <pre><code>curl -X POST $KUBAM_API/api/v1/isos/map -d &apos;{&quot;iso_map&quot; : [{&quot;os&quot; : &quot;centos7.4&quot;, &quot;file&quot; : &quot;/kubam/CentOS-7-x86_64-Minimal-1708.iso&quot;}]}&apos; -H &quot;Content-Type: application/json&quot;
 {
 &quot;iso_map&quot;: [
 {
@@ -872,7 +875,15 @@ curl -X POST -H &quot;Content-Type: application/jon&quot; -d &apos;{ &quot;kubam
 <li><p>Params: </p>
 <pre><code>{&quot;name&quot;, &quot;ucs01&quot;, &quot;type&quot; : &quot;ucsm&quot;, &quot;credentials&quot; : {&quot;user&quot;: &quot;admin&quot;, &quot;password&quot; : &quot;secret-password&quot;, &quot;ip&quot; : &quot;172.28.225.163&quot; }}
 </code></pre></li>
-<li><p>Example: <code>curl -X POST -H &quot;Content-Type: application/json&quot; -d &apos;{&quot;credentials&quot; : {&quot;user&quot;: &quot;admin&quot;, &quot;password&quot; : &quot;nbv12345&quot;, &quot;ip&quot; : &quot;172.28.225.163&quot; }, &quot;type&quot; : &quot;ucsm&quot;, &quot;name&quot; : &quot;devi&quot; }&apos; http://$KUBAM_API/api/v2/servers</code></p>
+<li><h4 id="ucs-example">UCS Example:</h4>
+<p>   Add a new UCS Manager Domain to the database</p>
+<pre><code>   curl -X POST -H &quot;Content-Type: application/json&quot; -d &apos;{&quot;credentials&quot; : {&quot;user&quot;: &quot;admin&quot;, &quot;password&quot; : &quot;nbv12345&quot;, &quot;ip&quot; : &quot;172.28.225.163&quot; }, &quot;type&quot; : &quot;ucsm&quot;, &quot;name&quot; : &quot;devi&quot; }&apos; http://$KUBAM_API/api/v2/servers
+</code></pre><ul>
+<li><h4 id="ucs-imc-stand-alone-example">UCS IMC Stand Alone Example</h4>
+<p>   Add a new C-Series server to the database. </p>
+<pre><code>   curl -X POST -H &quot;Content-Type: application/json&quot; -d &apos;{&quot;credentials&quot; : {&quot;user&quot;: &quot;admin&quot;, &quot;password&quot; : &quot;C1sco1234&quot;, &quot;ip&quot; : &quot;10.93.130.90&quot; }, &quot;type&quot; : &quot;imc&quot;, &quot;name&quot; : &quot;LK02-C220-M3-R5-RU11&quot; }&apos; http://$KUBAM_API/api/v2/servers
+</code></pre></li>
+</ul>
 </li>
 </ul>
 </li>
@@ -883,6 +894,42 @@ curl -X POST -H &quot;Content-Type: application/jon&quot; -d &apos;{ &quot;kubam
 <li>Example: <code>curl -X DELETE -H &quot;Content-Type: application/json&quot;  -d &apos;{&quot;name&quot; : &quot;net1&quot;}&apos; $KUBAM_API/api/v2/servers</code></li>
 </ul>
 </li>
+</ul>
+<h3 id="apiv2serversservergroupservers"><code>/api/v2/servers/&lt;server_group&gt;/servers</code></h3>
+<p>Gets the compute resources of a server group or updates the servers. </p>
+<ul>
+<li><pre><code class="lang-GET```">  * Example: ```curl $KUBAM_API/api/v2/servers/UCS01/servers
+</code></pre>
+<ul>
+<li><p>Output: </p>
+<pre><code>{
+    &quot;servers&quot;: [
+    {
+        &quot;association&quot;: &quot;associated&quot;,
+        &quot;chassis_id&quot;: &quot;1&quot;,
+        &quot;dn&quot;: &quot;sys/chassis-1/blade-8&quot;,
+        &quot;label&quot;: &quot;kubam - master&quot;,
+        &quot;model&quot;: &quot;UCSB-B200-M3&quot;,
+        &quot;num_cores&quot;: &quot;12&quot;,
+        &quot;num_cpus&quot;: &quot;2&quot;,
+        &quot;oper_power&quot;: &quot;on&quot;,
+        &quot;ram&quot;: &quot;262144&quot;,
+        &quot;ram_speed&quot;: &quot;1333&quot;,
+        &quot;service_profile&quot;: &quot;org-root/org-devi/ls-devi1&quot;,
+        &quot;slot&quot;: &quot;8&quot;,
+        &quot;type&quot;: &quot;blade&quot;
+    },
+  ... 
+  ]
+}
+</code></pre></li>
+</ul>
+</li>
+<li><pre><code class="lang-POST```">  * Example: Update the selected hosts with blades 1/2 and 1/3 and with rack mount servers 6 and 7.
+</code></pre>
+<p>  curl -X POST -d &apos;{&quot;blades&quot; : [&quot;1/1&quot;, &quot;1,2&quot;], &quot;rack&quot;: [&quot;6&quot;, &quot;7&quot;]}&apos; -H &quot;Content-Type: application/json&quot; $KUBAM_API/api/v2/servers/UCS01/servers</p>
+<pre><code>  ```
+</code></pre></li>
 </ul>
 <h3 id="apiv2serversservergrouppowerpower-action"><code>/api/v2/servers/&lt;server_group&gt;/power/&lt;power-action&gt;</code></h3>
 <p>These methods change the power cycle of the server</p>
@@ -1130,7 +1177,7 @@ curl -X POST -H &quot;Content-Type: application/jon&quot; -d &apos;{ &quot;kubam
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"KUBAM API","level":"3.6.1","depth":2,"next":{"title":"KUBAM API Walkthrough","level":"3.6.2","depth":2,"path":"kubam/developer/APIGUIDE.md","ref":"kubam/developer/APIGUIDE.md","articles":[]},"previous":{"title":"KUBAM Developer","level":"3.6","depth":1,"path":"kubam/developer/README.md","ref":"kubam/developer/README.md","articles":[{"title":"KUBAM API","level":"3.6.1","depth":2,"path":"kubam/developer/API.md","ref":"kubam/developer/API.md","articles":[]},{"title":"KUBAM API Walkthrough","level":"3.6.2","depth":2,"path":"kubam/developer/APIGUIDE.md","ref":"kubam/developer/APIGUIDE.md","articles":[]},{"title":"KUBAM YAML","level":"3.6.3","depth":2,"path":"kubam/developer/YAML.md","ref":"kubam/developer/YAML.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"kubam/developer/API.md","mtime":"2018-07-14T00:21:54.227Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-07-14T00:22:16.731Z"},"basePath":"../..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"KUBAM API","level":"3.6.1","depth":2,"next":{"title":"KUBAM API Walkthrough","level":"3.6.2","depth":2,"path":"kubam/developer/APIGUIDE.md","ref":"kubam/developer/APIGUIDE.md","articles":[]},"previous":{"title":"KUBAM Developer","level":"3.6","depth":1,"path":"kubam/developer/README.md","ref":"kubam/developer/README.md","articles":[{"title":"KUBAM API","level":"3.6.1","depth":2,"path":"kubam/developer/API.md","ref":"kubam/developer/API.md","articles":[]},{"title":"KUBAM API Walkthrough","level":"3.6.2","depth":2,"path":"kubam/developer/APIGUIDE.md","ref":"kubam/developer/APIGUIDE.md","articles":[]},{"title":"KUBAM YAML","level":"3.6.3","depth":2,"path":"kubam/developer/YAML.md","ref":"kubam/developer/YAML.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"kubam/developer/API.md","mtime":"2018-07-20T22:15:37.989Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-07-20T23:18:35.271Z"},"basePath":"../..","book":{"language":""}});
         });
     </script>
 </div>

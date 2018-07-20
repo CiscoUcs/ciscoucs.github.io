@@ -49,6 +49,11 @@ Set the IP address of the boot server.  Usually this is just the KUBAM server. T
 	"ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCd2XeDE/Ev5TJxBRAmrsTglAQQG8v5JZ8VoOUdSBUCONcJilcERdpOtGOgJR4t1xr2r0G3oDZrRGEaS5/Kjo91/LIxOR01aUgNb6zFkrSdlu8ktBmLsEvocG68di3GGG9JqoICL8CoPLkRDWGcBO3GKhOEd0TEK1hwUeGOX0NBMBERQtGXPiHq4tXvoUSyzsUSdAKypfRlKJgCETG9muGmHAtF1Z5pJXq8BqiiZ/GKm8Z6R60Z8hEQnNzIySyUHp1J6wvgnsZAVrUSMTclQ8NBrnagLVPToU5SI2zXGdiVIPh9enda+warwF5TuW80EABCbEIUtbqwde2nbqIlQOP5"
 	]}
 	```
+	* Example:
+
+		```
+		curl -X POST -d '{"keys" : [ "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCc/7HrOIZB2wk8FvmZXzLMS1ZJ8TvS9OWBf5xosp59NRvcAbwbclLRD2f9z5KvOF1n5a4mK03OetymTQQX08rBpZJZ5ZWztdjiFjIce6rm7V87CRjeuwa97XyhacKx98QcijOJWBbLf1TE/cRd8KVopfG/RPZeMMx1n3J071QRiVhbHEzVw3xuY4KruIb/2kLGHEyYqtx//y8c3k6UaMF180nOIaq6WBZVHnpYXZZ+EkolpJ+10objpueuWPcJe4OU7AIRP1JGsaDHrmXNoy9ygeWceSqOIqRLOdPneHtC6xU78t3ttpnRdC9OgtawIVqaq0wpvd7G0sQ7Jv2DO2hZ"]}' -H "Content-Type: application/json" $KUBAM_API/api/v1/keys
+		```
 
 
 ## Monitor
@@ -207,7 +212,7 @@ We Map the file of the operating system to the name of what operating system it 
    	```
 	* Example: 
 	```
-	curl -X POST http://10.93.234.96:8001/api/v1/isos/ma -d '{"iso_map" : [{"os" : "centos7.4", "file" : "/kubam/CentOS-7-x86_64-Minimal-1708.iso"}]}' -H "Content-Type: application/json"
+	curl -X POST $KUBAM_API/api/v1/isos/map -d '{"iso_map" : [{"os" : "centos7.4", "file" : "/kubam/CentOS-7-x86_64-Minimal-1708.iso"}]}' -H "Content-Type: application/json"
 {
   "iso_map": [
     {
@@ -249,13 +254,63 @@ KUBAM stores values for UCS logins inside the ```kubam.yaml``` This API just off
 	{"name", "ucs01", "type" : "ucsm", "credentials" : {"user": "admin", "password" : "secret-password", "ip" : "172.28.225.163" }}
 	```
 	
-	* Example: ```curl -X POST -H "Content-Type: application/json" -d '{"credentials" : {"user": "admin", "password" : "nbv12345", "ip" : "172.28.225.163" }, "type" : "ucsm", "name" : "devi" }' http://$KUBAM_API/api/v2/servers```
+	* #### UCS Example: 
+	
+	 	Add a new UCS Manager Domain to the database
+	 
+	 	```
+	 	curl -X POST -H "Content-Type: application/json" -d '{"credentials" : {"user": "admin", "password" : "nbv12345", "ip" : "172.28.225.163" }, "type" : "ucsm", "name" : "devi" }' http://$KUBAM_API/api/v2/servers
+	 	```
+
+   * #### UCS IMC Stand Alone Example
+   
+   		Add a new C-Series server to the database. 
+   	
+   		```
+   		curl -X POST -H "Content-Type: application/json" -d '{"credentials" : {"user": "admin", "password" : "C1sco1234", "ip" : "10.93.130.90" }, "type" : "imc", "name" : "LK02-C220-M3-R5-RU11" }' http://$KUBAM_API/api/v2/servers
+   		```
 	
 * ```PUT``` - Update an existing UCS Domain.  You need to include the UUID of the Domain. Otherwise its the same action as ```POST```. 
 * ```DELETE``` - Delete the UCS / CIMC Server Group.  
 	* Parameters: ```{"name" : "asdfbasdf..."}```
 	* Example: ```curl -X DELETE -H "Content-Type: application/json"  -d '{"name" : "net1"}' $KUBAM_API/api/v2/servers```
 
+### ```/api/v2/servers/<server_group>/servers```
+Gets the compute resources of a server group or updates the servers. 
+
+* ```GET``` 
+	* Example: ```curl $KUBAM_API/api/v2/servers/UCS01/servers```
+	* Output: 
+	
+	```
+	{
+  		"servers": [
+    	  {
+      		"association": "associated",
+      		"chassis_id": "1",
+      		"dn": "sys/chassis-1/blade-8",
+      		"label": "kubam - master",
+      		"model": "UCSB-B200-M3",
+      		"num_cores": "12",
+      		"num_cpus": "2",
+      		"oper_power": "on",
+      		"ram": "262144",
+      		"ram_speed": "1333",
+      		"service_profile": "org-root/org-devi/ls-devi1",
+      		"slot": "8",
+      		"type": "blade"
+    	  },
+    	... 
+    	]
+   }
+	```
+* ```POST```
+	* Example: Update the selected hosts with blades 1/2 and 1/3 and with rack mount servers 6 and 7. 
+		
+		```
+	curl -X POST -d '{"blades" : ["1/1", "1,2"], "rack": ["6", "7"]}' -H "Content-Type: application/json" $KUBAM_API/api/v2/servers/UCS01/servers
+		```
+	
 	
 ### ```/api/v2/servers/<server_group>/power/<power-action>```
 
