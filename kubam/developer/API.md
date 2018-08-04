@@ -23,7 +23,7 @@ Set the IP address of the boot server.  Usually this is just the KUBAM server. T
 	
 	
 	```
-	curl -X POST -H "Content-Type: application/jon" -d '{ "kubam_ip": "10.93.234.96" }' $KUBAM_API/api/v1/ip
+	curl -X POST -H "Content-Type: application/json" -d '{ "kubam_ip": "10.93.234.96" }' $KUBAM_API/api/v1/ip
 	```
 
 ### ```/api/v1/keys```
@@ -112,12 +112,21 @@ Set the IP address of the boot server.  Usually this is just the KUBAM server. T
 ### ```/api/v2/fsm```
 
 * ```GET``` Get the current detailed status of all FSM stages given server based on the passed parameters.
-    * Parameters:
-        - type: blade or rack
-        - chassis_id: number of the chassis in case of the blade server type
-        - slot: number of the blade slot in the chassis in case of the blade server type
-        - rack_id: number of the rack server in case of a rack mount server type
-        - example: ```/api/v2/status?type=rack&rack_id=2```
+        - examples: 
+
+        ```
+        curl -X GET -d '{"servers": {"blades": ["1/3"], "rack_servers" : ["1"]}}' -H "Content-Type: application/json" $KUBAM_API/api/v2/servers/kube-group1/fsm
+        ```
+
+        ```
+        curl -X GET -d '{"servers": {"blades": ["1/3"]}}' -H "Content-Type: application/json" $KUBAM_API/api/v2/servers/kube-group1/fsm
+        ```
+        
+        ```
+        curl -X GET -d '{"servers": {"blades": ["1009/1/3"]}}' -H "Content-Type: application/json" $KUBAM_API/api/v2/servers/pdx-central/fsm
+        ```
+        
+        
     * Returns: 
 ```
 {
@@ -308,7 +317,7 @@ Gets the compute resources of a server group or updates the servers.
 	* Example: Update the selected hosts with blades 1/2 and 1/3 and with rack mount servers 6 and 7. 
 		
 		```
-	curl -X POST -d '{"blades" : ["1/1", "1,2"], "rack": ["6", "7"]}' -H "Content-Type: application/json" $KUBAM_API/api/v2/servers/UCS01/servers
+	curl -X POST -d '{"servers" : {"blades" : ["1/1", "1,2"], "rack": ["6", "7"]}}' -H "Content-Type: application/json" $KUBAM_API/api/v2/servers/kube-group1/servers
 		```
 	
 	

@@ -665,7 +665,7 @@
 </li>
 </ul>
 <pre><code>```
-curl -X POST -H &quot;Content-Type: application/jon&quot; -d &apos;{ &quot;kubam_ip&quot;: &quot;10.93.234.96&quot; }&apos; $KUBAM_API/api/v1/ip
+curl -X POST -H &quot;Content-Type: application/json&quot; -d &apos;{ &quot;kubam_ip&quot;: &quot;10.93.234.96&quot; }&apos; $KUBAM_API/api/v1/ip
 ```
 </code></pre><h3 id="apiv1keys"><code>/api/v1/keys</code></h3>
 <ul>
@@ -742,48 +742,52 @@ curl -X POST -H &quot;Content-Type: application/jon&quot; -d &apos;{ &quot;kubam
 </ul>
 <h3 id="apiv2fsm"><code>/api/v2/fsm</code></h3>
 <ul>
-<li><code>GET</code> Get the current detailed status of all FSM stages given server based on the passed parameters.<ul>
-<li>Parameters:<ul>
-<li>type: blade or rack</li>
-<li>chassis_id: number of the chassis in case of the blade server type</li>
-<li>slot: number of the blade slot in the chassis in case of the blade server type</li>
-<li>rack_id: number of the rack server in case of a rack mount server type</li>
-<li>example: <code>/api/v2/status?type=rack&amp;rack_id=2</code></li>
-</ul>
-</li>
-<li>Returns: <pre><code>{
-&quot;stages&quot;: [
-  {
-      &quot;descr&quot;: &quot;Check if power can be allocated to server 1(FSM-STAGE:sam:dme:ComputePhysicalTurnup:CheckPowerAvailability)&quot;,
-      &quot;last_update_time&quot;: &quot;2018-04-09T10:42:11.093&quot;,
-      &quot;name&quot;: &quot;TurnupCheckPowerAvailability&quot;,
-      &quot;order&quot;: &quot;1&quot;,
-      &quot;retry&quot;: &quot;0&quot;,
-      &quot;stage_status&quot;: &quot;skip&quot;
-  },
-  {
-      &quot;descr&quot;: &quot;Waiting for power allocation to server 1(FSM-STAGE:sam:dme:ComputePhysicalTurnup:PowerDeployWait)&quot;,
-      &quot;last_update_time&quot;: &quot;2018-04-09T10:42:11.093&quot;,
-      &quot;name&quot;: &quot;TurnupPowerDeployWait&quot;,
-      &quot;order&quot;: &quot;2&quot;,
-      &quot;retry&quot;: &quot;0&quot;,
-      &quot;stage_status&quot;: &quot;skip&quot;
-  },
-  {
-      &quot;descr&quot;: &quot;Power-on server sys/rack-unit-1(FSM-STAGE:sam:dme:ComputePhysicalTurnup:Execute)&quot;,
-      &quot;last_update_time&quot;: &quot;2018-04-09T10:42:11.670&quot;,
-      &quot;name&quot;: &quot;TurnupExecute&quot;,
-      &quot;order&quot;: &quot;3&quot;,
-      &quot;retry&quot;: &quot;1&quot;,
-      &quot;stage_status&quot;: &quot;success&quot;
-  }
-]
-}
+<li><p><code>GET</code> Get the current detailed status of all FSM stages given server based on the passed parameters.</p>
+<pre><code>  - examples: 
+
+  ```
+  curl -X GET -d &apos;{&quot;servers&quot;: {&quot;blades&quot;: [&quot;1/3&quot;], &quot;rack_servers&quot; : [&quot;1&quot;]}}&apos; -H &quot;Content-Type: application/json&quot; $KUBAM_API/api/v2/servers/kube-group1/fsm
+  ```
+
+  ```
+  curl -X GET -d &apos;{&quot;servers&quot;: {&quot;blades&quot;: [&quot;1/3&quot;]}}&apos; -H &quot;Content-Type: application/json&quot; $KUBAM_API/api/v2/servers/kube-group1/fsm
+  ```
+
+  ```
+  curl -X GET -d &apos;{&quot;servers&quot;: {&quot;blades&quot;: [&quot;1009/1/3&quot;]}}&apos; -H &quot;Content-Type: application/json&quot; $KUBAM_API/api/v2/servers/pdx-central/fsm
+  ```
 </code></pre></li>
 </ul>
-</li>
-</ul>
-<h2 id="iso-images">ISO Images</h2>
+<pre><code>* Returns: 
+</code></pre><pre><code>{
+    &quot;stages&quot;: [
+        {
+            &quot;descr&quot;: &quot;Check if power can be allocated to server 1(FSM-STAGE:sam:dme:ComputePhysicalTurnup:CheckPowerAvailability)&quot;,
+            &quot;last_update_time&quot;: &quot;2018-04-09T10:42:11.093&quot;,
+            &quot;name&quot;: &quot;TurnupCheckPowerAvailability&quot;,
+            &quot;order&quot;: &quot;1&quot;,
+            &quot;retry&quot;: &quot;0&quot;,
+            &quot;stage_status&quot;: &quot;skip&quot;
+        },
+        {
+            &quot;descr&quot;: &quot;Waiting for power allocation to server 1(FSM-STAGE:sam:dme:ComputePhysicalTurnup:PowerDeployWait)&quot;,
+            &quot;last_update_time&quot;: &quot;2018-04-09T10:42:11.093&quot;,
+            &quot;name&quot;: &quot;TurnupPowerDeployWait&quot;,
+            &quot;order&quot;: &quot;2&quot;,
+            &quot;retry&quot;: &quot;0&quot;,
+            &quot;stage_status&quot;: &quot;skip&quot;
+        },
+        {
+            &quot;descr&quot;: &quot;Power-on server sys/rack-unit-1(FSM-STAGE:sam:dme:ComputePhysicalTurnup:Execute)&quot;,
+            &quot;last_update_time&quot;: &quot;2018-04-09T10:42:11.670&quot;,
+            &quot;name&quot;: &quot;TurnupExecute&quot;,
+            &quot;order&quot;: &quot;3&quot;,
+            &quot;retry&quot;: &quot;1&quot;,
+            &quot;stage_status&quot;: &quot;success&quot;
+        }
+    ]
+}
+</code></pre><h2 id="iso-images">ISO Images</h2>
 <h3 id="apiv1catalog"><code>/api/v1/catalog</code></h3>
 <ul>
 <li><code>GET</code></li>
@@ -927,7 +931,7 @@ curl -X POST -H &quot;Content-Type: application/jon&quot; -d &apos;{ &quot;kubam
 </li>
 <li><pre><code class="lang-POST```">  * Example: Update the selected hosts with blades 1/2 and 1/3 and with rack mount servers 6 and 7.
 </code></pre>
-<p>  curl -X POST -d &apos;{&quot;blades&quot; : [&quot;1/1&quot;, &quot;1,2&quot;], &quot;rack&quot;: [&quot;6&quot;, &quot;7&quot;]}&apos; -H &quot;Content-Type: application/json&quot; $KUBAM_API/api/v2/servers/UCS01/servers</p>
+<p>  curl -X POST -d &apos;{&quot;servers&quot; : {&quot;blades&quot; : [&quot;1/1&quot;, &quot;1,2&quot;], &quot;rack&quot;: [&quot;6&quot;, &quot;7&quot;]}}&apos; -H &quot;Content-Type: application/json&quot; $KUBAM_API/api/v2/servers/kube-group1/servers</p>
 <pre><code>  ```
 </code></pre></li>
 </ul>
@@ -1177,7 +1181,7 @@ curl -X POST -H &quot;Content-Type: application/jon&quot; -d &apos;{ &quot;kubam
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"KUBAM API","level":"3.6.1","depth":2,"next":{"title":"KUBAM API Walkthrough","level":"3.6.2","depth":2,"path":"kubam/developer/APIGUIDE.md","ref":"kubam/developer/APIGUIDE.md","articles":[]},"previous":{"title":"KUBAM Developer","level":"3.6","depth":1,"path":"kubam/developer/README.md","ref":"kubam/developer/README.md","articles":[{"title":"KUBAM API","level":"3.6.1","depth":2,"path":"kubam/developer/API.md","ref":"kubam/developer/API.md","articles":[]},{"title":"KUBAM API Walkthrough","level":"3.6.2","depth":2,"path":"kubam/developer/APIGUIDE.md","ref":"kubam/developer/APIGUIDE.md","articles":[]},{"title":"KUBAM YAML","level":"3.6.3","depth":2,"path":"kubam/developer/YAML.md","ref":"kubam/developer/YAML.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"kubam/developer/API.md","mtime":"2018-07-20T22:15:37.989Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-07-20T23:18:35.271Z"},"basePath":"../..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"KUBAM API","level":"3.6.1","depth":2,"next":{"title":"KUBAM API Walkthrough","level":"3.6.2","depth":2,"path":"kubam/developer/APIGUIDE.md","ref":"kubam/developer/APIGUIDE.md","articles":[]},"previous":{"title":"KUBAM Developer","level":"3.6","depth":1,"path":"kubam/developer/README.md","ref":"kubam/developer/README.md","articles":[{"title":"KUBAM API","level":"3.6.1","depth":2,"path":"kubam/developer/API.md","ref":"kubam/developer/API.md","articles":[]},{"title":"KUBAM API Walkthrough","level":"3.6.2","depth":2,"path":"kubam/developer/APIGUIDE.md","ref":"kubam/developer/APIGUIDE.md","articles":[]},{"title":"KUBAM YAML","level":"3.6.3","depth":2,"path":"kubam/developer/YAML.md","ref":"kubam/developer/YAML.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"kubam/developer/API.md","mtime":"2018-08-04T01:50:50.507Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-08-04T01:51:00.581Z"},"basePath":"../..","book":{"language":""}});
         });
     </script>
 </div>
