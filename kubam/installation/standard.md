@@ -191,6 +191,12 @@ curl -O https://raw.githubusercontent.com/CiscoUcs/KUBaM/master/docker-compose.y
 docker-compose up -d
 ```
 
+To try version 2.0 (still under development)
+
+```
+curl -O https://raw.githubusercontent.com/CiscoUcs/KUBaM/v2.0/docker-compose.yml
+```
+
 Navigate to Port ```5000``` of this server and behold all the glory of KUBAM!
 
 
