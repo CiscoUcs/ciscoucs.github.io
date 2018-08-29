@@ -383,6 +383,25 @@ These methods change the power cycle of the server
 	```
 	curl $KUBAM_API/api/v2/servers/kube-group1/powerstat
 	```
+### ```/api/v2/<server_group>/disks```
+* ```GET``` - Get the disks of a server
+* Example: 
+```
+curl -X GET -d '{"servers": {"blades": ["1/3"], "rack_servers" : ["1"]}}' -H "Content-Type: application/json" $KUBAM_API/api/v2/servers/kube-group1/disks
+```
+* Output
+
+
+
+* ```DELETE``` - Reset the disks of servers.  
+* Example: 
+
+```
+curl -X DELETE -d '{"servers": {"blades": ["1/3"], "rack_servers" : ["1"]}}' -H "Content-Type: application/json" $KUBAM_API/api/v2/servers/kube-group1/disks
+```
+
+
+
 
 ### ```/api/v2/<server_group>/deploy```
 
