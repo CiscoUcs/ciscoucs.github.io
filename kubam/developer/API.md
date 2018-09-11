@@ -112,22 +112,24 @@ Set the IP address of the boot server.  Usually this is just the KUBAM server. T
 ### ```/api/v2/fsm```
 
 * ```GET``` Get the current detailed status of all FSM stages given server based on the passed parameters.
-        - examples: 
+	* examples: 
 
-        ```
-        curl -X GET -d '{"servers": {"blades": ["1/3"], "rack_servers" : ["1"]}}' -H "Content-Type: application/json" $KUBAM_API/api/v2/servers/kube-group1/fsm
-        ```
+    ```
+curl -X GET -d '{"servers": {"blades": ["1/3"], "rack_servers" : ["1"]}}' -H "Content-Type: application/json" $KUBAM_API/api/v2/servers/kube-group1/fsm
+   	```
+   	
 
-        ```
-        curl -X GET -d '{"servers": {"blades": ["1/3"]}}' -H "Content-Type: application/json" $KUBAM_API/api/v2/servers/kube-group1/fsm
-        ```
+   ```
+curl -X GET -d '{"servers": {"blades": ["1/3"]}}' -H "Content-Type: application/json" $KUBAM_API/api/v2/servers/kube-group1/fsm
+   ```
         
-        ```
-        curl -X GET -d '{"servers": {"blades": ["1009/1/3"]}}' -H "Content-Type: application/json" $KUBAM_API/api/v2/servers/pdx-central/fsm
-        ```
+   ```
+ curl -X GET -d '{"servers": {"blades": ["1009/1/3"]}}' -H "Content-Type: application/json" $KUBAM_API/api/v2/servers/pdx-central/fsm
+   ```
         
         
     * Returns: 
+    
 ```
 {
     "stages": [
@@ -159,8 +161,6 @@ Set the IP address of the boot server.  Usually this is just the KUBAM server. T
 }
 ```
 
-
-
 ## ISO Images
 
 ### ```/api/v1/catalog```
@@ -174,15 +174,16 @@ Set the IP address of the boot server.  Usually this is just the KUBAM server. T
 * ```GET```  Gets the current ISO files that exist in the ```/kubam/``` directory.  
 	* Example: 
 	
-	```
-	curl http://10.93.234.96:8001/api/v1/isos
+```
+curl http://10.93.234.96:8001/api/v1/isos
+
 {
   "isos": [
     "CentOS-7-x86_64-Minimal-1708.iso"
   ]
 }
 
-	```
+```
 
 
 ### ```/api/v1/isos/map```
@@ -192,36 +193,10 @@ We Map the file of the operating system to the name of what operating system it 
 * ```GET``` Gets the current Mapping of OS name to OS iso files.  These are OSes that can be deployed. 
 	* Parameters:  None
 	* Example:
-	```
-	curl http://10.93.234.96:8001/api/v1/isos/map
-{
-  "iso_map": [
-    {
-      "file": "/kubam/CentOS-7-x86_64-Minimal-1708.iso",
-      "os": "centos7.4"
-    }
-  ]
-}
-	```
 
+```
+curl http://10.93.234.96:8001/api/v1/isos/map
 
-* ```POST``` Maps all ISOS to files.  You should include all previously mapped ISO maps in this request if you want to add one.  KUBAM expects all ISO files to be in the ```/kubam/``` directory of the container.  (this directory is mounted when KUBAM starts from something like ```/root/kubam```.  
-   * Parameters: Should be a map of all the isos in the file to the name of the operating systems. 
-   	```
-   	{
-  		"iso_map": [
-    		{
-      			"file": "/kubam/CentOS-7-x86_64-Minimal-1708.iso",
-      			"os": "centos7.4"
-    		},
-    		{...
-    		},
-  		]
-	}
-   	```
-	* Example: 
-	```
-	curl -X POST $KUBAM_API/api/v1/isos/map -d '{"iso_map" : [{"os" : "centos7.4", "file" : "/kubam/CentOS-7-x86_64-Minimal-1708.iso"}]}' -H "Content-Type: application/json"
 {
   "iso_map": [
     {
@@ -232,6 +207,41 @@ We Map the file of the operating system to the name of what operating system it 
 }
 ```
 
+
+* ```POST``` Maps all ISOS to files.  You should include all previously mapped ISO maps in this request if you want to add one.  KUBAM expects all ISO files to be in the ```/kubam/``` directory of the container.  (this directory is mounted when KUBAM starts from something like ```/root/kubam```.  
+   * Parameters: Should be a map of all the isos in the file to the name of the operating systems. 
+
+```
+{
+  	"iso_map": [
+    	{
+      		"file": "/kubam/CentOS-7-x86_64-Minimal-1708.iso",
+      		"os": "centos7.4"
+    	},
+    	{...
+    	},
+  	]
+}
+```
+
+
+* Example:
+	 
+
+```
+curl -X POST $KUBAM_API/api/v1/isos/map \
+	-d '{"iso_map" : [{"os" : "centos7.4", "file" : "/kubam/CentOS-7-x86_64-Minimal-1708.iso"}]}' \
+	-H "Content-Type: application/json"
+
+{
+  "iso_map": [
+    {
+      "file": "/kubam/CentOS-7-x86_64-Minimal-1708.iso",
+      "os": "centos7.4"
+    }
+  ]
+}
+```
 
 
 
@@ -384,16 +394,22 @@ These methods change the power cycle of the server
 	curl $KUBAM_API/api/v2/servers/kube-group1/powerstat
 	```
 ### ```/api/v2/<server_group>/disks```
-* ```GET``` - Get the disks of a server
+
+####  ```GET``` - Get the disks of a server
 * Example: 
 ```
 curl -X GET -d '{"servers": {"blades": ["1/3"], "rack_servers" : ["1"]}}' -H "Content-Type: application/json" $KUBAM_API/api/v2/servers/kube-group1/disks
 ```
-* Output
+
+* UCS Central Example
+
+```
+curl -X GET -d '{"servers": {"blades": ["109/1/3"]}}' -H "Content-Type: application/json" $KUBAM_API/api/v2/servers/pdx-central/disks
+```
 
 
 
-* ```DELETE``` - Reset the disks of servers.  
+####  ```DELETE``` - Reset the disks of servers to unconfigured Good.  
 * Example: 
 
 ```

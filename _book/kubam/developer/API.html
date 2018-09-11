@@ -743,22 +743,16 @@ curl -X POST -H &quot;Content-Type: application/json&quot; -d &apos;{ &quot;kuba
 <h3 id="apiv2fsm"><code>/api/v2/fsm</code></h3>
 <ul>
 <li><p><code>GET</code> Get the current detailed status of all FSM stages given server based on the passed parameters.</p>
-<pre><code>  - examples: 
-
-  ```
-  curl -X GET -d &apos;{&quot;servers&quot;: {&quot;blades&quot;: [&quot;1/3&quot;], &quot;rack_servers&quot; : [&quot;1&quot;]}}&apos; -H &quot;Content-Type: application/json&quot; $KUBAM_API/api/v2/servers/kube-group1/fsm
-  ```
-
-  ```
-  curl -X GET -d &apos;{&quot;servers&quot;: {&quot;blades&quot;: [&quot;1/3&quot;]}}&apos; -H &quot;Content-Type: application/json&quot; $KUBAM_API/api/v2/servers/kube-group1/fsm
-  ```
-
-  ```
-  curl -X GET -d &apos;{&quot;servers&quot;: {&quot;blades&quot;: [&quot;1009/1/3&quot;]}}&apos; -H &quot;Content-Type: application/json&quot; $KUBAM_API/api/v2/servers/pdx-central/fsm
-  ```
+<ul>
+<li><p>examples: </p>
+<pre><code>curl -X GET -d &apos;{&quot;servers&quot;: {&quot;blades&quot;: [&quot;1/3&quot;], &quot;rack_servers&quot; : [&quot;1&quot;]}}&apos; -H &quot;Content-Type: application/json&quot; $KUBAM_API/api/v2/servers/kube-group1/fsm
 </code></pre></li>
 </ul>
-<pre><code>* Returns: 
+</li>
+</ul>
+<pre><code>curl -X GET -d &apos;{&quot;servers&quot;: {&quot;blades&quot;: [&quot;1/3&quot;]}}&apos; -H &quot;Content-Type: application/json&quot; $KUBAM_API/api/v2/servers/kube-group1/fsm
+</code></pre><pre><code> curl -X GET -d &apos;{&quot;servers&quot;: {&quot;blades&quot;: [&quot;1009/1/3&quot;]}}&apos; -H &quot;Content-Type: application/json&quot; $KUBAM_API/api/v2/servers/pdx-central/fsm
+</code></pre><pre><code>* Returns: 
 </code></pre><pre><code>{
     &quot;stages&quot;: [
         {
@@ -794,66 +788,69 @@ curl -X POST -H &quot;Content-Type: application/json&quot; -d &apos;{ &quot;kuba
 </ul>
 <h3 id="apiv1isos"><code>/api/v1/isos</code></h3>
 <ul>
-<li><p><code>GET</code>  Gets the current ISO files that exist in the <code>/kubam/</code> directory.  </p>
-<ul>
-<li><p>Example: </p>
-<pre><code>curl http://10.93.234.96:8001/api/v1/isos
-{
-&quot;isos&quot;: [
-&quot;CentOS-7-x86_64-Minimal-1708.iso&quot;
-]
-}
-</code></pre></li>
+<li><code>GET</code>  Gets the current ISO files that exist in the <code>/kubam/</code> directory.  <ul>
+<li>Example: </li>
 </ul>
 </li>
 </ul>
-<h3 id="apiv1isosmap"><code>/api/v1/isos/map</code></h3>
+<pre><code>curl http://10.93.234.96:8001/api/v1/isos
+
+{
+  &quot;isos&quot;: [
+    &quot;CentOS-7-x86_64-Minimal-1708.iso&quot;
+  ]
+}
+</code></pre><h3 id="apiv1isosmap"><code>/api/v1/isos/map</code></h3>
 <p>We Map the file of the operating system to the name of what operating system it is.  We are not smart enough to figure it out in code at this time.  Actually, we are just a little lazy. </p>
 <ul>
 <li><code>GET</code> Gets the current Mapping of OS name to OS iso files.  These are OSes that can be deployed. <ul>
 <li>Parameters:  None</li>
-<li>Example:<pre><code>curl http://10.93.234.96:8001/api/v1/isos/map
-{
-&quot;iso_map&quot;: [
-{
-&quot;file&quot;: &quot;/kubam/CentOS-7-x86_64-Minimal-1708.iso&quot;,
-&quot;os&quot;: &quot;centos7.4&quot;
-}
-]
-}
-</code></pre></li>
+<li>Example:</li>
 </ul>
 </li>
 </ul>
-<ul>
-<li><code>POST</code> Maps all ISOS to files.  You should include all previously mapped ISO maps in this request if you want to add one.  KUBAM expects all ISO files to be in the <code>/kubam/</code> directory of the container.  (this directory is mounted when KUBAM starts from something like <code>/root/kubam</code>.  <ul>
-<li>Parameters: Should be a map of all the isos in the file to the name of the operating systems. <pre><code>  {
-     &quot;iso_map&quot;: [
-       {
-             &quot;file&quot;: &quot;/kubam/CentOS-7-x86_64-Minimal-1708.iso&quot;,
-             &quot;os&quot;: &quot;centos7.4&quot;
-       },
-       {...
-       },
-     ]
+<pre><code>curl http://10.93.234.96:8001/api/v1/isos/map
+
+{
+  &quot;iso_map&quot;: [
+    {
+      &quot;file&quot;: &quot;/kubam/CentOS-7-x86_64-Minimal-1708.iso&quot;,
+      &quot;os&quot;: &quot;centos7.4&quot;
+    }
+  ]
 }
 </code></pre><ul>
-<li>Example: <pre><code>curl -X POST $KUBAM_API/api/v1/isos/map -d &apos;{&quot;iso_map&quot; : [{&quot;os&quot; : &quot;centos7.4&quot;, &quot;file&quot; : &quot;/kubam/CentOS-7-x86_64-Minimal-1708.iso&quot;}]}&apos; -H &quot;Content-Type: application/json&quot;
-{
-&quot;iso_map&quot;: [
-{
-&quot;file&quot;: &quot;/kubam/CentOS-7-x86_64-Minimal-1708.iso&quot;,
-&quot;os&quot;: &quot;centos7.4&quot;
-}
-]
-}
-</code></pre></li>
+<li><code>POST</code> Maps all ISOS to files.  You should include all previously mapped ISO maps in this request if you want to add one.  KUBAM expects all ISO files to be in the <code>/kubam/</code> directory of the container.  (this directory is mounted when KUBAM starts from something like <code>/root/kubam</code>.  <ul>
+<li>Parameters: Should be a map of all the isos in the file to the name of the operating systems. </li>
 </ul>
 </li>
 </ul>
-</li>
+<pre><code>{
+      &quot;iso_map&quot;: [
+        {
+              &quot;file&quot;: &quot;/kubam/CentOS-7-x86_64-Minimal-1708.iso&quot;,
+              &quot;os&quot;: &quot;centos7.4&quot;
+        },
+        {...
+        },
+      ]
+}
+</code></pre><ul>
+<li>Example:</li>
 </ul>
-<h2 id="server-groups">Server Groups</h2>
+<pre><code>curl -X POST $KUBAM_API/api/v1/isos/map \
+    -d &apos;{&quot;iso_map&quot; : [{&quot;os&quot; : &quot;centos7.4&quot;, &quot;file&quot; : &quot;/kubam/CentOS-7-x86_64-Minimal-1708.iso&quot;}]}&apos; \
+    -H &quot;Content-Type: application/json&quot;
+
+{
+  &quot;iso_map&quot;: [
+    {
+      &quot;file&quot;: &quot;/kubam/CentOS-7-x86_64-Minimal-1708.iso&quot;,
+      &quot;os&quot;: &quot;centos7.4&quot;
+    }
+  ]
+}
+</code></pre><h2 id="server-groups">Server Groups</h2>
 <p>KUBAM stores values for UCS logins inside the <code>kubam.yaml</code> This API just offers a way to make this happen.  </p>
 <h3 id="apiv2servers"><code>/api/v2/servers</code></h3>
 <ul>
@@ -993,13 +990,18 @@ curl -X POST -H &quot;Content-Type: application/json&quot; -d &apos;{ &quot;kuba
 </li>
 </ul>
 </li>
-<li><code>GET</code> - Get the disks of a server</li>
-<li>Example: <pre><code>curl -X GET -d &apos;{&quot;servers&quot;: {&quot;blades&quot;: [&quot;1/3&quot;], &quot;rack_servers&quot; : [&quot;1&quot;]}}&apos; -H &quot;Content-Type: application/json&quot; $KUBAM_API/api/v2/servers/kube-group1/disks
-</code></pre></li>
-<li>Output</li>
 </ul>
+<h4 id="get---get-the-disks-of-a-server"><code>GET</code> - Get the disks of a server</h4>
 <ul>
-<li><code>DELETE</code> - Reset the disks of servers.  </li>
+<li><p>Example: </p>
+<pre><code>curl -X GET -d &apos;{&quot;servers&quot;: {&quot;blades&quot;: [&quot;1/3&quot;], &quot;rack_servers&quot; : [&quot;1&quot;]}}&apos; -H &quot;Content-Type: application/json&quot; $KUBAM_API/api/v2/servers/kube-group1/disks
+</code></pre></li>
+<li><p>UCS Central Example</p>
+</li>
+</ul>
+<pre><code>curl -X GET -d &apos;{&quot;servers&quot;: {&quot;blades&quot;: [&quot;109/1/3&quot;]}}&apos; -H &quot;Content-Type: application/json&quot; $KUBAM_API/api/v2/servers/pdx-central/disks
+</code></pre><h4 id="delete---reset-the-disks-of-servers-to-unconfigured-good"><code>DELETE</code> - Reset the disks of servers to unconfigured Good.</h4>
+<ul>
 <li>Example: </li>
 </ul>
 <pre><code>curl -X DELETE -d &apos;{&quot;servers&quot;: {&quot;blades&quot;: [&quot;1/3&quot;], &quot;rack_servers&quot; : [&quot;1&quot;]}}&apos; -H &quot;Content-Type: application/json&quot; $KUBAM_API/api/v2/servers/kube-group1/disks
@@ -1191,7 +1193,7 @@ curl -X POST -H &quot;Content-Type: application/json&quot; -d &apos;{ &quot;kuba
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"KUBAM API","level":"3.6.1","depth":2,"next":{"title":"KUBAM API Walkthrough","level":"3.6.2","depth":2,"path":"kubam/developer/APIGUIDE.md","ref":"kubam/developer/APIGUIDE.md","articles":[]},"previous":{"title":"KUBAM Developer","level":"3.6","depth":1,"path":"kubam/developer/README.md","ref":"kubam/developer/README.md","articles":[{"title":"KUBAM API","level":"3.6.1","depth":2,"path":"kubam/developer/API.md","ref":"kubam/developer/API.md","articles":[]},{"title":"KUBAM API Walkthrough","level":"3.6.2","depth":2,"path":"kubam/developer/APIGUIDE.md","ref":"kubam/developer/APIGUIDE.md","articles":[]},{"title":"KUBAM YAML","level":"3.6.3","depth":2,"path":"kubam/developer/YAML.md","ref":"kubam/developer/YAML.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"kubam/developer/API.md","mtime":"2018-08-27T19:20:05.129Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-08-29T21:50:59.533Z"},"basePath":"../..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"KUBAM API","level":"3.6.1","depth":2,"next":{"title":"KUBAM API Walkthrough","level":"3.6.2","depth":2,"path":"kubam/developer/APIGUIDE.md","ref":"kubam/developer/APIGUIDE.md","articles":[]},"previous":{"title":"KUBAM Developer","level":"3.6","depth":1,"path":"kubam/developer/README.md","ref":"kubam/developer/README.md","articles":[{"title":"KUBAM API","level":"3.6.1","depth":2,"path":"kubam/developer/API.md","ref":"kubam/developer/API.md","articles":[]},{"title":"KUBAM API Walkthrough","level":"3.6.2","depth":2,"path":"kubam/developer/APIGUIDE.md","ref":"kubam/developer/APIGUIDE.md","articles":[]},{"title":"KUBAM YAML","level":"3.6.3","depth":2,"path":"kubam/developer/YAML.md","ref":"kubam/developer/YAML.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"kubam/developer/API.md","mtime":"2018-09-11T18:38:04.917Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-09-11T18:38:26.892Z"},"basePath":"../..","book":{"language":""}});
         });
     </script>
 </div>
