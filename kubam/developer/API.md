@@ -58,60 +58,11 @@ Set the IP address of the boot server.  Usually this is just the KUBAM server. T
 
 ## Monitor
 
-### ```/api/v2/servers/<server-group>/status```
-
-* ```GET``` Get the current overall status of the given server based on the passed parameters.
-	* Examples:
-	
-	```
-	curl -X GET -d '{"servers": {"blades": ["1/3"], "rack_servers" : ["1"]}}' -H "Content-Type: application/json" $KUBAM_API/api/v2/servers/kube-group1/status
-	```
-	
-	Entering no parameters gets the status of every node
-	
-	```
-	curl $KUBAM_API/api/v2/servers/kube-group1/status
-	```
-   
-    * Returns: 
-
-    ```
-  	{
-  		"servers": {
-    		"blades": {
-      			"1009/1/1": {
-        			"association": "associated",
-        			"chassis_id": "1",
-        			"dn": "compute/sys-1009/chassis-1/blade-1",
-        			"domain_id": "1009",
-        			"label": "",
-        			"model": "UCSB-B200-M4",
-        			"num_cores": "36",
-        			"num_cpus": "2",
-        			"oper_power": "off",
-        			"ram": "393216",
-        			"ram_speed": "1866",
-        			"service_profile": "org-root/org-SLCLAB3/ls-SLC-RDO_OS-01",
-        			"slot": "1",
-        			"type": "blade"
-      			},
-      		...
-      		}
-     		"rack_servers": {
-       		"1009/1" : {
-       			...
-       		}
-       		...
-     		}
-     	}
-    }
-    ```
-    (The above output is for UCS Central.  UCS Manager shows similar but omits the domain id (1009) from the blade name.)
-
 
 ### ```/api/v2/fsm```
 
-* ```GET``` Get the current detailed status of all FSM stages given server based on the passed parameters.
+* ```GET``` Get the current detailed status of all finite state machines (FSM) stages given server based on the passed parameters.
+
 	* examples: 
 
     ```
@@ -166,7 +117,6 @@ curl -X GET -d '{"servers": {"blades": ["1/3"]}}' -H "Content-Type: application/
 ### ```/api/v1/catalog```
 
 * ```GET```
-
 
 
 ### ```/api/v1/isos```
@@ -393,10 +343,15 @@ These methods change the power cycle of the server
 	```
 	curl $KUBAM_API/api/v2/servers/kube-group1/powerstat
 	```
+	
+	
 ### ```/api/v2/<server_group>/disks```
 
 ####  ```GET``` - Get the disks of a server
+
+
 * Example: 
+
 ```
 curl -X GET -d '{"servers": {"blades": ["1/3"], "rack_servers" : ["1"]}}' -H "Content-Type: application/json" $KUBAM_API/api/v2/servers/kube-group1/disks
 ```
@@ -406,7 +361,6 @@ curl -X GET -d '{"servers": {"blades": ["1/3"], "rack_servers" : ["1"]}}' -H "Co
 ```
 curl -X GET -d '{"servers": {"blades": ["109/1/3"]}}' -H "Content-Type: application/json" $KUBAM_API/api/v2/servers/pdx-central/disks
 ```
-
 
 
 ####  ```DELETE``` - Reset the disks of servers to unconfigured Good.  
@@ -567,11 +521,3 @@ Unique or all of them.  Allow multiple servers to be created.  If nothing is pas
 ```
 [ "host1", "host2", "host3", ...]
 ```
-
-
-
-## UCS Actions
-
-### ```/api/v2/ucs/drives```
-
-* ```DELETE``` resets the disk arrays from JBOD to unconfigured good.

@@ -696,53 +696,9 @@ curl -X POST -H &quot;Content-Type: application/json&quot; -d &apos;{ &quot;kuba
 </li>
 </ul>
 <h2 id="monitor">Monitor</h2>
-<h3 id="apiv2serversserver-groupstatus"><code>/api/v2/servers/&lt;server-group&gt;/status</code></h3>
-<ul>
-<li><p><code>GET</code> Get the current overall status of the given server based on the passed parameters.</p>
-<ul>
-<li><p>Examples:</p>
-<pre><code>curl -X GET -d &apos;{&quot;servers&quot;: {&quot;blades&quot;: [&quot;1/3&quot;], &quot;rack_servers&quot; : [&quot;1&quot;]}}&apos; -H &quot;Content-Type: application/json&quot; $KUBAM_API/api/v2/servers/kube-group1/status
-</code></pre><p>Entering no parameters gets the status of every node</p>
-<pre><code>curl $KUBAM_API/api/v2/servers/kube-group1/status
-</code></pre></li>
-<li><p>Returns: </p>
-<pre><code>{
-    &quot;servers&quot;: {
-      &quot;blades&quot;: {
-            &quot;1009/1/1&quot;: {
-              &quot;association&quot;: &quot;associated&quot;,
-              &quot;chassis_id&quot;: &quot;1&quot;,
-              &quot;dn&quot;: &quot;compute/sys-1009/chassis-1/blade-1&quot;,
-              &quot;domain_id&quot;: &quot;1009&quot;,
-              &quot;label&quot;: &quot;&quot;,
-              &quot;model&quot;: &quot;UCSB-B200-M4&quot;,
-              &quot;num_cores&quot;: &quot;36&quot;,
-              &quot;num_cpus&quot;: &quot;2&quot;,
-              &quot;oper_power&quot;: &quot;off&quot;,
-              &quot;ram&quot;: &quot;393216&quot;,
-              &quot;ram_speed&quot;: &quot;1866&quot;,
-              &quot;service_profile&quot;: &quot;org-root/org-SLCLAB3/ls-SLC-RDO_OS-01&quot;,
-              &quot;slot&quot;: &quot;1&quot;,
-              &quot;type&quot;: &quot;blade&quot;
-            },
-        ...
-        }
-       &quot;rack_servers&quot;: {
-         &quot;1009/1&quot; : {
-             ...
-         }
-         ...
-       }
-   }
-}
-</code></pre><p>(The above output is for UCS Central.  UCS Manager shows similar but omits the domain id (1009) from the blade name.)</p>
-</li>
-</ul>
-</li>
-</ul>
 <h3 id="apiv2fsm"><code>/api/v2/fsm</code></h3>
 <ul>
-<li><p><code>GET</code> Get the current detailed status of all FSM stages given server based on the passed parameters.</p>
+<li><p><code>GET</code> Get the current detailed status of all finite state machines (FSM) stages given server based on the passed parameters.</p>
 <ul>
 <li><p>examples: </p>
 <pre><code>curl -X GET -d &apos;{&quot;servers&quot;: {&quot;blades&quot;: [&quot;1/3&quot;], &quot;rack_servers&quot; : [&quot;1&quot;]}}&apos; -H &quot;Content-Type: application/json&quot; $KUBAM_API/api/v2/servers/kube-group1/fsm
@@ -986,18 +942,18 @@ curl -X POST -H &quot;Content-Type: application/json&quot; -d &apos;{ &quot;kuba
 </li>
 <li><p>Example: You can also get all the servers by not passing in any arguments</p>
 <pre><code>curl $KUBAM_API/api/v2/servers/kube-group1/powerstat
-</code></pre><h3 id="apiv2servergroupdisks"><code>/api/v2/&lt;server_group&gt;/disks</code></h3>
-</li>
+</code></pre></li>
 </ul>
 </li>
 </ul>
+<h3 id="apiv2servergroupdisks"><code>/api/v2/&lt;server_group&gt;/disks</code></h3>
 <h4 id="get---get-the-disks-of-a-server"><code>GET</code> - Get the disks of a server</h4>
 <ul>
-<li><p>Example: </p>
+<li>Example: </li>
+</ul>
 <pre><code>curl -X GET -d &apos;{&quot;servers&quot;: {&quot;blades&quot;: [&quot;1/3&quot;], &quot;rack_servers&quot; : [&quot;1&quot;]}}&apos; -H &quot;Content-Type: application/json&quot; $KUBAM_API/api/v2/servers/kube-group1/disks
-</code></pre></li>
-<li><p>UCS Central Example</p>
-</li>
+</code></pre><ul>
+<li>UCS Central Example</li>
 </ul>
 <pre><code>curl -X GET -d &apos;{&quot;servers&quot;: {&quot;blades&quot;: [&quot;109/1/3&quot;]}}&apos; -H &quot;Content-Type: application/json&quot; $KUBAM_API/api/v2/servers/pdx-central/disks
 </code></pre><h4 id="delete---reset-the-disks-of-servers-to-unconfigured-good"><code>DELETE</code> - Reset the disks of servers to unconfigured Good.</h4>
@@ -1145,12 +1101,7 @@ curl -X POST -H &quot;Content-Type: application/json&quot; -d &apos;{ &quot;kuba
 </ul>
 <p>Unique or all of them.  Allow multiple servers to be created.  If nothing is passed in, all servers will have boot images created for them. </p>
 <pre><code>[ &quot;host1&quot;, &quot;host2&quot;, &quot;host3&quot;, ...]
-</code></pre><h2 id="ucs-actions">UCS Actions</h2>
-<h3 id="apiv2ucsdrives"><code>/api/v2/ucs/drives</code></h3>
-<ul>
-<li><code>DELETE</code> resets the disk arrays from JBOD to unconfigured good.</li>
-</ul>
-
+</code></pre>
                                 
                                 </section>
                             
@@ -1193,7 +1144,7 @@ curl -X POST -H &quot;Content-Type: application/json&quot; -d &apos;{ &quot;kuba
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"KUBAM API","level":"3.6.1","depth":2,"next":{"title":"KUBAM API Walkthrough","level":"3.6.2","depth":2,"path":"kubam/developer/APIGUIDE.md","ref":"kubam/developer/APIGUIDE.md","articles":[]},"previous":{"title":"KUBAM Developer","level":"3.6","depth":1,"path":"kubam/developer/README.md","ref":"kubam/developer/README.md","articles":[{"title":"KUBAM API","level":"3.6.1","depth":2,"path":"kubam/developer/API.md","ref":"kubam/developer/API.md","articles":[]},{"title":"KUBAM API Walkthrough","level":"3.6.2","depth":2,"path":"kubam/developer/APIGUIDE.md","ref":"kubam/developer/APIGUIDE.md","articles":[]},{"title":"KUBAM YAML","level":"3.6.3","depth":2,"path":"kubam/developer/YAML.md","ref":"kubam/developer/YAML.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"kubam/developer/API.md","mtime":"2018-09-11T18:38:04.917Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-09-11T18:38:26.892Z"},"basePath":"../..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"KUBAM API","level":"3.6.1","depth":2,"next":{"title":"KUBAM API Walkthrough","level":"3.6.2","depth":2,"path":"kubam/developer/APIGUIDE.md","ref":"kubam/developer/APIGUIDE.md","articles":[]},"previous":{"title":"KUBAM Developer","level":"3.6","depth":1,"path":"kubam/developer/README.md","ref":"kubam/developer/README.md","articles":[{"title":"KUBAM API","level":"3.6.1","depth":2,"path":"kubam/developer/API.md","ref":"kubam/developer/API.md","articles":[]},{"title":"KUBAM API Walkthrough","level":"3.6.2","depth":2,"path":"kubam/developer/APIGUIDE.md","ref":"kubam/developer/APIGUIDE.md","articles":[]},{"title":"KUBAM YAML","level":"3.6.3","depth":2,"path":"kubam/developer/YAML.md","ref":"kubam/developer/YAML.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"kubam/developer/API.md","mtime":"2018-09-13T22:53:32.557Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-09-13T22:53:52.432Z"},"basePath":"../..","book":{"language":""}});
         });
     </script>
 </div>
