@@ -384,7 +384,9 @@ Deploy the UCS Service Profiles
 
 * ```POST```: Deploys a VMedia policy only that can be used by existing Service Profiles. 
 
+### ```/api/v2/servers/<server_group>/templates```
 
+* ```GET```: Get all Service Profile templates in the UCS Manager or UCS Central server group. 
 
 
 ## ACI
