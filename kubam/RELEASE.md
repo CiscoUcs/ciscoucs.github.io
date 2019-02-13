@@ -1,6 +1,14 @@
 # Release Notes
 
-## KUBAM 2.0 - Targeted (6/11/2018)
+## KUBAM 2.1 - March 2019
+
+* New OS support:
+	* Ubuntu 18.04
+* Kubernetes 1.11
+* Bug Fixes
+* Documentation Fixes
+
+## KUBAM 2.0 - Released November 2018
 
 * New OS support: 
 	* Windows 2012 R2
@@ -12,11 +20,6 @@
 * IMC Server Support - Deploy C series servers
 * Bug fixes.
 * Support for SELinux
-
-* Kubernetes 1.10 
-	* Contiv VPP
-	* ACI CNI Plugins
-	* Slim Kernal KUBAM image
 
 
 ## KUBAM 1.0 - Released November 2017

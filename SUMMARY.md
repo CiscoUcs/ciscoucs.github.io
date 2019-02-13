@@ -11,6 +11,7 @@
 * [Operating Systems](OS/README.md)
 	* [CoreOS](OS/COREOS.md)
 	* [RedHat](OS/REDHAT.md)
+	* [Ubuntu](OS/UBUNTU.md)
 * [Containers](CONTAINERS/README.md)
 * [Support](SUPPORT.md)
 

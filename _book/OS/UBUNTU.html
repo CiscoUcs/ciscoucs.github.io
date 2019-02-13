@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <title>Containers · GitBook</title>
+        <title>Ubuntu · GitBook</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="GitBook 3.2.3">
@@ -57,10 +57,10 @@
     <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="../SUPPORT.html" />
+    <link rel="next" href="../CONTAINERS/" />
     
     
-    <link rel="prev" href="../OS/UBUNTU.html" />
+    <link rel="prev" href="REDHAT.html" />
     
 
     </head>
@@ -148,9 +148,9 @@
             
         </li>
     
-        <li class="chapter " data-level="2.4" data-path="../OS/">
+        <li class="chapter " data-level="2.4" data-path="./">
             
-                <a href="../OS/">
+                <a href="./">
             
                     
                     Operating Systems
@@ -162,9 +162,9 @@
             <ul class="articles">
                 
     
-        <li class="chapter " data-level="2.4.1" data-path="../OS/COREOS.html">
+        <li class="chapter " data-level="2.4.1" data-path="COREOS.html">
             
-                <a href="../OS/COREOS.html">
+                <a href="COREOS.html">
             
                     
                     CoreOS
@@ -175,9 +175,9 @@
             
         </li>
     
-        <li class="chapter " data-level="2.4.2" data-path="../OS/REDHAT.html">
+        <li class="chapter " data-level="2.4.2" data-path="REDHAT.html">
             
-                <a href="../OS/REDHAT.html">
+                <a href="REDHAT.html">
             
                     
                     RedHat
@@ -188,9 +188,9 @@
             
         </li>
     
-        <li class="chapter " data-level="2.4.3" data-path="../OS/UBUNTU.html">
+        <li class="chapter active" data-level="2.4.3" data-path="UBUNTU.html">
             
-                <a href="../OS/UBUNTU.html">
+                <a href="UBUNTU.html">
             
                     
                     Ubuntu
@@ -206,9 +206,9 @@
             
         </li>
     
-        <li class="chapter active" data-level="2.5" data-path="./">
+        <li class="chapter " data-level="2.5" data-path="../CONTAINERS/">
             
-                <a href="./">
+                <a href="../CONTAINERS/">
             
                     
                     Containers
@@ -644,7 +644,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href=".." >Containers</a>
+        <a href=".." >Ubuntu</a>
     </h1>
 </div>
 
@@ -659,16 +659,150 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <p>Here we will post information on how to best run container systems on UCS.  While we may be biased, we find half of the people who run container systems run them in their own Data Centers with the other half running them on public cloud offerings.  </p>
-<h2 id="docker-data-center">Docker Data Center</h2>
+                                <h1 id="ubuntu-vmedia-installation">Ubuntu vMedia Installation</h1>
+<p><strong>Date:</strong> Feb 2019 <strong>Author:</strong> <a href="https://twitter.com/vallard" target="_blank">@vallard</a></p>
+<p>This tutorial will explain how to install Ubuntu on UCS bare metal using vMedia policies to create an automated installation.  This is the method used by KUBAM to deploy Ubuntu on Bare Metal. </p>
+<h2 id="1-get-base-os-image-media">1. Get base OS image media</h2>
+<p>You can get the Ubuntu 18.04 image from the alternative downloads.  If you get the standard live server this method won&apos;t work.  Here is a <a href="http://cdimage.ubuntu.com/releases/18.04.1/release/ubuntu-18.04.1-server-amd64.iso" target="_blank">link that works today</a>.  </p>
+<h2 id="2-build-boot-iso-image">2. Build Boot ISO Image</h2>
+<p>Mount the Ubuntu ISO image.  This could be done with: </p>
+<pre><code>sudo mkdir -p /root/kubam/ubuntu18.04
+sudo mount -o loop &lt;ubuntu iso&gt;.iso /media
+sudo cp -rT /media/ /root/kubam/ubuntu18.04
+export BASEPATH=/root/kubam/ubuntu18.04
+</code></pre><p>Now create the directory where our boot files will go:</p>
+<pre><code>sudo mkdir ubuntu18.04-boot
+</code></pre><p>Now copy the following files from the base media to the boot dir.  We try to keep it small so we only copy what we need:</p>
+<pre><code>export BASEPATH=/root/kubam/ubuntu18.04
+cd ubuntu18.04-boot
+cp $BASEPATH/isolinux/f*txt . 
+cp $BASEPATH/isolinux/splash.png . 
+cp $BASEPATH/isolinux/vesamenu.c32 . 
+cp $BASEPATH/isolinux/txt.cfg .
+cp $BASEPATH/isolinux/stdmenu.cfg .  
+cp $BASEPATH/isolinux/rqtxt.cfg . 
+cp $BASEPATH/isolinux/prompt.cfg . 
+cp $BASEPATH/isolinux/menu.cfg . 
+cp $BASEPATH/isolinux/libutil.c32 .
+cp $BASEPATH/isolinux/libcom32.c32 .
+cp $BASEPATH/isolinux/ldlinux.c32 .
+cp $BASEPATH/isolinux/isolinux.cfg .
+cp $BASEPATH/isolinux/isolinux.bin . 
+cp $BASEPATH/isolinux/exithelp.cfg .
+cp $BASEPATH/isolinux/boot.cat .
+cp $BASEPATH/isolinux/adtxt.cfg .
+cp $BASEPATH/install/netboot/ubuntu-installer/amd64/linux . 
+cp $BASEPATH/install/netboot/ubuntu-installer/amd64/initrd.gz .
+cp -a $BASEPATH/boot .
+cp $BASEPATH/preseed/ubuntu-server-minimal.seed .
+</code></pre><p>Now we&apos;ll need to edit a few files in this directory: </p>
+<h3 id="22-edit-isolinuxcfg">2.2 Edit <code>isolinux.cfg</code></h3>
+<p>Remove the last line and set the timeout to 3.</p>
+<pre><code># D-I config version 2.0
+# search path for the c32 support libraries (libcom32, libutil etc.)
+path
+include menu.cfg
+default vesamenu.c32
+prompt 1
+timeout 3
+</code></pre><p>This way it starts in 3 microseconds and you don&apos;t have to wait for anything. If you want it to wait longer before installing you can put different timeout values. </p>
+<h3 id="23-edit-txtcfg">2.3 Edit <code>txt.cfg</code></h3>
+<p>We edit the <code>txt.cfg</code> file to look as follows:</p>
+<pre><code>default install
+label install
+  menu label ^Install Ubuntu Server
+  kernel linux
+  append netcfg/disable_autoconfig=true netcfg/confirm_static=true netcfg/get_ipaddress=192.168.1.42 netcfg/get_netmask=255.255.255.0 netcfg/get_nameservers=192.168.1.1 netcfg/get_gateway=192.168.1.1 url=http://192.168.1.14/kubam/preseed.cfg initrd=initrd.gz hostname=kubam01 domain=local mirror/http/hostname=192.168.1.14 mirror/country=manual mirror/http/proxy= protocol=http mirror/http/directory=/kubam/ubuntu18.04 keymap=us locale=en_US --- DEBCONF_DEBUG=5
+
+label hd
+  menu label ^Boot from first hard disk
+  localboot 0x80
+</code></pre><p>As you can see there is a lot of static part of the configuration that we put into the kernel command line.  The gist of it is that we define the network and some other necessary parameters so that it can automatically start the installation.  It then grabs the rest of the parameters from the <code>preseed</code> file that lives on the server.  </p>
+<p>The bulk of the details of the <code>preseed</code> file is <a href="https://help.ubuntu.com/lts/installation-guide/amd64/apbs04.html" target="_blank">documented here</a>. We will break down the kernel parameters we use here:</p>
 <ul>
-<li><a href="http://www.cisco.com/c/en/us/td/docs/unified_computing/ucs/UCS_CVDs/ucs_docker.html" target="_blank">Validated design for UCS and Docker Enterprise Edition</a></li>
-<li><a href="http://www.cisco.com/c/en/us/td/docs/unified_computing/ucs/UCS_CVDs/flexpod_docker_deploy_design.html" target="_blank">Validated design for FlexPod and Docker Enterprise Edition</a></li>
+<li><code>netcfg/disable_autoconfig=true</code> - If this is not set the server will attempt do install via DHCP.  We prefer to set it static. </li>
+<li><code>netcfg/confirm_static=true</code> - If we don&apos;t put this it asks if we really really want to do a static IP.  Yes we do. </li>
+<li><code>etcfg/get_ipaddress=192.168.1.42</code>, <code>netcfg/get_netmask=255.255.255.0</code>,  <code>netcfg/get_nameservers=192.168.1.1</code>, <code>netcfg/get_gateway=192.168.1.1</code> - Here we are setting the static IP address of the server.  If any of these parameters are left out it will prompt us for answers. We don&apos;t want that to happen :-)</li>
+<li><code>url=http://192.168.1.14/kubam/preseed.cfg</code> - This is the preseed config file that is used for the node.  It has extra details in it.  This file lives on the server <code>192.168.1.14</code> in the specified directory.  During the install, the host will reach out to the <code>192.168.1.14</code> server and try to read this file. </li>
+<li><code>hostname=kubam01</code>, <code>domain=local</code> - Local hostname configuration for the server.  </li>
+<li><code>initrd=initrd.gz</code> - The ramdisk that will be used to boot the machine.  This file is in the customized CD image we make. </li>
+<li><code>mirror/http/hostname=192.168.1.14</code>,  <code>mirror/country=manual mirror/http/proxy=</code>, <code>protocol=http</code>, <code>mirror/http/directory=/kubam/ubuntu18.04</code> - These settings are so that we download the Ubuntu files directly from the server as opposed to going out to the internet to fetch them.  This helps us install in air gapped environments.  Since the boot ISO image is only 50MB all the packages live elsewhere. </li>
+<li><code>keymap=us</code>, <code>locale=en_US</code> - Used to set locale. Otherwise we would be prompted. </li>
+<li><code>DEBCONF_DEBUG=5</code> - Adding this kernel parameter lets us get more logs of the install process on <code>Alt-F4</code>.  It helps debug.  You can leave it off. </li>
 </ul>
-<h2 id="kubernetes">Kubernetes</h2>
-<ul>
-<li><a href="../kubam">KUBaM! - Kubernetes on UCS Bare Metal</a> This guide walks through automatically installing Kubernetes on UCS Bare Metal as fast as possible.  </li>
-</ul>
+<p>Many of these details should be put in just the preseed file, the issue is the installer still stops unless we have some of these on the command line.  </p>
+<h3 id="24-make-the-boot-iso-image">2.4 Make the Boot ISO image.</h3>
+<p>To make the boot ISO image we run:</p>
+<pre><code>apt install genisoimage
+mkisofs -D -r -V &quot;UBUNTU&quot; -cache-inodes -J -l -b isolinux.bin -c boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -o ubuntu18.04-boot.iso ubuntu18.04-boot/
+</code></pre><p>We now have a boot ISO image we can use with a Vmedia image for one node.  But we will still need to create the <code>preseed</code> file and put it on our server. </p>
+<h2 id="3-make-the-preseed-file">3. Make the preseed file</h2>
+<p>Our file looks as follows:</p>
+<pre><code>d-i debconf/priority string critical
+d-i auto-install/enable boolean true
+d-i anna/choose_modules apt-cdrom-setup
+
+# use -proposed udebs
+d-i apt-setup/proposed boolean false
+
+# minimal install (the only one not working!)
+ubiquity ubiquity/minimal_install boolean true
+
+# localization
+d-i debian-installer/language string en
+d-i debian-installer/country string US
+d-i debian-installer/locale string en_US.UTF-8
+
+# keyboard
+d-i console-setup/ask_detect boolean false
+d-i keyboard-configuration/xkb-keymap select us
+
+# use static network configuration
+d-i netcfg/get_hostname string unassigned-hostname
+d-i netcfg/get_domain string unassigned-domain
+d-i netcfg/disable_autoconfig boolean true
+d-i netcfg/choose_interface select enp0s3
+d-i netcfg/get_ipaddress string 192.168.1.42
+d-i netcfg/get_netmask string 255.255.255.0
+d-i netcfg/get_gateway string 192.168.1.1
+d-i netcfg/get_nameservers string 192.168.1.1
+d-i netcfg/confirm_static boolean true
+
+
+# user setup
+d-i passwd/user-fullname string kubam
+d-i passwd/username string kubam
+d-i passwd/user-password password Cisco.123
+d-i passwd/user-password-again password Cisco.123
+d-i user-setup/allow-password-weak boolean true
+d-i user-setup/encrypt-home boolean false
+
+# enable shadow passwords
+d-i passwd/shadow boolean true
+
+# Date/Time settings
+d-i clock-setup/utc boolean true
+d-i time/zone string US/Pacific
+d-i clock-setup/ntp boolean true
+
+
+# release to install
+d-i mirror/suite string bionic
+
+# do not enable live installer, use normal instead
+d-i live-installer/enable boolean false
+
+# auto-partition, all files in one partition
+d-i partman-auto/init_automatically_partition select biggest_free
+d-i partman-auto/method string regular
+d-i partman-auto/choose_recipe select atomic
+d-i partman/choose_partition select finish
+d-i partman/confirm_nooverwrite boolean true
+d-i partman/confirm boolean true
+
+# reboot at the end
+d-i finish-install/reboot_in_progress note
+</code></pre><p>There are many more complicated setups you could use but this is one that gets our systems up and running. </p>
 
                                 
                                 </section>
@@ -696,12 +830,12 @@
 
             
                 
-                <a href="../OS/UBUNTU.html" class="navigation navigation-prev " aria-label="Previous page: Ubuntu">
+                <a href="REDHAT.html" class="navigation navigation-prev " aria-label="Previous page: RedHat">
                     <i class="fa fa-angle-left"></i>
                 </a>
                 
                 
-                <a href="../SUPPORT.html" class="navigation navigation-next " aria-label="Next page: Support">
+                <a href="../CONTAINERS/" class="navigation navigation-next " aria-label="Next page: Containers">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -712,7 +846,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Containers","level":"2.5","depth":1,"next":{"title":"Support","level":"2.6","depth":1,"path":"SUPPORT.md","ref":"SUPPORT.md","articles":[]},"previous":{"title":"Ubuntu","level":"2.4.3","depth":2,"path":"OS/UBUNTU.md","ref":"OS/UBUNTU.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"CONTAINERS/README.md","mtime":"2018-03-01T19:51:05.772Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-02-13T00:23:02.062Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Ubuntu","level":"2.4.3","depth":2,"next":{"title":"Containers","level":"2.5","depth":1,"path":"CONTAINERS/README.md","ref":"CONTAINERS/README.md","articles":[]},"previous":{"title":"RedHat","level":"2.4.2","depth":2,"path":"OS/REDHAT.md","ref":"OS/REDHAT.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"OS/UBUNTU.md","mtime":"2019-02-13T00:22:15.627Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-02-13T00:23:02.062Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
