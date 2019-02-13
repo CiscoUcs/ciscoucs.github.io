@@ -187,3 +187,13 @@ d-i finish-install/reboot_in_progress note
 
 ```
 There are many more complicated setups you could use but this is one that gets our systems up and running. 
+
+Now for each host to be installed you need to put a `preseed.cfg` on a server that each host can reach during the installation. 
+
+## 4. Setup Vmedia Policy
+
+The best strategy would be to create a unique ISO image for each host and name the ISO after the UCS Service Profile Name.  This way each server would grab this ISO file and boot it up.  Then each server would have its own preseed file it could access as well.  If this sounds tedious using any configuration management tool could actually set this up.  We use [kubam](https://kubam.io) to do this for us as it also serves the files. 
+
+By using this we now can boot the server and the OS comes up automatically! 
+
+Hit me up if there are any questions on [@twitter](https://twitter.com/vallard). 
