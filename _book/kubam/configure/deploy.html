@@ -428,12 +428,12 @@
             
         </li>
     
-        <li class="chapter " data-level="3.4.7" data-path="windows2.html">
+        <li class="chapter " data-level="3.4.7" data-path="ubuntu.html">
             
-                <a href="windows2.html">
+                <a href="ubuntu.html">
             
                     
-                    Windows Windows AutoDeploy
+                    Ubuntu Preseed
             
                 </a>
             
@@ -441,7 +441,20 @@
             
         </li>
     
-        <li class="chapter active" data-level="3.4.8" data-path="deploy.html">
+        <li class="chapter " data-level="3.4.8" data-path="windows2.html">
+            
+                <a href="windows2.html">
+            
+                    
+                    Microsoft Windows AutoDeploy
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="3.4.9" data-path="deploy.html">
             
                 <a href="deploy.html">
             
@@ -454,7 +467,7 @@
             
         </li>
     
-        <li class="chapter " data-level="3.4.9" data-path="sp.html">
+        <li class="chapter " data-level="3.4.10" data-path="sp.html">
             
                 <a href="sp.html">
             
@@ -674,6 +687,10 @@
                                 
                                 <h1 id="deploy-install-images">Deploy install Images</h1>
 <p>At this point all values should be filled out and servers may be customized with auto install template files.  Our next step is to make the deployment images with these yet to be installed systems. </p>
+<p>This is done by returning to the <code>Hosts</code> tab and checking the servers.  Then by clicking <code>Build Boot Images</code>.</p>
+<p><img src="../img/deploy01.png" alt="deploy01"></p>
+<p>This will then build the files in the <code>~/kubam</code> directory required for the service profile templates. </p>
+<p>Currently the GUI does not implement the other features such as <code>Deploy VMedia Policy</code>, or other items in the menu.  Sorry about that.  Next all you need to do is build your service profiles from templates that have VMedia profiles correctly and the machine will boot up into the OS.  Beautiful!</p>
 
                                 
                                 </section>
@@ -701,7 +718,7 @@
 
             
                 
-                <a href="windows2.html" class="navigation navigation-prev " aria-label="Previous page: Windows Windows AutoDeploy">
+                <a href="windows2.html" class="navigation navigation-prev " aria-label="Previous page: Microsoft Windows AutoDeploy">
                     <i class="fa fa-angle-left"></i>
                 </a>
                 
@@ -717,7 +734,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Deploy Install Images","level":"3.4.8","depth":2,"next":{"title":"Configure Service Profiles","level":"3.4.9","depth":2,"path":"kubam/configure/sp.md","ref":"kubam/configure/sp.md","articles":[]},"previous":{"title":"Windows Windows AutoDeploy","level":"3.4.7","depth":2,"path":"kubam/configure/windows2.md","ref":"kubam/configure/windows2.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"kubam/configure/deploy.md","mtime":"2019-02-15T23:21:48.394Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-02-15T23:22:09.636Z"},"basePath":"../..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Deploy Install Images","level":"3.4.9","depth":2,"next":{"title":"Configure Service Profiles","level":"3.4.10","depth":2,"path":"kubam/configure/sp.md","ref":"kubam/configure/sp.md","articles":[]},"previous":{"title":"Microsoft Windows AutoDeploy","level":"3.4.8","depth":2,"path":"kubam/configure/windows2.md","ref":"kubam/configure/windows2.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"kubam/configure/deploy.md","mtime":"2019-02-15T23:47:49.952Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-02-15T23:48:30.587Z"},"basePath":"../..","book":{"language":""}});
         });
     </script>
 </div>

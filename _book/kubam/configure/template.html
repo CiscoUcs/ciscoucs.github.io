@@ -57,7 +57,7 @@
     <link rel="shortcut icon" href="../../gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="windows2.html" />
+    <link rel="next" href="ubuntu.html" />
     
     
     <link rel="prev" href="settings.html" />
@@ -428,12 +428,12 @@
             
         </li>
     
-        <li class="chapter " data-level="3.4.7" data-path="windows2.html">
+        <li class="chapter " data-level="3.4.7" data-path="ubuntu.html">
             
-                <a href="windows2.html">
+                <a href="ubuntu.html">
             
                     
-                    Windows Windows AutoDeploy
+                    Ubuntu Preseed
             
                 </a>
             
@@ -441,7 +441,20 @@
             
         </li>
     
-        <li class="chapter " data-level="3.4.8" data-path="deploy.html">
+        <li class="chapter " data-level="3.4.8" data-path="windows2.html">
+            
+                <a href="windows2.html">
+            
+                    
+                    Microsoft Windows AutoDeploy
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.4.9" data-path="deploy.html">
             
                 <a href="deploy.html">
             
@@ -454,7 +467,7 @@
             
         </li>
     
-        <li class="chapter " data-level="3.4.9" data-path="sp.html">
+        <li class="chapter " data-level="3.4.10" data-path="sp.html">
             
                 <a href="sp.html">
             
@@ -673,7 +686,7 @@
                                 <section class="normal markdown-section">
                                 
                                 <h1 id="kickstart-templates">Kickstart Templates</h1>
-<p>KUBAM uses <a href="https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html/installation_guide/s1-kickstart2-file" target="_blank">kickstart</a> for automated installs for RedHat and VMware ESXi.  Further supported operating systems will also use the native automated answer file for rapid installation. </p>
+<p>KUBAM uses <a href="https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html/installation_guide/s1-kickstart2-file" target="_blank">kickstart</a> for automated installs for RedHat and VMware ESXi.  Other supported operating systems use the native automated answer file for rapid installation as well. </p>
 <p>The current default kickstart templates are found in the <a href="https://github.com/CiscoUcs/KUBaM/tree/master/kubam/templates" target="_blank">KUBAM source repository</a>.  These templates are copied into the container in the <code>/usr/share/kubam/templates</code> directory.  </p>
 <h2 id="kickstart-templates">Kickstart Templates</h2>
 <p>The kickstart template allows for a blueprint of multiple unique kickstart files for each server.  In this way every server receives its unique installation file.  This is important as each node has something unique about it including <code>hostname</code>, <code>ip address</code>, or different role type.  </p>
@@ -682,14 +695,15 @@
 <h2 id="kubam-template-key-words">KUBAM Template Key words</h2>
 <p>The following jinja2 variables found in a kickstart file will be automatically filled: </p>
 <ul>
-<li><code> </code></li>
-<li><code>\</code></li>
-<li><code>{\{ gateway }}</code></li>
-<li><code> </code></li>
-<li><code> </code> - The hostname of the server, not the FQDN.</li>
-<li><code> </code> - A list of public keys authorized to log into this server. </li>
-<li><code>\{\{ proxy \}\}</code> - A proxy server if the machine is behind a firewall.  This can be used in post scripts. </li>
+<li><code>masterIP</code></li>
+<li><code>netmask</code></li>
+<li><code>gateway</code></li>
+<li><code>nameserver</code></li>
+<li><code>name</code> - The hostname of the server, not the FQDN.</li>
+<li><code>keys</code> - A list of public keys authorized to log into this server. </li>
+<li><code>proxy</code> - A proxy server if the machine is behind a firewall.  This can be used in post scripts. </li>
 </ul>
+<p>These values are filled in by the values you put in the <code>kubam.yaml</code> file either by the GUI, API, or by editing the file directory.</p>
 <h2 id="workflow">Workflow</h2>
 <p>The default workflow is that when a user selects <strong>Generate Boot Images</strong> from the GUI the kickstart template pertaining to the OS image is filled in with all the specific nodes to be deployed.  This file is copied into a <a href="https://github.com/CiscoUcs/KUBaM/blob/master/kubam/files/stage1/ks.img" target="_blank">1MB disk image</a>  that comes with KUBAM.  The disk image is written to the <code>/kubam</code> directory as the name <code>&lt;nodename&gt;.img</code>.  One image is written for each node to be deployed.  This image is unique to each server. </p>
 <h3 id="post-installation">Post installation</h3>
@@ -736,7 +750,7 @@ mount -o loop supernode01.img tmp1
                 </a>
                 
                 
-                <a href="windows2.html" class="navigation navigation-next " aria-label="Next page: Windows Windows AutoDeploy">
+                <a href="ubuntu.html" class="navigation navigation-next " aria-label="Next page: Ubuntu Preseed">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -747,7 +761,7 @@ mount -o loop supernode01.img tmp1
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Kickstart Templates","level":"3.4.6","depth":2,"next":{"title":"Windows Windows AutoDeploy","level":"3.4.7","depth":2,"path":"kubam/configure/windows2.md","ref":"kubam/configure/windows2.md","articles":[]},"previous":{"title":"Settings","level":"3.4.5","depth":2,"path":"kubam/configure/settings.md","ref":"kubam/configure/settings.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"kubam/configure/template.md","mtime":"2018-03-19T16:48:11.938Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-02-15T23:22:09.636Z"},"basePath":"../..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Kickstart Templates","level":"3.4.6","depth":2,"next":{"title":"Ubuntu Preseed","level":"3.4.7","depth":2,"path":"kubam/configure/ubuntu.md","ref":"kubam/configure/ubuntu.md","articles":[]},"previous":{"title":"Settings","level":"3.4.5","depth":2,"path":"kubam/configure/settings.md","ref":"kubam/configure/settings.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"kubam/configure/template.md","mtime":"2019-02-15T23:31:27.764Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-02-15T23:48:30.587Z"},"basePath":"../..","book":{"language":""}});
         });
     </script>
 </div>

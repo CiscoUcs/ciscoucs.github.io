@@ -1,6 +1,6 @@
 # Kickstart Templates
 
-KUBAM uses [kickstart](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html/installation_guide/s1-kickstart2-file) for automated installs for RedHat and VMware ESXi.  Further supported operating systems will also use the native automated answer file for rapid installation. 
+KUBAM uses [kickstart](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html/installation_guide/s1-kickstart2-file) for automated installs for RedHat and VMware ESXi.  Other supported operating systems use the native automated answer file for rapid installation as well. 
 
 The current default kickstart templates are found in the [KUBAM source repository](https://github.com/CiscoUcs/KUBaM/tree/master/kubam/templates).  These templates are copied into the container in the ```/usr/share/kubam/templates``` directory.  
 
@@ -15,14 +15,15 @@ KUBAM uses the [Jinja2](http://jinja.pocoo.org/docs/2.10/)
 
 The following jinja2 variables found in a kickstart file will be automatically filled: 
 
-* ``` {{ masterIP }} ```
-* ``` \{{ netmask }} ```
-* ``` {\{ gateway }} ```
-* ``` {{ nameserver }} ```
-* ``` {{ name }} ``` - The hostname of the server, not the FQDN.
-* ``` {{ keys }} ``` - A list of public keys authorized to log into this server. 
-* ```\{\{ proxy \}\}``` - A proxy server if the machine is behind a firewall.  This can be used in post scripts. 
+* `masterIP`
+* `netmask`
+* `gateway`
+* `nameserver`
+* `name` - The hostname of the server, not the FQDN.
+* `keys` - A list of public keys authorized to log into this server. 
+* `proxy` - A proxy server if the machine is behind a firewall.  This can be used in post scripts. 
 
+These values are filled in by the values you put in the `kubam.yaml` file either by the GUI, API, or by editing the file directory.
 
 ## Workflow
 
