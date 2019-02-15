@@ -31,6 +31,7 @@
 	* [Settings](kubam/configure/settings.md)
 	* [Kickstart Templates](kubam/configure/template.md)
 	* [Windows Windows AutoDeploy](kubam/configure/windows2.md)
+	* [Deploy Install Images](kubam/configure/deploy.md)
 	* [Configure Service Profiles](kubam/configure/sp.md)
 * [KUBAM Glorious Underbelly](kubam/internals/README.md)
 	* [Stage1 - Docker](kubam/internals/stage1/docker.md)

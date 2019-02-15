@@ -22,10 +22,25 @@ This will return any number of items if there are `iso` files in the directory. 
 }
 ```
 
-Here we have one file that we returned.  
+Using the GUI we will first see an empty list
+
+![images](../img/isos01.png)  
 
 ## 2. Put ISOS in KUBAM config
 
+Let's configure the KUBAM system to have ISO information.  
+
+### 2.1 GUI
+
+We can add an ISO image by clicking the plus in the bottom right side. 
+
+![isos create](../img/isos02.png)
+
+We can use the dropdown to create a mapping with all the different ISOs that we have. 
+
+![isos list](../img/isos03.png)
+
+### 2.2 CLI/API
 The next command you will want to do is map the ISO files. To see what is already mapped we can run: 
 
 ```
@@ -71,7 +86,6 @@ This will give us the output to show it is mapped:
 }
 ```
 
-## 3. Extract ISO images
+Next it's time to [Add more settings](https://ciscoucs.github.io/site/kubam/configure/settings.html)
 
-KUBAM will need access to the ISO images to build the boot images.  For RedHat/CentOS it will build a boot image in addition to extracting the ISO image.  For VMware and Ubuntu we build a customer ISO image for each server. 
 

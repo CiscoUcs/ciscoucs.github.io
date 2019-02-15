@@ -57,7 +57,7 @@
     <link rel="shortcut icon" href="../../gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="servers.md" />
+    <link rel="next" href="servers.html" />
     
     
     <link rel="prev" href="creds.html" />
@@ -376,9 +376,9 @@
             
         </li>
     
-        <li class="chapter " data-level="3.4.3" data-path="servers.md">
+        <li class="chapter " data-level="3.4.3" data-path="servers.html">
             
-                <span>
+                <a href="servers.html">
             
                     
                     Servers
@@ -441,7 +441,20 @@
             
         </li>
     
-        <li class="chapter " data-level="3.4.8" data-path="sp.html">
+        <li class="chapter " data-level="3.4.8" data-path="deploy.html">
+            
+                <a href="deploy.html">
+            
+                    
+                    Deploy Install Images
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="3.4.9" data-path="sp.html">
             
                 <a href="sp.html">
             
@@ -660,7 +673,16 @@
                                 <section class="normal markdown-section">
                                 
                                 <h1 id="kubam-networking">KUBAM Networking</h1>
-<p>We need to tell KUBAM how to setup the networking for the operating systems we will be installing.  On the GUI this is simple: </p>
+<p>We need to tell KUBAM how to setup the networking for the operating systems we will be installing.  On the GUI this is simple.</p>
+<p>First we go to the Network page</p>
+<p><img src="../img/net01.png" alt="net01"></p>
+<p>At the bottom right we add a new network.  The information you put in this field is the information you would like to apply to the operating system of a subset of nodes.  For example, you may name this pdx140, meaning all nodes that are in the 140 VLAN in my PDX group will get the same nameserver, subnet, netmask, ntp, etc. </p>
+<p><img src="../img/net02.png" alt="net02"></p>
+<p>One of the fields in there <code>proxy</code> is to deal with machines that may require a proxy server to escape the local network.  This usually happens behind corporate firewalls like the one in which Kubam was developed in. </p>
+<p>The othe field VLAN is for times when the network ports the servers are connected to do not have native VLANs and need to specify it in the port.  Usually we see this in ESXi installations.  </p>
+<p><img src="../img/net03.png" alt="net03"></p>
+<p>KUBAM tries to make it easy for you to edit and update these values.  Keep in mind that if you do update, new boot images would need to be created. </p>
+<p>Next up, you need to select the <a href="https://ciscoucs.github.io/site/kubam/configure/servers.html" target="_blank">servers</a>.</p>
 
                                 
                                 </section>
@@ -693,7 +715,7 @@
                 </a>
                 
                 
-                <a href="servers.md" class="navigation navigation-next " aria-label="Next page: Servers">
+                <a href="servers.html" class="navigation navigation-next " aria-label="Next page: Servers">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -704,7 +726,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Networking","level":"3.4.2","depth":2,"next":{"title":"Servers","level":"3.4.3","depth":2,"path":"kubam/configure/servers.md","ref":"kubam/configure/servers.md","articles":[]},"previous":{"title":"Credentials","level":"3.4.1","depth":2,"path":"kubam/configure/creds.md","ref":"kubam/configure/creds.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"kubam/configure/network.md","mtime":"2019-02-15T19:15:26.118Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-02-15T19:20:44.946Z"},"basePath":"../..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Networking","level":"3.4.2","depth":2,"next":{"title":"Servers","level":"3.4.3","depth":2,"path":"kubam/configure/servers.md","ref":"kubam/configure/servers.md","articles":[]},"previous":{"title":"Credentials","level":"3.4.1","depth":2,"path":"kubam/configure/creds.md","ref":"kubam/configure/creds.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"kubam/configure/network.md","mtime":"2019-02-15T23:00:33.877Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-02-15T23:22:09.636Z"},"basePath":"../..","book":{"language":""}});
         });
     </script>
 </div>

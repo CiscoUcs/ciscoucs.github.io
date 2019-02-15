@@ -22,17 +22,4 @@ ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC5QQkOU2k+zVh5gwH7AMmvF0/XsoM4R7h5xeVRQR1I
 ```
 Note there should be no spaces. 
 
-## Proxy Server
-
-In many enterprise environments the servers are behind a firewall and don't have access to the public internet without a proxy server.  KUBAM requires the ability to reach out to docker hub and other container and package repositories to download all the necessary components.  For this we ask that you enter a proxy configuration.  If you are in an open environment you may not need a proxy environment.  The proxy server should be entered something like the following: 
-
-```
-<protocol>://<server>:<port>
-```
-Example:
-
-```
-http://proxy.esl.cisco.com:8080
-```
-
-IP addresses for proxy servers may not work as expected. 
+Next you can configure customized auto install files. 

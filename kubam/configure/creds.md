@@ -31,7 +31,7 @@ KUBAM makes sure that this UCS system can be reached.  If it can you will see an
 
 You could also use the API to do this action.  See the [API Walkthrough](https://ciscoucs.github.io/site/kubam/developer/APIGUIDE.html).  
 
-Next up, its time to talk about everybody at Cisco's favorite topic:  [Networking](https://ciscoucs.github.io/site/kubam/configure/network.md)
+Next up, its time to talk about everybody at Cisco's favorite topic:  [Networking](https://ciscoucs.github.io/site/kubam/configure/network.html)
 
 
 
