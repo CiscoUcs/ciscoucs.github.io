@@ -30,8 +30,8 @@
 	* [Boot Images](kubam/configure/iso.md)
 	* [Settings](kubam/configure/settings.md)
 	* [Kickstart Templates](kubam/configure/template.md)
-	* [Windows vMedia Method (WIP)](kubam/configure/windows.md)
-	* [Windows vMedia/Network Method (WIP)](kubam/configure/windows2.md)
+	* [Windows Windows AutoDeploy](kubam/configure/windows2.md)
+	* [Configure Service Profiles](kubam/configure/sp
 * [KUBAM Glorious Underbelly](kubam/internals/README.md)
 	* [Stage1 - Docker](kubam/internals/stage1/docker.md)
 	* [Stage1 - ESXi](kubam/internals/stage1/esxi.md)

@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <title>Settings · GitBook</title>
+        <title>Networking · GitBook</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="GitBook 3.2.3">
@@ -57,10 +57,10 @@
     <link rel="shortcut icon" href="../../gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="template.html" />
+    <link rel="next" href="servers.md" />
     
     
-    <link rel="prev" href="iso.html" />
+    <link rel="prev" href="creds.html" />
     
 
     </head>
@@ -363,7 +363,7 @@
             
         </li>
     
-        <li class="chapter " data-level="3.4.2" data-path="network.html">
+        <li class="chapter active" data-level="3.4.2" data-path="network.html">
             
                 <a href="network.html">
             
@@ -402,7 +402,7 @@
             
         </li>
     
-        <li class="chapter active" data-level="3.4.5" data-path="settings.html">
+        <li class="chapter " data-level="3.4.5" data-path="settings.html">
             
                 <a href="settings.html">
             
@@ -644,7 +644,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href="../.." >Settings</a>
+        <a href="../.." >Networking</a>
     </h1>
 </div>
 
@@ -659,26 +659,8 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="settings">Settings</h1>
-<p>The settings portion has additional information on how to configure your environment. </p>
-<h2 id="kubam-ip-address">KUBAM IP address</h2>
-<p>This is the IP address of the machine where you are running docker and subsequently the kubam services.  This IP address needs to be reachable from the same network that your blades access as well as the CIMC network.  The reason for this is because:</p>
-<ol>
-<li>The blade kickstart file has this network to access the repos for the OS install. </li>
-<li>The CIMC mounts the ISO images from this same network to perform the autmated boot installation</li>
-</ol>
-<p>While it may work with DHCP relay or other methods, really the simplest way is to make the install network, the CIMC network, and the UCS management network all be on the same network.  We can always update this if required, but for now that&apos;s the way it works.  If you have an issue with that, <a href="https://github.com/CiscoUcs/KUBAM-Frontend/issues" target="_blank">open an issue</a></p>
-<h2 id="public-key">Public Key</h2>
-<p>You&apos;ll notice that KUBAM never asks you for a password for the servers you are installing.  The reason for this is that we are trying to be more secure.  As such, we only access our KUBAM nodes using SSH keypairs.  To create SSH keypairs there is <a href="https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys--2" target="_blank">lots of documentation</a> on how to do this. </p>
-<p>When entering the public key into the SSH form, please be sure to add the <code>ssh-rsa</code> portion before the key.  For example, a properly entered key would be: </p>
-<pre><code>ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC5QQkOU2k+zVh5gwH7AMmvF0/XsoM4R7h5xeVRQR1IBeeHjHAKoTXX04VbUD+g+9sHnsOvi+MgkHJ55EryZe7YVNI3ylfL0h1quq60Z0tFysA/6X45eJXcu5qAiLk9lkxxOrMO1x0PfVuvzJSqBA8KnPsj6F47bnM787K8x7ZfJG2nJNVZ/ZtQ+sCMcq/HSrmV6r1kY0ZmaiQWHFyR1vhY0i7h1IWVHCbXTfKMcxYfldUtiyZSMErISIcsOv2LckU6R9xOcJGYZboEkle5nrw89Pf0k+H9KXiHYG4RbldsHV1t8xbkGzZYmYXByrJd8N2+78y8HeKJyN09TpB9R9en
-</code></pre><p>Note there should be no spaces. </p>
-<h2 id="proxy-server">Proxy Server</h2>
-<p>In many enterprise environments the servers are behind a firewall and don&apos;t have access to the public internet without a proxy server.  KUBAM requires the ability to reach out to docker hub and other container and package repositories to download all the necessary components.  For this we ask that you enter a proxy configuration.  If you are in an open environment you may not need a proxy environment.  The proxy server should be entered something like the following: </p>
-<pre><code>&lt;protocol&gt;://&lt;server&gt;:&lt;port&gt;
-</code></pre><p>Example:</p>
-<pre><code>http://proxy.esl.cisco.com:8080
-</code></pre><p>IP addresses for proxy servers may not work as expected. </p>
+                                <h1 id="kubam-networking">KUBAM Networking</h1>
+<p>We need to tell KUBAM how to setup the networking for the operating systems we will be installing.  On the GUI this is simple: </p>
 
                                 
                                 </section>
@@ -706,12 +688,12 @@
 
             
                 
-                <a href="iso.html" class="navigation navigation-prev " aria-label="Previous page: Boot Images">
+                <a href="creds.html" class="navigation navigation-prev " aria-label="Previous page: Credentials">
                     <i class="fa fa-angle-left"></i>
                 </a>
                 
                 
-                <a href="template.html" class="navigation navigation-next " aria-label="Next page: Kickstart Templates">
+                <a href="servers.md" class="navigation navigation-next " aria-label="Next page: Servers">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -722,7 +704,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Settings","level":"3.4.5","depth":2,"next":{"title":"Kickstart Templates","level":"3.4.6","depth":2,"path":"kubam/configure/template.md","ref":"kubam/configure/template.md","articles":[]},"previous":{"title":"Boot Images","level":"3.4.4","depth":2,"path":"kubam/configure/iso.md","ref":"kubam/configure/iso.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"kubam/configure/settings.md","mtime":"2018-03-01T19:00:50.061Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-02-15T19:16:37.728Z"},"basePath":"../..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Networking","level":"3.4.2","depth":2,"next":{"title":"Servers","level":"3.4.3","depth":2,"path":"kubam/configure/servers.md","ref":"kubam/configure/servers.md","articles":[]},"previous":{"title":"Credentials","level":"3.4.1","depth":2,"path":"kubam/configure/creds.md","ref":"kubam/configure/creds.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"kubam/configure/network.md","mtime":"2019-02-15T19:15:26.118Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-02-15T19:16:37.728Z"},"basePath":"../..","book":{"language":""}});
         });
     </script>
 </div>
