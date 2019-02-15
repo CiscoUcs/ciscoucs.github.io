@@ -270,7 +270,7 @@
                 <a href="../kubam/installation/">
             
                     
-                    Installation
+                    Install KUBAM
             
                 </a>
             
@@ -341,7 +341,7 @@
                 <a href="../kubam/configure/">
             
                     
-                    Configuration
+                    Use KUBAM
             
                 </a>
             
@@ -389,9 +389,9 @@
             
         </li>
     
-        <li class="chapter " data-level="3.4.4" data-path="../kubam/configure/iso.md">
+        <li class="chapter " data-level="3.4.4" data-path="../kubam/configure/iso.html">
             
-                <span>
+                <a href="../kubam/configure/iso.html">
             
                     
                     Boot Images
@@ -793,12 +793,25 @@ d-i mirror/suite string bionic
 d-i live-installer/enable boolean false
 
 # auto-partition, all files in one partition
-d-i partman-auto/init_automatically_partition select biggest_free
+# if there is only one disk this works: 
+#d-i partman-auto/init_automatically_partition select biggest_free
+#d-i partman-auto/method string regular
+#d-i partman-auto/choose_recipe select atomic
+#d-i partman/choose_partition select finish
+#d-i partman/confirm_nooverwrite boolean true
+#d-i partman/confirm boolean true
+
+# auto partition if there are multiple disks. 
+# Here we choose /dev/sdd as the disk to install on. 
 d-i partman-auto/method string regular
+d-i partman-auto/disk string /dev/sdd
+d-i partman-lvm/device_remove_lvm boolean true
 d-i partman-auto/choose_recipe select atomic
+d-i grub-installer/bootdev string default
+d-i partman-partitioning/confirm_write_new_label boolean true
 d-i partman/choose_partition select finish
-d-i partman/confirm_nooverwrite boolean true
 d-i partman/confirm boolean true
+d-i partman/confirm_nooverwrite boolean true
 
 # reboot at the end
 d-i finish-install/reboot_in_progress note
@@ -851,7 +864,7 @@ d-i finish-install/reboot_in_progress note
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Ubuntu","level":"2.4.3","depth":2,"next":{"title":"Containers","level":"2.5","depth":1,"path":"CONTAINERS/README.md","ref":"CONTAINERS/README.md","articles":[]},"previous":{"title":"RedHat","level":"2.4.2","depth":2,"path":"OS/REDHAT.md","ref":"OS/REDHAT.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"OS/UBUNTU.md","mtime":"2019-02-13T00:27:00.056Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-02-13T00:27:15.211Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Ubuntu","level":"2.4.3","depth":2,"next":{"title":"Containers","level":"2.5","depth":1,"path":"CONTAINERS/README.md","ref":"CONTAINERS/README.md","articles":[]},"previous":{"title":"RedHat","level":"2.4.2","depth":2,"path":"OS/REDHAT.md","ref":"OS/REDHAT.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"OS/UBUNTU.md","mtime":"2019-02-14T23:41:54.873Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-02-15T00:57:55.708Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

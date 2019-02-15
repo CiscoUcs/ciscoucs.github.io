@@ -175,12 +175,25 @@ d-i mirror/suite string bionic
 d-i live-installer/enable boolean false
 
 # auto-partition, all files in one partition
-d-i partman-auto/init_automatically_partition select biggest_free
+# if there is only one disk this works: 
+#d-i partman-auto/init_automatically_partition select biggest_free
+#d-i partman-auto/method string regular
+#d-i partman-auto/choose_recipe select atomic
+#d-i partman/choose_partition select finish
+#d-i partman/confirm_nooverwrite boolean true
+#d-i partman/confirm boolean true
+
+# auto partition if there are multiple disks. 
+# Here we choose /dev/sdd as the disk to install on. 
 d-i partman-auto/method string regular
+d-i partman-auto/disk string /dev/sdd
+d-i partman-lvm/device_remove_lvm boolean true
 d-i partman-auto/choose_recipe select atomic
+d-i grub-installer/bootdev string default
+d-i partman-partitioning/confirm_write_new_label boolean true
 d-i partman/choose_partition select finish
-d-i partman/confirm_nooverwrite boolean true
 d-i partman/confirm boolean true
+d-i partman/confirm_nooverwrite boolean true
 
 # reboot at the end
 d-i finish-install/reboot_in_progress note
